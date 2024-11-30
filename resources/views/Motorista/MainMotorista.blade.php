@@ -39,7 +39,13 @@
                         <div class="map-container">
                             Mapa interativo (em desenvolvimento)
                         </div>
-                    </div>
+                        <!-- Botão para iniciar/pausar a viagem -->
+                        <div class="text-center mt-3">
+                            <button class="btn viagem">Iniciar Viagem <ion-icon name="play-outline"></ion-icon></button>
+                            <button class="btn viagem">Pausar Viagem <ion-icon name="pause-outline"></ion-icon></button>
+                            <button class="btn viagem">Pausar Viagem <ion-icon name="stop-outline"></ion-icon></button>
+                        </div>
+                    </div>                   
                 </div>
                 <!-- Viagens Ativas -->
                 <div class="card">
@@ -57,13 +63,6 @@
                                 <span>Maria Souza</span>
                                 <span>Ver Mais</span>
                             </a>
-                        </div>
-
-                        <!-- Botão para iniciar/pausar a viagem -->
-                        <div class="text-center mt-3">
-                            <button class="btn viagem">Iniciar Viagem <ion-icon name="play-outline"></ion-icon></button>
-                            <button class="btn viagem">Pausar Viagem <ion-icon name="pause-outline"></ion-icon></button>
-                            <button class="btn viagem">Pausar Viagem <ion-icon name="stop-outline"></ion-icon></button>
                         </div>
                     </div>
                 </div>

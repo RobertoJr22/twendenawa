@@ -44,7 +44,7 @@
                     <!-- Viagem Atual -->
                     <div class="card">
                         <div class="card-header">
-                            Viagem Atual &nbsp; <ion-icon name="bus-outline"></ion-icon>
+                            Viagem Atual <ion-icon name="bus-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <p><strong>Veículo:</strong> Minibus Azul</p>
@@ -59,7 +59,7 @@
                         <!-- Notificações Recentes -->
                         <div class="card">
                         <div class="card-header">
-                            Notificações Recentes &nbsp; <ion-icon name="notifications-outline"></ion-icon>
+                            Notificações Recentes <ion-icon name="notifications-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <ul class="list-group">
@@ -71,7 +71,7 @@
                     <!-- Histórico de Viagens -->
                     <div class="card">
                         <div class="card-header">
-                            Histórico de Viagens &nbsp; <ion-icon name="bus-outline"></ion-icon>
+                            Histórico de Viagens <ion-icon name="bus-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <ul class="list-group">
@@ -86,11 +86,11 @@
                     <!-- Mapa Interativo -->
                     <div class="card">
                         <div class="card-header">
-                            Localização em Tempo Real &nbsp; <ion-icon name="pin-outline"></ion-icon>
+                            Localização em Tempo Real <ion-icon name="navigate-circle-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <div class="map-container">
-                                Mapa interativo aqui (em desenvolvimento) &nbsp; <ion-icon name="map-outline"></ion-icon>
+                                Mapa interativo aqui (em desenvolvimento) <ion-icon name="map-outline"></ion-icon>
                             </div>
                         </div>
                     </div>
