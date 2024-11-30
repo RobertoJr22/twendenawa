@@ -79,7 +79,7 @@
             </div>
 
             <!-- Botão de Ação -->
-            <button type="submit" class="btn btn-primary w-100">Salvar Cadastro</button>
+            <button type="submit" class="btn btn-custom w-100">Salvar Cadastro</button>
         </form>
     </div>
 </div>

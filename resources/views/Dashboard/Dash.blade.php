@@ -6,16 +6,16 @@
         <h2 class="text-center mb-4">Central de controlo</h2>
         
         <!-- Botão Estudantes -->
-        <a href="/Dashboard/Estudante" class="btn-custom mb-3">Estudantes</a>
+        <a href="/Dashboard/Estudante" class="btn-custom mb-3 btn-main-dash">Estudantes</a>
 
         <!-- Botão Responsáveis -->
-        <a href="/Dashboard/Responsavel" class="btn-custom mb-3">Responsáveis</a>
+        <a href="/Dashboard/Responsavel" class="btn-custom mb-3 btn-main-dash">Responsáveis</a>
 
         <!-- Botão Motoristas -->
-        <a href="/Dashboard/Motorista" class="btn-custom mb-3">Motoristas</a>
+        <a href="/Dashboard/Motorista" class="btn-custom mb-3 btn-main-dash">Motoristas</a>
 
         <!-- Botão Viaturas -->
-        <a href="/Dashboard/Viatura" class="btn-custom mb-3">Viaturas</a>
+        <a href="/Dashboard/Viatura" class="btn-custom mb-3 btn-main-dash">Viaturas</a>
     </div>
     <div id="space"></div>
 @endsection

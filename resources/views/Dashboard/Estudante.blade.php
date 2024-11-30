@@ -31,8 +31,8 @@
                     <td>joao.silva@example.com</td>
                     <td>Engenharia</td>
                     <td>
-                        <button class="btn btn-sm btn-primary mb-1">Editar</button>
-                        <button class="btn btn-sm btn-danger mb-1">Deletar</button>
+                        <button class="btn btn-sm btn-custom mb-1">Editar</button>
+                        <button class="btn btn-sm btn-custom mb-1">Deletar</button>
                     </td>
                 </tr>
                 <tr>
@@ -41,8 +41,8 @@
                     <td>maria.oliveira@example.com</td>
                     <td>Medicina</td>
                     <td>
-                        <button class="btn btn-sm btn-primary mb-1">Editar</button>
-                        <button class="btn btn-sm btn-danger mb-1">Deletar</button>
+                        <button class="btn btn-sm btn-custom mb-1">Editar</button>
+                        <button class="btn btn-sm btn-custom mb-1">Deletar</button>
                     </td>
                 </tr>
                 <!-- Adicione mais linhas conforme necessário -->
@@ -52,7 +52,7 @@
 
     <!-- Botão de Cadastrar Novo Estudante -->
     <div class="text-center mt-4">
-        <a class="btn btn-success" href="/Estudante/CadastrarEstudante">Cadastrar Novo Estudante</a>
+        <a class="btn btn-custom" href="/Estudante/CadastrarEstudante">Cadastrar Novo Estudante</a>
     </div>
 </div>
 <div id="space"></div>

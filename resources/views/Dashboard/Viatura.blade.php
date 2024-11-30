@@ -31,8 +31,8 @@
                         <td>Ford Ranger</td>
                         <td>2021</td>
                         <td>
-                            <button class="btn btn-sm btn-primary">Editar</button>
-                            <button class="btn btn-sm btn-danger">Deletar</button>
+                            <button class="btn btn-sm btn-custom">Editar</button>
+                            <button class="btn btn-sm btn-custom">Deletar</button>
                         </td>
                     </tr>
                     <tr>
@@ -41,8 +41,8 @@
                         <td>Chevrolet Onix</td>
                         <td>2019</td>
                         <td>
-                            <button class="btn btn-sm btn-primary">Editar</button>
-                            <button class="btn btn-sm btn-danger">Deletar</button>
+                            <button class="btn btn-sm btn-custom">Editar</button>
+                            <button class="btn btn-sm btn-custom">Deletar</button>
                         </td>
                     </tr>
                     <!-- Adicione mais linhas conforme necessário -->
@@ -52,7 +52,7 @@
 
         <!-- Botão de Cadastrar Nova Viatura -->
         <div class="text-center mt-3">
-            <button class="btn btn-success">Cadastrar Nova Viatura</button>
+            <button class="btn btn-custom">Cadastrar Nova Viatura</button>
         </div>
     </div>
     <div id="space"></div>

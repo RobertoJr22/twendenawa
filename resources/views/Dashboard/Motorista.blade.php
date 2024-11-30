@@ -31,8 +31,8 @@
                     <td>(99) 99999-9999</td>
                     <td>12345-AB</td>
                     <td>
-                        <button class="btn btn-sm btn-primary">Editar</button>
-                        <button class="btn btn-sm btn-danger">Deletar</button>
+                        <button class="btn btn-sm btn-custom">Editar</button>
+                        <button class="btn btn-sm btn-custom">Deletar</button>
                     </td>
                 </tr>
                 <tr>
@@ -41,8 +41,8 @@
                     <td>(88) 88888-8888</td>
                     <td>67890-CD</td>
                     <td>
-                        <button class="btn btn-sm btn-primary">Editar</button>
-                        <button class="btn btn-sm btn-danger">Deletar</button>
+                        <button class="btn btn-sm btn-custom">Editar</button>
+                        <button class="btn btn-sm btn-custom">Deletar</button>
                     </td>
                 </tr>
                 <!-- Adicione mais linhas conforme necessário -->
@@ -52,7 +52,7 @@
 
     <!-- Botão de Cadastrar Novo Motorista -->
     <div class="text-center mt-3">
-        <a href="/Motorista/CadastrarMotorista" class="btn btn-success">Cadastrar Novo Motorista</a>
+        <a href="/Motorista/CadastrarMotorista" class="btn btn-custom">Cadastrar Novo Motorista</a>
     </div>
 </div>
 <div id="space"></div>

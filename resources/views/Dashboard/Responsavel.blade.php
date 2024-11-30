@@ -31,8 +31,8 @@
                         <td>(99) 99999-9999</td>
                         <td>carlos.ferreira@example.com</td>
                         <td>
-                            <button class="btn btn-sm btn-primary">Editar</button>
-                            <button class="btn btn-sm btn-danger">Deletar</button>
+                            <button class="btn btn-sm btn-custom">Editar</button>
+                            <button class="btn btn-sm btn-custom">Deletar</button>
                         </td>
                     </tr>
                     <tr>
@@ -41,8 +41,8 @@
                         <td>(88) 88888-8888</td>
                         <td>ana.souza@example.com</td>
                         <td>
-                            <button class="btn btn-sm btn-primary">Editar</button>
-                            <button class="btn btn-sm btn-danger">Deletar</button>
+                            <button class="btn btn-sm btn-custom">Editar</button>
+                            <button class="btn btn-sm btn-custom">Deletar</button>
                         </td>
                     </tr>
                     <!-- Adicione mais linhas conforme necessário -->
@@ -52,7 +52,7 @@
 
         <!-- Botão de Cadastrar Novo Responsável -->
         <div class="text-center mt-3">
-            <button class="btn btn-success">Cadastrar Novo Responsável</button>
+            <button class="btn btn-custom">Cadastrar Novo Responsável</button>
         </div>
     </div>
     <div id="space"></div>

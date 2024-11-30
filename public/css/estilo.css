@@ -141,24 +141,46 @@ footer hr{
 /* DASHBOARD */
 
 /*Dashboard Principal*/
-.btn-custom {
+.btn-main-dash {
     width: 70%; /* Deixa 15% de margem em cada lado */
     background-color: rgba(229, 233, 13, 0.8); /* Cor #e5e90d um pouco transparente */
     color: black; /* Texto preto */
     text-decoration: none; /* Remove sublinhado */
     text-align: center;
     padding: 15px; /* Espaço interno para maior altura */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Transição para efeito hover */
     display: block;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);/* Adicionar sombras*/
     border-radius: 10px;
+    transition: transform 0.3s ease;
 }
 
 /* Efeito de hover */
-.btn-custom:hover {
-    background-color: black;
-    color: rgba(229, 233, 13, 0.87);
+.btn-custom:hover, .btn-main-dash:hover {
+    color: black;
     text-decoration: none;
+    transform: scale(1.05);
+}
+.btn-custom:active, .btn-main-dash:active {
+    background-color: black; /* Cor de fundo ao clicar */
+    color:  rgba(229, 233, 13, 0.87); /* Cor do texto ao clicar */
+    box-shadow: 0 0 5px rgba(229, 233, 13, 0.87);
+}
+
+/* Personalizar a borda ao focar no botão */
+.btn-custom:focus, .btn-main-dash:focus {
+    outline: none; /* Retira o contorno padrão */
+    border: 2px solid rgba(229, 233, 13, 0.87); /* Cor personalizada para a borda ao focar */
+    box-shadow: 0 0 5px rgba(229, 233, 13, 0.87);
+}
+
+#btn-lista:active{
+    background-color: #e5e90d;
+    box-shadow: 0 0 5px rgba(229, 233, 13, 0.87);
+}
+#btn-lista:focus{
+    outline: none; /* Retira o contorno padrão */
+    border: 2px solid rgba(229, 233, 13, 0.87); /* Cor personalizada para a borda ao focar */
+    box-shadow: 0 0 5px rgba(229, 233, 13, 0.87);
 }
 
 
@@ -230,12 +252,14 @@ footer hr{
 .btn:active {
     background-color: black; /* Cor de fundo ao clicar */
     color:  rgba(229, 233, 13, 0.87); /* Cor do texto ao clicar */
+    box-shadow: 0 0 5px rgba(229, 233, 13, 0.87);
 }
 
 /* Personalizar a borda ao focar no botão */
 .btn:focus {
     outline: none; /* Retira o contorno padrão */
     border: 2px solid rgba(229, 233, 13, 0.87); /* Cor personalizada para a borda ao focar */
+    box-shadow: 0 0 5px rgba(229, 233, 13, 0.87);
 }
 
 .text-muted {
@@ -260,7 +284,6 @@ footer hr{
     border-radius: 10px; /* Arredondamento das bordas */
     padding: 20px; /* Espaçamento interno */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Sombra leve */
-    text-align: left;
 }
 #dados-responsavel{
     text-align: left;
@@ -326,4 +349,23 @@ footer hr{
 .profile-photo-container.has-photo ion-icon {
     display: none; /* Oculta o ícone */
 }
+
+/* PARA TODOS OS INPUTS */
+.form-control{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    border: 1px solid;
+}
+.form-control:hover {
+    transform: scale(1.05);
+}
+.form-control:active {
+   border-color:rgba(229, 233, 13, 0.87);
+}
+/* Personalizar a borda ao focar no botão */
+.form-control:focus {
+    outline: none; /* Retira o contorno padrão */
+    box-shadow: 0 0 5px rgba(229, 233, 13, 0.87);
+    border: 2px solid rgba(229, 233, 13, 0.87); /* Cor personalizada para a borda ao focar */
+}
+
 

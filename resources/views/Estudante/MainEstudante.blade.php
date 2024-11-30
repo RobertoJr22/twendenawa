@@ -17,12 +17,13 @@
 
                     <!-- Dados Pessoais -->
                     <div>
-                        <p><ion-icon name="person-outline"></ion-icon>:&nbsp; João Silva</p>
-                        <p><ion-icon name="mail-outline"></ion-icon>:&nbsp; joao.silva@example.com</p>
-                        <p><ion-icon name="call-outline"></ion-icon>:&nbsp; +244 912 345 678</p>
-                        <p><ion-icon name="home-outline"></ion-icon>:&nbsp;Rua Principal, nº 123, Luanda</p>
+                        <h5 class="card-title">Informações do Estudante</h5>
+                        <p><strong>Nome:</strong> João Silva</p>
+                        <p><strong>Email:</strong> joao.silva@example.com</p>
+                        <p><strong>Telefone:</strong> +244 912 345 678</p>
+                        <p><strong>Endereço:</strong> Rua Principal, nº 123, Luanda</p>
                     </div>
-                    <a href="" class="btn editar">Editar<ion-icon name="pencil-outline"></ion-icon></a>
+                    <a href="" class="btn editar btn-custom">Editar<ion-icon name="pencil-outline"></ion-icon></a>
                 </div>
                 <!-- Dados responsavel -->
                 <div class="card" id="dados-responsavel">
@@ -53,7 +54,7 @@
                             <p><strong>Local de Destino:</strong> Rua Principal</p>
                             <p><strong>Horário de Início:</strong> 07:30</p>
                             <p><strong>Horário Estimado de Chegada:</strong> 08:15</p>
-                            <button class="btn btn-outline-primary">Ver Detalhes</button>
+                            <button class="btn btn-custom">Ver Detalhes</button>
                         </div>
                     </div>
                         <!-- Notificações Recentes -->
@@ -79,7 +80,7 @@
                                 <li class="list-group-item">Viagem concluída em 26/11/2024. Motorista: Pedro Alves.</li>
                             </ul>
                             <div class="text-center mt-3">
-                                <button class="btn btn-outline-dark">Ver Histórico Completo</button>
+                                <button class="btn btn-custom">Ver Histórico Completo</button>
                             </div>
                         </div>
                     </div>

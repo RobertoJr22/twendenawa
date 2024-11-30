@@ -7,7 +7,7 @@
         <div class="row g-4">
             <!-- Coluna esquerda (dados pessoais) -->
             <div class="col-md-4">
-                <div class="card dados-pessoais text-center">
+                <div class="card dados-pessoais">
                     <!-- Foto de Perfil -->
                     <div class="profile-photo-container" id="profile-photo">
                         <!-- Ícone de Câmera -->
@@ -18,12 +18,13 @@
 
                     <!-- Dados Pessoais -->
                     <div>
+                        <h5 class="card-title">Informações do Responsável</h5>
                         <p><strong>Nome:</strong> João Silva</p>
                         <p><strong>Email:</strong> joao.silva@example.com</p>
                         <p><strong>Telefone:</strong> +244 912 345 678</p>
                         <p><strong>Endereço:</strong> Rua Principal, nº 123, Luanda</p>
                     </div>
-                    <a href="" class="btn editar">Editar<ion-icon name="pencil-outline"></ion-icon></a>
+                    <a href="" class="btn editar .btn-custom">Editar<ion-icon name="pencil-outline"></ion-icon></a>
                 </div>
             </div>
 

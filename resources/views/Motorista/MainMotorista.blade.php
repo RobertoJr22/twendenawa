@@ -6,7 +6,7 @@
     <div class="row g-4">
         <!-- Coluna esquerda (dados pessoais) -->
         <div class="col-md-4">
-            <div class="card dados-pessoais text-center">
+            <div class="card dados-pessoais">
                 <!-- Foto de Perfil -->
                 <div class="profile-photo-container" id="profile-photo">
                     <!-- Ícone de Câmera -->
@@ -23,7 +23,7 @@
                     <p><strong>Telefone:</strong> +244 912 345 678</p>
                     <p><strong>Placa do Veículo:</strong> ABC1234</p>
                 </div>
-                <a href="" class="btn editar">Editar<ion-icon name="pencil-outline"></ion-icon></a>
+                <a href="" class="btn editar .btn-custom">Editar<ion-icon name="pencil-outline"></ion-icon></a>
             </div>
         </div>
 
@@ -55,11 +55,11 @@
                     <div class="card-body">
                         <p><strong>Estudantes a bordo:</strong></p>
                         <div class="list-group">
-                            <a href="#" class="btn btn-outline-primary d-flex justify-content-between align-items-center mb-3">
+                            <a href="#" id="btn-lista" class="btn d-flex justify-content-between align-items-center mb-3">
                                 <span>João Silva</span>
                                 <span>Ver Mais</span>
                             </a>
-                            <a href="#" class="btn btn-outline-primary d-flex justify-content-between align-items-center mb-3">
+                            <a href="#" id="btn-lista" class="btn  d-flex justify-content-between align-items-center mb-3">
                                 <span>Maria Souza</span>
                                 <span>Ver Mais</span>
                             </a>
@@ -74,7 +74,7 @@
                     </div>
                     <div class="card-body">
                         <textarea class="form-control" rows="4" placeholder="Informe qualquer eventualidade na viagem..."></textarea>
-                        <button class="btn btn-outline-success mt-3">Enviar Relatório</button>
+                        <button class="btn .btn-custom mt-3">Enviar Relatório</button>
                     </div>
                 </div>
             </div>
