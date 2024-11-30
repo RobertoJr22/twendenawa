@@ -1,0 +1,319 @@
+*{
+    margin: 0;
+}
+
+/* Define altura mínima para o corpo */
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ajuste para o conteúdo principal */
+main {
+    flex: 1;
+}
+
+/* Footer */
+footer {
+    position:static;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px; /* Espaçamento interno */
+    background-color: #000;
+    color: aliceblue;
+}
+.TabelasFooter{
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    padding: 20px;
+}
+.TabelaFooter ul{
+    text-decoration: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.TabelaFooter{
+    width: 20%;
+    margin: 5px;
+}
+.TabelaFooter h5{
+    color: #e5e90d;
+}
+.TabelaFooter a{
+    color:aliceblue;
+    margin-right: 5px;
+}
+.TabelaFooter a:hover{
+    color:#e5e90d;
+    text-decoration: none;
+}
+footer hr{
+    color: #e5e90d;
+    border: 0;
+    border-top: 0.1px solid aliceblue;
+}
+
+/*FIM FOOTER*/
+
+
+#contactos-container a:hover{
+    color: white; /* Links em branco */
+    text-decoration: none; /* Remove sublinhado dos links */
+}
+
+
+#contactos-container a,
+#navbarNav a:hover{
+    color: #e5e90d; /* Cor dos links ao passar o mouse */
+}
+
+.navbar-brand img{
+    height: 50px;
+    margin-left: 10px;
+}
+
+
+
+#welcome {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.61)), url('/img/VamosBem.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    height: 520px;
+    color: white;
+    display: flex; /* Usar flexbox para centralizar */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    text-align: center;
+    font-family: 'Roboto', sans-serif; /* Aplica a fonte Roboto */
+}
+/* CADASTRAR SE */
+/* Estilo do botão personalizado */
+.btn-cadastrar {
+    background-color: rgba(229, 233, 13, 0.87); /* Cor com transparência */
+    color: #000; /* Texto preto */
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.btn-cadastrar:hover {
+    background-color: black; 
+    color: rgba(229, 233, 13, 0.87);
+}
+
+
+
+#welcome h1{
+    color: #e5e90d;
+    font-weight: bolder;
+}
+/* Responsividade para o título */
+#welcome h1 {
+    font-size: 6.5vw; /* Ajusta o tamanho com base na largura da viewport */
+}
+
+/* Responsividade para o subtítulo */
+#welcome h3 {
+    font-size: 2.5vw; /* Ajusta o tamanho com base na largura da viewport */
+}
+
+/* Media Queries para ajustes em telas menores */
+@media (max-width: 768px) {
+    #welcome h1 {
+        font-size: 11vw; /* Ajuste o tamanho para telas menores */
+    }
+    #welcome h3 {
+        font-size: 5vw; /* Ajuste o tamanho para telas menores */
+    }
+}
+
+.navbar-custom {
+    background-color: black !important; /* Fundo preto sólido */
+}
+
+/* DASHBOARD */
+
+/*Dashboard Principal*/
+.btn-custom {
+    width: 70%; /* Deixa 15% de margem em cada lado */
+    background-color: rgba(229, 233, 13, 0.8); /* Cor #e5e90d um pouco transparente */
+    color: black; /* Texto preto */
+    text-decoration: none; /* Remove sublinhado */
+    text-align: center;
+    padding: 15px; /* Espaço interno para maior altura */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transição para efeito hover */
+    display: block;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);/* Adicionar sombras*/
+    border-radius: 10px;
+}
+
+/* Efeito de hover */
+.btn-custom:hover {
+    background-color: black;
+    color: rgba(229, 233, 13, 0.87);
+    text-decoration: none;
+}
+
+
+
+/* FIM DASHBOARD*/
+
+
+
+/*CADASTRAR MOTORISTA*/
+#CadastrarMotorista {
+    margin-bottom: 100px;
+}
+#CadastrarMotorista form {
+    margin-bottom: 50px;
+}
+
+/*Para espaco*/
+
+#space{
+    margin-bottom:5%;
+}
+#subtitle-vamos{
+    margin-bottom: 40px;
+}
+
+/* TELAS PRINCIPAIS  */
+
+/*ESTUDANTE*/
+.container {
+    margin-top: 30px;
+}
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+
+}
+.card-header {
+    background-color: black;
+    color: rgba(229, 233, 13, 0.87);
+}
+.card-body {
+    background-color: white;
+    color: black;
+}
+.map-container {
+    height: 300px;
+    background: #e9ecef;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6c757d;
+    font-size: 18px;
+}
+.btn {
+    color: black;
+    background-color: #e5e90d;
+    transition: transform 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Sombra leve */
+}
+.btn:hover {
+    color: black;
+    background-color: #e5e90d;
+    transform: scale(1.05);
+}
+.btn:active {
+    background-color: black; /* Cor de fundo ao clicar */
+    color:  rgba(229, 233, 13, 0.87); /* Cor do texto ao clicar */
+}
+
+/* Personalizar a borda ao focar no botão */
+.btn:focus {
+    outline: none; /* Retira o contorno padrão */
+    border: 2px solid rgba(229, 233, 13, 0.87); /* Cor personalizada para a borda ao focar */
+}
+
+.text-muted {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+
+/*RESPONSAVEL*/
+
+.student-link {
+    background-color: rgba(229, 233, 13, 0.87);
+    color: black;
+    transition: transform 0.3s ease;  
+}
+.student-link:hover {
+    background-color: rgba(229, 233, 13, 0.87);
+    color: black;
+    transform: scale(1.05);
+}
+.dados-pessoais, .outro, #dados-responsavel {
+
+    border-radius: 10px; /* Arredondamento das bordas */
+    padding: 20px; /* Espaçamento interno */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Sombra leve */
+    text-align: left;
+}
+#dados-responsavel{
+    text-align: left;
+}
+
+
+/* Imagem de perfil */
+.rounded-circle {
+    border: 0.5px solid black; /* Borda preta na imagem */
+    object-fit: cover; /* Garante que a imagem preencha o círculo */
+}
+.dados-pessoais{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.editar{
+    width: 100%;
+}
+/* Estilo do container da foto de perfil */
+.profile-photo-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 1px solid black; /* Borda preta */
+    overflow: hidden; /* Garante que a imagem fique dentro do círculo */
+    background-color: #f0f0f0; /* Cor de fundo cinza claro */
+    margin-bottom: 20px;
+}
+
+/* Estilo da imagem de perfil */
+.profile-photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta a imagem para preencher o círculo */
+    display: none; /* Por padrão, a imagem não será exibida */
+}
+
+/* Ícone de câmera como placeholder */
+.profile-photo-container ion-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    color: gray;
+}
+
+/* Quando houver uma imagem de perfil */
+.profile-photo-container.has-photo img {
+    display: block; /* Exibe a imagem */
+}
+
+.profile-photo-container.has-photo ion-icon {
+    display: none; /* Oculta o ícone */
+}
+
