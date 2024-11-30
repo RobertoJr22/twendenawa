@@ -33,7 +33,7 @@
                     <!-- Viagens Ativas -->
                     <div class="card">
                         <div class="card-header">
-                            Viagens Ativas
+                            Viagens Ativas&nbsp; <ion-icon name="bus-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <p><strong>Estudantes em Viagem:</strong></p>
@@ -57,7 +57,7 @@
                     <!-- Notificações -->
                     <div class="card mt-3">
                         <div class="card-header">
-                            Notificações
+                            Notificações&nbsp; <ion-icon name="notifications-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <ul class="list-group">
@@ -70,7 +70,7 @@
                     <!-- Estudantes Sob Responsabilidade -->
                     <div class="card mt-3">
                         <div class="card-header">
-                            Estudantes Sob Sua Responsabilidade
+                            Estudantes Sob Sua Responsabilidade&nbsp;<ion-icon name="people-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <div class="list-group">

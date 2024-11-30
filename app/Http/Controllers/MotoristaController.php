@@ -10,4 +10,9 @@ class MotoristaController extends Controller
 
         return view('Motorista.CadastrarMotorista');
     }
+
+    public function MainMotorista(){
+
+        return view('Motorista.MainMotorista');
+    }
 }

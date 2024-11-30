@@ -17,22 +17,25 @@
 
                     <!-- Dados Pessoais -->
                     <div>
-                        <p><strong>Nome:</strong> João Silva</p>
-                        <p><strong>Email:</strong> joao.silva@example.com</p>
-                        <p><strong>Telefone:</strong> +244 912 345 678</p>
-                        <p><strong>Endereço:</strong> Rua Principal, nº 123, Luanda</p>
+                        <p><ion-icon name="person-outline"></ion-icon>:&nbsp; João Silva</p>
+                        <p><ion-icon name="mail-outline"></ion-icon>:&nbsp; joao.silva@example.com</p>
+                        <p><ion-icon name="call-outline"></ion-icon>:&nbsp; +244 912 345 678</p>
+                        <p><ion-icon name="home-outline"></ion-icon>:&nbsp;Rua Principal, nº 123, Luanda</p>
                     </div>
                     <a href="" class="btn editar">Editar<ion-icon name="pencil-outline"></ion-icon></a>
                 </div>
                 <!-- Dados responsavel -->
                 <div class="card" id="dados-responsavel">
-                    <h5>Dados do Responsável</h5>
-                    <p><strong>Nome:</strong> João Silva</p>
-                    <p><strong>Email:</strong> joao.silva@example.com</p>
-                    <p><strong>Telefone:</strong> +244 912 345 678</p>
-                    <p><strong>Endereço:</strong> Rua Principal, nº 123, Luanda</p>
+                    <div class="card-header">
+                        Dados do Responsável
+                    </div>
+                    <div class="card-body">
+                        <p><ion-icon name="person-outline"></ion-icon>:&nbsp; João Silva</p>
+                        <p><ion-icon name="mail-outline"></ion-icon>:&nbsp; joao.silva@example.com</p>
+                        <p><ion-icon name="call-outline"></ion-icon>:&nbsp; +244 912 345 678</p>
+                        <p><ion-icon name="home-outline"></ion-icon>:&nbsp; Rua Principal, nº 123, Luanda</p>
+                    </div>
                 </div>
-
             </div>
 
             <!-- Coluna direita (outro card) -->
@@ -41,7 +44,7 @@
                     <!-- Viagem Atual -->
                     <div class="card">
                         <div class="card-header">
-                            Viagem Atual
+                            Viagem Atual &nbsp; <ion-icon name="bus-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <p><strong>Veículo:</strong> Minibus Azul</p>
@@ -56,7 +59,7 @@
                         <!-- Notificações Recentes -->
                         <div class="card">
                         <div class="card-header">
-                            Notificações Recentes
+                            Notificações Recentes &nbsp; <ion-icon name="notifications-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <ul class="list-group">
@@ -68,7 +71,7 @@
                     <!-- Histórico de Viagens -->
                     <div class="card">
                         <div class="card-header">
-                            Histórico de Viagens
+                            Histórico de Viagens &nbsp; <ion-icon name="bus-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <ul class="list-group">
@@ -83,11 +86,11 @@
                     <!-- Mapa Interativo -->
                     <div class="card">
                         <div class="card-header">
-                            Localização em Tempo Real
+                            Localização em Tempo Real &nbsp; <ion-icon name="pin-outline"></ion-icon>
                         </div>
                         <div class="card-body">
                             <div class="map-container">
-                                Mapa interativo aqui (em desenvolvimento)
+                                Mapa interativo aqui (em desenvolvimento) &nbsp; <ion-icon name="map-outline"></ion-icon>
                             </div>
                         </div>
                     </div>

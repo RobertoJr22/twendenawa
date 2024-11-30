@@ -16,6 +16,7 @@ Route::get('/',[TwendenawaController::class, 'index']);
 
 /* Motorista Rotas */
 Route::get('/Motorista/CadastrarMotorista',[MotoristaController::class, 'index'] );
+Route::get('/Motorista/MainMotorista',[MotoristaController::class, 'MainMotorista'] );
 
 /* Estudante Rotas */
 Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );

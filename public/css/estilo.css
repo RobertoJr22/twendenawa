@@ -198,6 +198,7 @@ footer hr{
 .card-header {
     background-color: black;
     color: rgba(229, 233, 13, 0.87);
+    border-radius: 10px;
 }
 .card-body {
     background-color: white;
@@ -212,6 +213,7 @@ footer hr{
     align-items: center;
     color: #6c757d;
     font-size: 18px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 .btn {
     color: black;
@@ -263,7 +265,15 @@ footer hr{
 #dados-responsavel{
     text-align: left;
 }
+#dados-responsavel h5{
+    margin-bottom: 20px;
+}
 
+/*ALGUNS DADOS DAS TELAS*/
+
+.viagem{
+    margin: 4px;
+}
 
 /* Imagem de perfil */
 .rounded-circle {

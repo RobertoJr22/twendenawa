@@ -32,6 +32,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/Responsavel/MainResponsavel">Responsavel</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Motorista/MainMotorista">Motorista</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -56,7 +59,7 @@
             <ul>
                 <li><a href="#" class="footer-link">TwendenawaLda <ion-icon name="logo-instagram" ></ion-icon></a></li>
                 <li><a href="#" class="footer-link"> Whatsapp <ion-icon name="logo-whatsapp" ></ion-icon></a></li>
-                <li><a href="#" class="footer-link">Telegram <ion-icon name="logo-telegram" ></ion-icon></a></li>
+                <li><a href="#" class="footer-link">Telegram <ion-icon name="paper-plane-outline"></ion-icon></a></li>
             </ul>
         </div>
     </div>
