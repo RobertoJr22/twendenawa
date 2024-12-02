@@ -1,81 +1,21 @@
-
-<div class="container mt-5">
-    <div class="row g-4">
-        <!-- Coluna esquerda (dados pessoais) -->
-        <div class="col-md-4">
-            <div class="card dados-pessoais text-center">
-                <!-- Foto de Perfil -->
-                <div class="profile-photo-container" id="profile-photo">
-                    <!-- Ícone de Câmera -->
-                    <ion-icon name="camera-outline"></ion-icon>
-                    <!-- Imagem de Perfil (escondida por padrão) -->
-                    <img src="" alt="Foto de Perfil">
-                </div>
-
-                <!-- Dados Pessoais -->
-                <div>
-                    <h5 class="card-title">Informações do Motorista</h5>
-                    <p><strong>Nome:</strong> João da Silva</p>
-                    <p><strong>Veículo:</strong> Minibus Azul</p>
-                    <p><strong>Telefone:</strong> +244 912 345 678</p>
-                    <p><strong>Placa do Veículo:</strong> ABC1234</p>
-                </div>
-                <a href="" class="btn editar">Editar<ion-icon name="pencil-outline"></ion-icon></a>
-            </div>
+<div>
+    <div class="d-flex justify-content-center align-items-center p-3">
+        <!-- Lado esquerdo: Foto do estudante -->
+        <div class="col-md-4 photo-container d-flex align-items-center justify-content-center">
+            <img src="https://via.placeholder.com/150" alt="Foto do Estudante">
         </div>
-
-        <!-- Coluna direita (outro card) -->
-        <div class="col-md-8">
-            <div class="card outro">
-                <!-- Mapa Interativo -->
-                <div class="card mt-3">
-                    <div class="card-header">
-                        Localização em Tempo Real <ion-icon name="navigate-circle-outline"></ion-icon>
-                    </div>
-                    <div class="card-body">
-                        <div class="map-container">
-                            Mapa interativo (em desenvolvimento)
-                        </div>
-                    </div>
-                </div>
-                <!-- Viagens Ativas -->
-                <div class="card">
-                    <div class="card-header">
-                        Viagens Ativas <ion-icon name="bus-outline"></ion-icon>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Estudantes a bordo:</strong></p>
-                        <div class="list-group">
-                            <a href="#" class="btn btn-outline-primary d-flex justify-content-between align-items-center mb-3">
-                                <span>João Silva</span>
-                                <span>Ver Mais</span>
-                            </a>
-                            <a href="#" class="btn btn-outline-primary d-flex justify-content-between align-items-center mb-3">
-                                <span>Maria Souza</span>
-                                <span>Ver Mais</span>
-                            </a>
-                        </div>
-
-                        <!-- Botão para iniciar/pausar a viagem -->
-                        <div class="text-center mt-3">
-                            <button class="btn ">Iniciar Viagem <ion-icon name="play-outline"></ion-icon></button>
-                            <button class="btn ">Pausar Viagem <ion-icon name="pause-outline"></ion-icon></button>
-                            <button class="btn ">Pausar Viagem <ion-icon name="stop-outline"></ion-icon></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Relatório de Eventualidades -->
-                <div class="card mt-3">
-                    <div class="card-header">
-                        Relatório de Eventualidades <ion-icon name="alert-circle-outline"></ion-icon>
-                    </div>
-                    <div class="card-body">
-                        <textarea class="form-control" rows="4" placeholder="Informe qualquer eventualidade na viagem..."></textarea>
-                        <button class="btn btn-outline-success mt-3">Enviar Relatório</button>
-                    </div>
-                </div>
-            </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <h5><strong>Informações do Estudante</strong></h5>
+            <p><strong>Nome:</strong> João Silva</p>
+            <p><strong>Data de Nascimento:</strong> 10/05/2008</p>
+            <p><strong>Telefone:</strong> +244 912 345 678</p>
+            <p><strong>Responsável:</strong> Maria Silva</p>
+            <p><strong>Telefone do Responsável:</strong> +244 923 456 789</p>
         </div>
+    </div>
+    <!-- Botões centralizados -->
+    <div class="buttons-container m-3">
+        <button class="btn btn-lista me-2">Adicionar</button>
+        <button class="btn btn-lista">Retirar</button>
     </div>
 </div>

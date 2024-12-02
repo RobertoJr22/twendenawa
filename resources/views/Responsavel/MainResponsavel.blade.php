@@ -39,15 +39,15 @@
                         <div class="card-body">
                             <p><strong>Estudantes em Viagem:</strong></p>
                             <div class="list-group">
-                                <a href="#" class="student-link btn btn-outline-primary d-flex justify-content-between align-items-center mb-3">
+                                <a href="/Estudante/DetalhesViagem" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
                                     <span>João Silva</span>
                                     <span>Ver Mais</span>
                                 </a>
-                                <a href="#" class="student-link btn btn-outline-primary d-flex justify-content-between align-items-center mb-3">
+                                <a href="/Estudante/DetalhesViagem" class="student-link btn btn-lista  d-flex justify-content-between align-items-center mb-3">
                                     <span>Maria Souza</span>
                                     <span>Ver Mais</span>
                                 </a>
-                                <a href="#" class="student-link btn btn-outline-primary d-flex justify-content-between align-items-center mb-3">
+                                <a href="/Estudante/DetalhesViagem" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
                                     <span>Pedro Almeida</span>
                                     <span>Ver Mais</span>
                                 </a>
@@ -75,15 +75,15 @@
                         </div>
                         <div class="card-body">
                             <div class="list-group">
-                                <a href="#" class="student-link btn btn-outline-primary d-flex justify-content-between align-items-center mb-3">
+                                <a href="/Estudante/InfoEstudante" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
                                     <span>João Silva</span>
                                     <span>Ver Mais</span>
                                 </a>
-                                <a href="#" class="student-link btn btn-outline-primary d-flex justify-content-between align-items-center mb-3">
+                                <a href="/Estudante/InfoEstudante" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
                                     <span>Maria Souza</span>
                                     <span>Ver Mais</span>
                                 </a>
-                                <a href="#" class="student-link btn btn-outline-primary d-flex justify-content-between align-items-center mb-3">
+                                <a href="/Estudante/InfoEstudante" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
                                     <span>Pedro Almeida</span>
                                     <span>Ver Mais</span>
                                 </a>

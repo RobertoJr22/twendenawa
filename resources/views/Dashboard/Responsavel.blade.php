@@ -3,7 +3,7 @@
 @section('content')
     <!-- Container principal da Dashboard de Responsáveis -->
     <div class="container mt-5">
-        <h2 class="text-center mb-4">Dashboard de Responsáveis dos Estudantes</h2>
+        <h2 class="text-center mb-4 fs-responsive">Dashboard de Responsáveis dos Estudantes</h2>
 
         <!-- Barra de Pesquisa de Responsáveis -->
         <div class="row justify-content-center mb-3">

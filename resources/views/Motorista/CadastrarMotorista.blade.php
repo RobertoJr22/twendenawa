@@ -3,7 +3,7 @@
 @section('content')
 <div class="container d-flex justify-content-center mt-5" id="CadastrarMotorista">
     <div class="col-md-8 col-lg-6">
-        <h2 class="text-center mb-4">Cadastro de Motorista</h2>
+        <h2 class="text-center mb-4 fs-responsive">Cadastro de Motorista</h2>
         <form>
             <!-- Dados Pessoais -->
             <div class="mb-3">

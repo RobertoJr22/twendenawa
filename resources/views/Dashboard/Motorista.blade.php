@@ -3,7 +3,7 @@
 @section('content')
 <!-- Container principal da Dashboard de Motoristas -->
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Dashboard de Motoristas</h2>
+    <h2 class="text-center mb-4 fs-responsive">Dashboard de Motoristas</h2>
 
     <!-- Barra de Pesquisa de Motoristas -->
     <div class="row justify-content-center mb-3">

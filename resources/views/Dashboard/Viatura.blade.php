@@ -3,7 +3,7 @@
 @section('content')
     <!-- Container principal da Dashboard de Viaturas -->
     <div class="container mt-5">
-        <h2 class="text-center mb-4">Dashboard de Viaturas</h2>
+        <h2 class="text-center mb-4 fs-responsive">Dashboard de Viaturas</h2>
 
         <!-- Barra de Pesquisa de Viaturas -->
         <div class="row justify-content-center mb-3">

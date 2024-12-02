@@ -64,6 +64,10 @@
                                 <span>Ver Mais</span>
                             </a>
                         </div>
+                        <!-- Botão de Voltar -->
+                        <div class="text-center">
+                            <a href="/Estudante/SelecaoEstudante" class="btn">Adicionar</a>
+                        </div>
                     </div>
                 </div>
 

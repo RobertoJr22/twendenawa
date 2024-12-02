@@ -28,7 +28,8 @@ footer {
 .TabelasFooter{
     width: 100%;
     display: flex;
-    justify-content: left;
+    justify-content:flex-start; /* Para deixar as divs lado a lado com espaço */
+    flex-wrap: wrap; /* Permite que os itens que não cabem se movam para a linha seguinte */
     padding: 20px;
 }
 .TabelaFooter ul{
@@ -57,6 +58,19 @@ footer hr{
     border: 0;
     border-top: 0.1px solid aliceblue;
 }
+
+@media (max-width: 768px) {
+    .TabelasFooter {
+        flex-direction: column; /* Alinha as divs em coluna em telas pequenas */
+        align-items: center; /* Centraliza as divs na tela */
+    }
+
+    .TabelaFooter {
+        width: 100%; /* Garante que as divs ocupem 100% da largura no modo coluna */
+        text-align: center; /* Centraliza o conteúdo dentro das divs */
+    }
+}
+
 
 /*FIM FOOTER*/
 
@@ -357,6 +371,7 @@ footer hr{
 }
 .form-control:hover {
     transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(229, 233, 13, 0.87);
 }
 .form-control:active {
    border-color:rgba(229, 233, 13, 0.87);
@@ -366,6 +381,47 @@ footer hr{
     outline: none; /* Retira o contorno padrão */
     box-shadow: 0 0 5px rgba(229, 233, 13, 0.87);
     border: 2px solid rgba(229, 233, 13, 0.87); /* Cor personalizada para a borda ao focar */
+}
+
+/*TELA DE ADICIONAR ESTUDANTES*/
+.custom-container {
+    max-width: 60%;
+    margin: 0 auto;
+}
+
+/* Centraliza e define a largura da barra de pesquisa */
+.search-bar {
+    max-width: 70%;
+    margin: 0 auto;
+}
+
+/* Card de foto do estudante */
+.photo-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid black;
+    margin: 5px;
+}
+.custom-container{
+    padding: 10px;
+}
+#card-selecionar{
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* ESTILO PAPA TITULO H2 SELECIONAR ESTUDANTE  */
+.fs-responsive {
+    font-size: 1.5rem; /* Tamanho base para telas pequenas */
+}
+
+@media (min-width: 768px) {
+    .fs-responsive {
+        font-size: 2.5rem; /* Tamanho maior para telas médias e maiores */
+    }
 }
 
 

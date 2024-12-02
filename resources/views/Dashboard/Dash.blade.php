@@ -3,7 +3,7 @@
 @section('content')
     <!-- Container centralizado com botões largos -->
     <div class="container d-flex flex-column align-items-center mt-5">
-        <h2 class="text-center mb-4">Central de controlo</h2>
+        <h2 class="text-center mb-4 fs-responsive">Central de controlo</h2>
         
         <!-- Botão Estudantes -->
         <a href="/Dashboard/Estudante" class="btn-custom mb-3 btn-main-dash">Estudantes</a>

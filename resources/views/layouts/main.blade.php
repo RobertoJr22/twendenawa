@@ -42,33 +42,33 @@
         @yield('content')
     </main>
     <footer>
-    <div class="TabelasFooter">
-        <!-- Primeira coluna: Informação (mais larga) -->
-        <div class="TabelaFooter">
-            <h5>Informação</h5>
-            <ul>
-                <li><a href="#" class="footer-link">Sobre nós</a></li>
-                <li><a href="#" class="footer-link">Política e Privacidade</a></li>
-                <li><a href="#" class="footer-link">Termos e Condições</a></li>
-            </ul>
+        <div class="TabelasFooter">
+            <!-- Primeira coluna: Informação (mais larga) -->
+            <div class="TabelaFooter">
+                <h5>Informação</h5>
+                <ul>
+                    <li><a href="#" class="footer-link">Sobre nós</a></li>
+                    <li><a href="#" class="footer-link">Política e Privacidade</a></li>
+                    <li><a href="#" class="footer-link">Termos e Condições</a></li>
+                </ul>
+            </div>
+
+            <!-- Segunda coluna: Contactos (mais estreita) -->
+            <div class="TabelaFooter">
+                <h5 >Contactos</h5>
+                <ul>
+                    <li><a href="#" class="footer-link">TwendenawaLda <ion-icon name="logo-instagram" ></ion-icon></a></li>
+                    <li><a href="#" class="footer-link"> Whatsapp <ion-icon name="logo-whatsapp" ></ion-icon></a></li>
+                    <li><a href="#" class="footer-link">Telegram <ion-icon name="paper-plane-outline"></ion-icon></a></li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Segunda coluna: Contactos (mais estreita) -->
-        <div class="TabelaFooter">
-            <h5 >Contactos</h5>
-            <ul>
-                <li><a href="#" class="footer-link">TwendenawaLda <ion-icon name="logo-instagram" ></ion-icon></a></li>
-                <li><a href="#" class="footer-link"> Whatsapp <ion-icon name="logo-whatsapp" ></ion-icon></a></li>
-                <li><a href="#" class="footer-link">Telegram <ion-icon name="paper-plane-outline"></ion-icon></a></li>
-            </ul>
+        <!-- Linha Divisória e Copyright -->
+        <hr>
+        <div class="text-center mt-2">
+            &copy; Twendenawa 2024
         </div>
-    </div>
-
-    <!-- Linha Divisória e Copyright -->
-    <hr>
-    <div class="text-center mt-2">
-        &copy; Twendenawa 2024
-    </div>
     </footer>
 
     <!-- Scripts do Bootstrap e jQuery -->

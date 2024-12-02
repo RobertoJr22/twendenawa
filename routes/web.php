@@ -21,6 +21,9 @@ Route::get('/Motorista/MainMotorista',[MotoristaController::class, 'MainMotorist
 /* Estudante Rotas */
 Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );
 Route::get('/Estudante/MainEstudante',[EstudanteController::class, 'MainEstudante'] );
+Route::get('/Estudante/DetalhesViagem',[EstudanteController::class,'DetalhesViagem']);
+Route::get('/Estudante/InfoEstudante',[EstudanteController::class,'InfoEstudante']);
+Route::get('/Estudante/SelecaoEstudante',[EstudanteController::class,'SelecaoEstudante']);
 
 /* Dashboard */
 Route::get('/Dashboard/Dash',[DashboardController::class,'index']);
