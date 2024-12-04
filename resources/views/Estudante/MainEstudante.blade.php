@@ -18,8 +18,8 @@
                     <!-- Dados Pessoais -->
                     <div>
                         <h5 class="card-title">Informações do Estudante</h5>
-                        <p><strong>Nome:</strong> João Silva</p>
-                        <p><strong>Email:</strong> joao.silva@example.com</p>
+                        <p><strong>Nome:</strong>{{ $helper->DadosUsuario('name') }}</p>
+                        <p><strong>Email:</strong> {{ $helper->DadosUsuario('email') }}</p>
                         <p><strong>Telefone:</strong> +244 912 345 678</p>
                         <p><strong>Endereço:</strong> Rua Principal, nº 123, Luanda</p>
                     </div>

@@ -18,9 +18,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name', 
+        'email', 
+        'password', 
+        'tipo_usuario_id', // Campo relacionado ao tipo de usuário
     ];
 
     /**
@@ -32,6 +33,12 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    // Relacionamento com o TipoUsuario
+    public function tipoUsuario()
+    {
+        return $this->belongsTo(tipo_usuario::class, 'tipo_usuario_id');
+    }
 
     /**
      * Get the attributes that should be cast.

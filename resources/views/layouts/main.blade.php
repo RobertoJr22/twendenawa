@@ -35,6 +35,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/Motorista/MainMotorista">Motorista</a>
                 </li>
+                <li class="nav-item">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn ">Logout</button>
+                    </form>
+                </li>
             </ul>
         </div>
     </nav>

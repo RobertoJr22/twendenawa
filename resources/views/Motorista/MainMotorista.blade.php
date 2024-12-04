@@ -18,7 +18,7 @@
                 <!-- Dados Pessoais -->
                 <div>
                     <h5 class="card-title">Informações do Motorista</h5>
-                    <p><strong>Nome:</strong> João da Silva</p>
+                    <p><strong>Nome:</strong> {{$helper->DadosUsuario('name')}}</p>
                     <p><strong>Veículo:</strong> Minibus Azul</p>
                     <p><strong>Telefone:</strong> +244 912 345 678</p>
                     <p><strong>Placa do Veículo:</strong> ABC1234</p>
