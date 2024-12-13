@@ -13,10 +13,12 @@ class TipoUsuariosSeeder extends Seeder
      */
     public function run()
     {
+
         DB::table('tipo_usuarios')->insert([
             ['nome' => 'admin', 'created_at' => now(), 'updated_at' => now()],
             ['nome' => 'estudante', 'created_at' => now(), 'updated_at' => now()],
             ['nome' => 'motorista', 'created_at' => now(), 'updated_at' => now()],
+            ['nome' => 'Responsavel', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

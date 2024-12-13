@@ -35,9 +35,25 @@ class User extends Authenticatable
     ];
 
     // Relacionamento com o TipoUsuario
-    public function tipoUsuario()
+    public function tipoUsuarios()
     {
         return $this->belongsTo(tipo_usuario::class, 'tipo_usuario_id');
+    }
+
+    public function escolas(){
+        return $this->hasOne('app\Models\escola');
+    }
+
+    public function responsavels(){
+        return $this->hasOne('app\Models\responsavel');
+    }
+
+    public function motoristas(){
+        return $this->hasOne('app\Models\motorista');
+    }
+
+    public function estudantes(){
+        return $this->hasOne('app\Models\estudante');
     }
 
     /**
