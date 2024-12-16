@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nome')->unique();
             $table->foreignId('marcas_id')->constrained('marcas');
+            $table->integer('estado')->default(1);
             $table->timestamps();
         });
     }

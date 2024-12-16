@@ -14,14 +14,14 @@ class sexo extends Model
 
 
     public function responsavels(){
-        return $this->hasMany('app\Models\responsavel');
+        return $this->hasMany(responsavel::class,'sexos_id');
     }
 
     public function motoristas(){
-        return $this->hasMany('app\Models\motorista');
+        return $this->hasMany(motorista::class,'sexos_id');
     }
 
     public function estudantes(){
-        return $this->hasMany('app\Models\estudante');
+        return $this->hasMany(estudante::class,'sexos_id');
     }
 }

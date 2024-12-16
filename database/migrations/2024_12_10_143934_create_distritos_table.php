@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('motoristas', function (Blueprint $table) {
-            $table->integer('telefone');
+        Schema::create('distritos', function (Blueprint $table) {
+            $table->id();
+            $table->string('nome')->unique();
+            $table->foreignId('municipios_id')->constrained('municipios');
+            $table->integer('estado')->default(1);
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('motoristas', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('distritos');
     }
 };

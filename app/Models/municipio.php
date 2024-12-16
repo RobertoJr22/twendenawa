@@ -9,10 +9,11 @@ class municipio extends Model
     protected $table = 'municipios';
 
     protected $fillable =[
-        'nome'
+        'nome',
+        'estado',
     ];
 
     public function distritos(){
-        return $this->hasMany('app\Models\distrito');
+        return $this->hasMany(distrito::class,'municipios_id');
     }
 }

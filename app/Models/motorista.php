@@ -9,14 +9,15 @@ class motorista extends Model
     protected $table = 'motoristas';
 
     protected $fillable = [
+        'id',
         'foto',
         'nome',
         'DataNascimento',
         'endereco',
         'BI',
+        'telefone',
         'sexos_id',
         'turnos_id',
-        'users_id',
         'estado',
     ];
 
@@ -25,23 +26,23 @@ class motorista extends Model
     ];
 
     public function sexos(){
-        return $this->belongsTo('app\Models\sexo');
+        return $this->belongsTo(sexo::class,'sexos_id');
     }
 
     public function turnos(){
-        return $this->belongsTo('app\Models\turno');
+        return $this->belongsTo(turno::class,'turnos_id');
     }
 
-    public function users(){
-        return $this->belongsTo('app\Models\User');
+    public function user(){
+        return $this->belongsTo(User::class,'id','id');
     }
 
     public function carteiras(){
-        return $this->hasOne('app\Models\carteira');
+        return $this->hasOne(carteira::class,'motoristas_id');
     }
 
     public function DadosViagems(){
-        return $this->hasMany('app\Models\DadosViagem');
+        return $this->hasMany(DadosViagem::class,'motoristas_id');
     }
 
 }

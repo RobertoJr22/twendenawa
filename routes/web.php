@@ -43,4 +43,4 @@ Route::get('/Dashboard/Viatura',[DashboardController::class,'Viatura']);
 Route::get('/Dashboard/Motorista',[DashboardController::class,'Motorista']);
 
 /* Responsavel Rotas */
-Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel']);
+Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');

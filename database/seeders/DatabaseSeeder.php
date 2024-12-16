@@ -15,14 +15,16 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             TipoUsuariosSeeder::class, 
+            UsersSeeder::class,
             SexosSeeder::class,
             TurnosSeeder::class,
             MarcasSeeder::class,
             ModelosSeeder::class,
-            VeiculosSeeder::class,
             MunicipiosSeeder::class,
             distritosSeeder::class,
             BairrosSeeder::class,
+            EscolasSeeder::class,
+            VeiculosSeeder::class,
         ]);
     }
 }

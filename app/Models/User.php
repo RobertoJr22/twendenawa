@@ -17,8 +17,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name', 
+    protected $fillable = [ 
         'email', 
         'password', 
         'tipo_usuario_id', // Campo relacionado ao tipo de usuário
@@ -41,19 +40,19 @@ class User extends Authenticatable
     }
 
     public function escolas(){
-        return $this->hasOne('app\Models\escola');
+        return $this->hasOne(escola::class, 'id','id');
     }
 
     public function responsavels(){
-        return $this->hasOne('app\Models\responsavel');
+        return $this->hasOne(responsavel::class, 'id','id');
     }
 
     public function motoristas(){
-        return $this->hasOne('app\Models\motorista');
+        return $this->hasOne(motorista::class, 'id','id');
     }
 
     public function estudantes(){
-        return $this->hasOne('app\Models\estudante');
+        return $this->hasOne(estudante::class, 'id','id');
     }
 
     /**

@@ -33,8 +33,10 @@ class AuthController extends Controller
                 return redirect()->route('TelaAdmin');
             } elseif ($user->tipo_usuario_id == 2) { // Exemplo: Estudante
                 return redirect()->route('TelaEstudante');
-            } else {
+            } elseif ($user->tipo_usuario_id == 3) { // Exemplo: Estudante
                 return redirect()->route('TelaMotorista');
+            } elseif ($user->tipo_usuario_id == 4) { // Exemplo: Estudante
+                return redirect()->route('TelaResponsavel');
             }
         }
 
@@ -62,14 +64,14 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            //'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
             'tipo_usuario_id' => 'required|exists:tipo_usuarios,id', // Garantir que o tipo de usuário seja válido
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            //'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password), // Criptografando a senha
             'tipo_usuario_id' => $request->tipo_usuario_id,
@@ -82,8 +84,10 @@ class AuthController extends Controller
             return redirect()->route('Dashboard.Dash');
         } elseif ($user->tipo_usuario_id == 2) {
             return redirect()->route('TelaEstudante');
-        } else {
+        } elseif($user->tipo_usuario_id == 3) {
             return redirect()->route('TelaMotorista');
+        } elseif($user->tipo_usuario_id == 4) {
+            return redirect()->route('TelaResponsavel');
         }
     }
 }

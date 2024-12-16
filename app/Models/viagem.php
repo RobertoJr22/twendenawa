@@ -13,6 +13,6 @@ class viagem extends Model
     ];
 
     public function DadosViagems(){
-        return $this->hasMany('app\Models\DadosViagem');
+        return $this->hasMany(DadosViagem::class,'viagems_id');
     }
 }

@@ -13,6 +13,7 @@ class tipo_usuario extends Model
     // Definir os campos que podem ser atribuídos em massa
     protected $fillable = [
         'nome',
+        'estado',
     ];
 
     // Relacionamento com o modelo User

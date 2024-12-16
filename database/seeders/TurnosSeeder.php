@@ -14,8 +14,8 @@ class TurnosSeeder extends Seeder
     public function run(): void
     {
         DB::table('turnos')->Insert([
-            ['nome'=>'Manhã','created_at'=>now(),'updated_at'=>now()],
-            ['nome'=>'Tarde','created_at'=>now(),'updated_at'=>now()],
+            ['nome'=>'Manhã','HoraIda'=>'07:00:00','HoraRegresso'=>'13:00:00','created_at'=>now(),'updated_at'=>now()],
+            ['nome'=>'Tarde','HoraIda'=>'12:00:00','HoraRegresso'=>'18:00:00','created_at'=>now(),'updated_at'=>now()],
         ]);
     }
 }

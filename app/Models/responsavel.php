@@ -9,14 +9,19 @@ class responsavel extends Model
     protected $table = 'responsavels';
 
     protected $fillable = [
+        'id',
         'nome',
         'DataNascimento',
         'foto',
+        'telefone',
         'endereco',
-        'users_id',
         'sexos_id',
         'estado',
     ];
+
+    protected $incrementing = false;
+
+    protected $keyType = 'unsignedBigInteger';
 
     protected $casts = [
         'DataNascimento' => 'date',
@@ -24,10 +29,10 @@ class responsavel extends Model
 
 
     public function sexos(){
-        return $this->belongsTo('app\Models\sexo');
+        return $this->belongsTo(sexo::class,'sexos_id');
     }
 
-    public function users(){
-        return $this->belongsTo('app\Models\User');
+    public function user(){
+        return $this->belongsTo(User::class,'id','id');
     }
 }

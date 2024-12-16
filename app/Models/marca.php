@@ -10,10 +10,11 @@ class marca extends Model
 
     protected $fillable = [
         'nome',
+        'estado',
     ];
 
 
     public function modelos(){
-        return $this->hasMany('app\Models\modelo');
+        return $this->hasMany(modelo::class,'marcas_id');
     }
 }

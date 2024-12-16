@@ -15,6 +15,6 @@ class carteira extends Model
     ];
 
     public function motoristas(){
-        return $this->belongsTo('app\Models\motorista');
+        return $this->belongsTo(motorista::class,'motoristas_id');
     }
 }

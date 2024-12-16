@@ -44,6 +44,7 @@
                                 <option value="1">Admin</option>
                                 <option value="2">Estudante</option>
                                 <option value="3">Motorista</option>
+                                <option value="4">Responsavel</option>
                             </select>
                         </div>
 

@@ -11,9 +11,10 @@ class bairro extends Model
     protected $fillable = [
         'nome',
         'distrito_id',
+        'estado',
     ];
 
     public function escolas(){
-        return $this->hasMany('app\Models\escola');
+        return $this->hasMany(escola::class,'bairros_id');
     }
 }

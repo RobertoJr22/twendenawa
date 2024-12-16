@@ -16,14 +16,14 @@ class DadosViagem extends Model
     ];
 
     public function estudantes(){
-        return $this->belongsTo('app\Models\estudante');
+        return $this->belongsTo(estudante::class,'estudantes_id');
     }
 
     public function motoristas(){
-        return $this->belongsTo('app\Models\motorista');
+        return $this->belongsTo(motorista::class,'motoristas');
     }
 
     public function viagems(){
-        return $this->belongsTo('app\Models\viagem');
+        return $this->belongsTo(viagem::class,'viagems_id');
     }
 }

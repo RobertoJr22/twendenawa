@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('turnos', function (Blueprint $table) {
             $table->id();
             $table->string('nome')->unique();
+            $table->time('HoraIda');
+            $table->time('HoraRegresso');
+            $table->integer('estado')->default(1);
             $table->timestamps();
         });
     }

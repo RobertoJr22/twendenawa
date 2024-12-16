@@ -10,13 +10,21 @@ class turno extends Model
 
     protected $fillable = [
         'nome',
+        'HoraIda',
+        'HoraRegresso',
+        'estado',
     ];
 
     public function motoristas(){
-        return $this->hasMany('app\Models\motorista');
+        return $this->hasMany(motorista::class,'turnos_id');
     }
 
     public function estudantes(){
-        return $this->hasMany('app\Models\estudante');
+        return $this->hasMany(estudante::class,'turnos_id');
     }
+
+    protected $cast = [
+        'HoraIda'=>'datetime:H:i:s',
+        'HoraRegresso'=>'datetime:H:i:s',
+    ];
 }

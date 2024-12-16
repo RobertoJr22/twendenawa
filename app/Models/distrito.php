@@ -10,10 +10,11 @@ class distrito extends Model
 
     protected $fillable = [
         'nome',
-        'municipios_id'
+        'municipios_id',
+        'estado',
     ];
 
     public function municipios(){
-        return $this->belongsTo('app\Models\municipio');
+        return $this->belongsTo(municipio::class,'municipios_id');
     }
 }

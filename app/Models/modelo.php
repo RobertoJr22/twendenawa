@@ -10,13 +10,14 @@ class modelo extends Model
 
     protected $fillable =[
         'nome',
-        'marcas_id'
+        'marcas_id',
+        'estado',
     ];
 
     public function marcas(){
-        return $this->belongsTo('app\Models\marca');
+        return $this->belongsTo(marca::class,'marcas_id');
     }
     public function veiculos(){
-        return $this->hasMany('app\Models\veiculo');
+        return $this->hasMany(veiculo::class,'modelos_id');
     }
 }

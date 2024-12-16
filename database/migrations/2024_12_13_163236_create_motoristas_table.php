@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('motoristas', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id');
+            $table->foreign('id')->references('id')->on('users');
+            $table->primary('id');
             $table->string('foto');
             $table->string('nome');
             $table->date('DataNascimento');
             $table->string('endereco')->nullable();
             $table->string('BI');
-            $table->foreignId('sexos_id')->constrained('sexos');
+            $table->integer('telefone');
             $table->foreignId('turnos_id')->constrained('turnos');
-            $table->foreignId('users_id')->constrained('Users');
+            $table->foreignId('sexos_id')->constrained('sexos');
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
