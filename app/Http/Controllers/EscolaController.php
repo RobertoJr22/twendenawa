@@ -4,26 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class EscolaController extends Controller
 {
 
     public function index(){
-        return view('Dashboard.Dash');
+        return view('Escola.MainEscola');
     }
 
     public function Estudante(){
-        return view('Dashboard.Estudante');
+        return view('Escola.Estudante');
     }
 
     public function Motorista(){
-        return view('Dashboard.Motorista');
+        return view('Escola.Motorista');
     }
 
     public function Responsavel(){
-        return view('Dashboard.Responsavel');
+        return view('Escola.Responsavel');
     }
 
     public function Viatura(){
-        return view('Dashboard.Viatura');
+        return view('Escola.Viatura');
     }
 }

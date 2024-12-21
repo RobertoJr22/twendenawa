@@ -17,7 +17,7 @@ class UsersSeeder extends Seeder
         foreach($emails as $email){
             DB::table('users')->updateOrInsert(
                 ['email'=>$email],
-                ['email'=>$email,'password'=>bcrypt('123456'),'tipo_usuario_id'=>1, 'created_at'=>now(), 'updated_at'=>now()]
+                ['name'=>'Ulumbo','email'=>$email,'password'=>bcrypt('123456'),'tipo_usuario_id'=>5, 'created_at'=>now(), 'updated_at'=>now()]
             );
         }
     }

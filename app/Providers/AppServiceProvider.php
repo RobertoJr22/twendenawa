@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\dados;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Helpers\Helper;
@@ -27,5 +28,6 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('helper', new Helper);
         });
+
     }
 }

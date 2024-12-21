@@ -17,6 +17,9 @@ class veiculo extends Model
         'estado',
         'capacidade',
     ];
+    public function rotas(){
+        return $this->belongsToMany(rota::class,'rotas_veiculos');
+    }
 
     public function modelo(){
         return $this->belongsTo(modelo::class,'modelos_id');

@@ -424,4 +424,12 @@ footer hr{
     }
 }
 
+/*selecao de estudante*/
+
+.dados-usuario{
+    margin: 5px;
+}
+.informacao-usuario{
+    margin-bottom: 10px;
+}
 

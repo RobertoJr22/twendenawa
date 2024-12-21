@@ -9,9 +9,8 @@ class motorista extends Model
     protected $table = 'motoristas';
 
     protected $fillable = [
-        'id',
+        'users_id',
         'foto',
-        'nome',
         'DataNascimento',
         'endereco',
         'BI',
@@ -21,23 +20,27 @@ class motorista extends Model
         'estado',
     ];
 
+
     protected $cast = [
         'DataNascimento' => 'date',
     ];
+    public function rotas(){
+        return $this->belongsToMany(rota::class,'motoristas_rotas');
+    }
 
-    public function sexos(){
+    public function sexo(){
         return $this->belongsTo(sexo::class,'sexos_id');
     }
 
-    public function turnos(){
+    public function turno(){
         return $this->belongsTo(turno::class,'turnos_id');
     }
 
     public function user(){
-        return $this->belongsTo(User::class,'id','id');
+        return $this->belongsTo(User::class,'users_id');
     }
 
-    public function carteiras(){
+    public function carteira(){
         return $this->hasOne(carteira::class,'motoristas_id');
     }
 

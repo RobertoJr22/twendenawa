@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('responsavels', function (Blueprint $table) {
+        Schema::create('rotas_veiculos', function(Blueprint  $table){
             $table->id();
-            $table->foreignId('users_id')->constrained('users');
-            $table->integer('telefone');
-            $table->date('DataNascimento');
-            $table->string('BI');
-            $table->string('foto')->nullable();
-            $table->string('endereco');
-            $table->foreignId('sexos_id')->constrained('sexos');
+            $table->foreignId('rotas_id')->constrained('rotas');
+            $table->foreignId('veiculos_id')->constrained('veiculos');
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('responsavels');
+        Schema::dropIfExists('rotas_veiculos');
     }
 };

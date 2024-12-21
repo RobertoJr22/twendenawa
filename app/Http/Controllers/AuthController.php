@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\estudante;
 use App\Models\User;
+use App\Models\responsavel;
 use App\Models\Tipo_usuario;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -14,6 +18,11 @@ class AuthController extends Controller
     public function showLoginForm()
     {
         return view('auth.login');
+    }
+    
+    // Exibir o Tela de selecao de tipo de registo
+    public function SelecaoRegisto(){
+        return view('auth.Selecao');
     }
 
     // Processar o login
@@ -29,27 +38,26 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             // Redirecionar para o home baseado no tipo de usuário
             $user = Auth::user();
+            $request->session()->regenerate();
+
             if ($user->tipo_usuario_id == 1) { // Exemplo: Admin
                 return redirect()->route('TelaAdmin');
             } elseif ($user->tipo_usuario_id == 2) { // Exemplo: Estudante
                 return redirect()->route('TelaEstudante');
-            } elseif ($user->tipo_usuario_id == 3) { // Exemplo: Estudante
+            } elseif ($user->tipo_usuario_id == 3) { // Exemplo: Motorista
                 return redirect()->route('TelaMotorista');
-            } elseif ($user->tipo_usuario_id == 4) { // Exemplo: Estudante
+            } elseif ($user->tipo_usuario_id == 4) { // Exemplo: Responsavel
                 return redirect()->route('TelaResponsavel');
+            } elseif ($user->tipo_usuario_id == 5) { // Exemplo: Escola
+                return redirect()->route('TelaEscola');
             }
         }
 
         return back()->withErrors(['email' => 'As credenciais não coincidem com nossos registros.']);
     }
 
-    // Exibir o formulário de registro
-    public function showRegistrationForm()
-    {
-        return view('auth.register');
-    }
-
     // Função de logout
+
     public function logout(Request $request)
     {
         Auth::logout(); // Faz o logout do usuário
@@ -60,34 +68,124 @@ class AuthController extends Controller
         return redirect()->route('login'); // Redireciona para a página de login
     }
 
+    // Exibir o formulário de registro
+
+    public function showResponsavelForm()
+    {
+        return view('auth.ResponsavelRegister');
+    }
+
+    public function showEstudanteForm()
+    {
+        return view('auth.EstudanteRegister');
+    }
+
+
     // Processar o registro
+
     public function register(Request $request)
     {
-        $request->validate([
-            //'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-            'tipo_usuario_id' => 'required|exists:tipo_usuarios,id', // Garantir que o tipo de usuário seja válido
-        ]);
+        DB::beginTransaction();
+        try{
+            // Valida campos comuns a todos os usuários
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:6|confirmed',
+                'tipo_usuario_id' => 'required|exists:tipo_usuarios,id',
+                'foto' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            ]);
 
-        $user = User::create([
-            //'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password), // Criptografando a senha
-            'tipo_usuario_id' => $request->tipo_usuario_id,
-        ]);
+            // Validação condicional com base no tipo de usuário
+            if ($request->tipo_usuario_id == 2) { // Estudante
+                $request->validate([
+                    'DataNascimento' => 'required|date',
+                    'endereco' => 'required|string|max:255',
+                    'telefone' => 'required|string|max:15',
+                    'sexos_id' => 'required|exists:sexos,id',
+                    'turnos_id' => 'required|exists:turnos,id',
+                ]);
+            } elseif ($request->tipo_usuario_id == 4) { // Responsável
+                $request->validate([
+                    'DataNascimento' => 'required|date',
+                    'BI' => 'required|string|max:14',
+                    'telefone' => 'required|string|max:15',
+                    'endereco' => 'required|string|max:255',
+                    'sexos_id' => 'required|exists:sexos,id',
+                ]);
+            }
+
+            $user = User::create([
+                'name'=>$request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password), // Criptografando a senha
+                'tipo_usuario_id' => $request->tipo_usuario_id,
+            ]);
+
+
+
+            // Verifica se a foto foi enviada
+            $path = $request->hasFile('foto') ? $request->file('foto')->store('fotos', 'public') : null;
+            dd($path);
+
+
+            //Criar um perfil de acordo o tipo de usuario e respectiva tabela
+            if ($user->tipo_usuario_id == 2) {
+
+                estudante::create([
+                    'users_id'=>$user->id,
+                    'foto'=>$path,
+                    'DataNascimento'=>$request->DataNascimento,
+                    'endereco'=>$request->endereco,
+                    'telefone'=>$request->telefone,
+                    'sexos_id'=>$request->sexos_id,
+                    'turnos_id'=>$request->turnos_id,
+                ]);
+            }
+            
+            elseif($user->tipo_usuario_id == 3) {
+                
+            } 
+            
+            elseif($user->tipo_usuario_id == 4) {
+    
+                responsavel::create([
+                    'users_id'=>$user->id,
+                    'foto'=>$path,
+                    'DataNascimento'=>$request->DataNascimento,
+                    'BI'=>$request->BI,
+                    'telefone'=>$request->telefone,
+                    'endereco'=>$request->endereco,
+                    'sexos_id'=>$request->sexos_id,
+                ]);
+    
+            } 
+            
+            elseif($user->tipo_usuario_id == 5) {
+                
+            }
+
+            DB::commit();
+
+        }catch(\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Erro ao cadastrar: ' . $e->getMessage());
+        }
+        
 
         Auth::login($user); // Loga o usuário após o registro
 
         // Redireciona com base no tipo de usuário
         if ($user->tipo_usuario_id == 1) {
-            return redirect()->route('Dashboard.Dash');
+            return redirect()->route('TelaAdmin');
         } elseif ($user->tipo_usuario_id == 2) {
             return redirect()->route('TelaEstudante');
         } elseif($user->tipo_usuario_id == 3) {
             return redirect()->route('TelaMotorista');
         } elseif($user->tipo_usuario_id == 4) {
             return redirect()->route('TelaResponsavel');
+        } elseif($user->tipo_usuario_id == 5) {
+            return redirect()->route('TelaEscola');
         }
     }
 }

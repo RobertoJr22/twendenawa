@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MotoristaController;
 use App\Http\Controllers\EstudanteController;
 use App\Http\Controllers\TwendenawaController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EscolaController;
 use App\Http\Controllers\ResponsavelController;
 use App\Http\Controllers\AuthController;
 
@@ -12,8 +12,14 @@ use App\Http\Controllers\AuthController;
 
 Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/auth/login', [AuthController::class, 'login']);
-Route::get('/auth/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::post('/auth/register', [AuthController::class, 'register']);
+
+//Route::get('/auth/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::get('/auth/ResponsavelRegister',[AuthController::class, 'showResponsavelForm'])->name('TelaRegistoResponsavel');
+Route::post('auth/ResponsavelRegister', [ResponsavelController::class, 'ResponsavelRegister'])->name('RegistarResponsavel');
+
+Route::get('/auth/EstudanteRegister',[AuthController::class, 'showEstudanteForm'])->name('TelaRegistoEstudante');
+Route::post('/auth/EstudanteRegister', [AuthController::class, 'register'])->name('RegistarEstudante');
+Route::get('/auth/Selecao',[AuthController::class, 'SelecaoRegisto'])->name('SelecaoRegisto');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
@@ -35,12 +41,12 @@ Route::get('/Estudante/DetalhesViagem',[EstudanteController::class,'DetalhesViag
 Route::get('/Estudante/InfoEstudante',[EstudanteController::class,'InfoEstudante']);
 Route::get('/Estudante/SelecaoEstudante',[EstudanteController::class,'SelecaoEstudante']);
 
-/* Dashboard */
-Route::get('/Dashboard/Dash',[DashboardController::class,'index']);
-Route::get('/Dashboard/Estudante',[DashboardController::class,'Estudante']);
-Route::get('/Dashboard/Responsavel',[DashboardController::class,'Responsavel']);
-Route::get('/Dashboard/Viatura',[DashboardController::class,'Viatura']);
-Route::get('/Dashboard/Motorista',[DashboardController::class,'Motorista']);
+/* Escola */
+Route::get('/Escola/MainEscola',[EscolaController::class,'index'])->name('TelaEscola');
+Route::get('/Escola/Estudante',[EscolaController::class,'Estudante']);
+Route::get('/Escola/Responsavel',[EscolaController::class,'Responsavel']);
+Route::get('/Escola/Viatura',[EscolaController::class,'Viatura']);
+Route::get('/Escola/Motorista',[EscolaController::class,'Motorista']);
 
 /* Responsavel Rotas */
 Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');

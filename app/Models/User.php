@@ -17,7 +17,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [ 
+    protected $fillable = [
+        'name',
         'email', 
         'password', 
         'tipo_usuario_id', // Campo relacionado ao tipo de usuário
@@ -34,8 +35,7 @@ class User extends Authenticatable
     ];
 
     // Relacionamento com o TipoUsuario
-    public function tipoUsuarios()
-    {
+    public function tipoUsuarios(){
         return $this->belongsTo(tipo_usuario::class, 'tipo_usuario_id');
     }
 
@@ -60,7 +60,7 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected function casts():array
     {
         return [
             'email_verified_at' => 'datetime',

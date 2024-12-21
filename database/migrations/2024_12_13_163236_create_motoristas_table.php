@@ -12,13 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('motoristas', function (Blueprint $table) {
-            $table->unsignedBigInteger('id');
-            $table->foreign('id')->references('id')->on('users');
-            $table->primary('id');
-            $table->string('foto');
-            $table->string('nome');
+            $table->id();
+            $table->foreignId('users_id')->constrained('users');
+            $table->string('foto')->nullable();
             $table->date('DataNascimento');
-            $table->string('endereco')->nullable();
+            $table->string('endereco');
             $table->string('BI');
             $table->integer('telefone');
             $table->foreignId('turnos_id')->constrained('turnos');

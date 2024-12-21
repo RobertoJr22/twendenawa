@@ -9,18 +9,18 @@ class escola extends Model
     protected $table = 'escolas';
 
     protected $fillable = [
-        'id',
-        'nome',
+        'users_id',
         'bairros_id',
         'telefone',
         'estado',
     ];
 
-    public function users(){
-        return $this->belongsTo(User::class,'id','id');
+
+    public function user(){
+        return $this->belongsTo(User::class,'users_id');
     }
 
-    public function bairros(){
+    public function bairro(){
         return $this->belongsTo(bairro::class,'bairros_id');
     }
 

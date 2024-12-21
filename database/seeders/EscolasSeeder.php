@@ -13,12 +13,12 @@ class EscolasSeeder extends Seeder
      */
     public function run(): void
     {
-        $escolas = ['Ulumbo'];
+        $ids = ['1'];
 
-        foreach($escolas as $escola){
+        foreach($ids as $id){
             DB::table('escolas')->updateOrInsert(
-                ['nome'=>$escola],
-                ['id'=>1,'nome'=>$escola,'telefone'=>924162800,'bairros_id'=>1,'created_at'=>now(),'updated_at'=>now()]
+                ['users_id'=>$id],
+                ['users_id'=>$id,'telefone'=>924162800,'bairros_id'=>1,'created_at'=>now(),'updated_at'=>now()]
             );
         }
     }

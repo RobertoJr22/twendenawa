@@ -24,7 +24,7 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Dashboard/Dash">Dashboard</a>
+                    <a class="nav-link" href="/Escola/MainEscola">Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/Estudante/MainEstudante">Estudante</a>

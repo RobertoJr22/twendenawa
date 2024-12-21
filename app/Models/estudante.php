@@ -9,9 +9,8 @@ class estudante extends Model
     protected $table = 'motoristas';
 
     protected $fillable = [
-        'id',
+        'users_id',
         'foto',
-        'nome',
         'DataNascimento',
         'endereco',
         'telefone',
@@ -24,16 +23,24 @@ class estudante extends Model
         'DataNascimento' => 'date',
     ];
 
-    public function sexos(){
+    public function rotas(){
+        return $this->belongsToMany(rota::class,'estudantes_rotas');
+    }
+
+    public function responsavels(){
+        return $this->belongsToMany(responsavel::class,'estudantes_responsavels');
+    }
+
+    public function sexo(){
         return $this->belongsTo(sexo::class,'sexos_id');
     }
 
-    public function turnos(){
+    public function turno(){
         return $this->belongsTo(turno::class,'turnos');
     }
 
-    public function users(){
-        return $this->belongsTo(User::class,'id','id');
+    public function user(){
+        return $this->belongsTo(User::class,'users_id');
     }
 
     public function DadosViagems(){

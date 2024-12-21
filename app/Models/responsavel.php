@@ -9,30 +9,30 @@ class responsavel extends Model
     protected $table = 'responsavels';
 
     protected $fillable = [
-        'id',
-        'nome',
+        'users_id',
         'DataNascimento',
         'foto',
+        'BI',
         'telefone',
         'endereco',
         'sexos_id',
         'estado',
     ];
 
-    protected $incrementing = false;
-
-    protected $keyType = 'unsignedBigInteger';
-
     protected $casts = [
         'DataNascimento' => 'date',
     ];
 
 
-    public function sexos(){
+    public function sexo(){
         return $this->belongsTo(sexo::class,'sexos_id');
     }
 
     public function user(){
-        return $this->belongsTo(User::class,'id','id');
+        return $this->belongsTo(User::class,'users_id');
+    }
+
+    public function estudantes(){
+        return $this->belongsToMany(estudante::class,'estudantes_responsavels');
     }
 }

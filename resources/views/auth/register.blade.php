@@ -12,7 +12,6 @@
                         <h4 class="text-center">Registrar-se</h4>
                     </div>
                     <div class="card-body">
-
                         <!-- Campo de Nome -->
                         <div class="mb-3">
                             <label for="name" class="form-label">Nome:</label>

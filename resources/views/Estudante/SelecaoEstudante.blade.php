@@ -11,27 +11,26 @@
     </div>
 
 
-    <div id="card-selecionar" class="d-flex flex-column justify-content-center align-items-center p-3">
-        <div class="d-flex flex-column flex-md-row justify-content-between p-3 w-100">
-            <!-- Lado esquerdo: Foto do estudante -->
-            <div class="photo-container d-flex align-items-center justify-content-center mb-3 mb-md-0 col-12 col-md-4">
-                <img src="https://via.placeholder.com/150" alt="Foto do Estudante" class="img-fluid">
-            </div>
-            <!-- Informações do estudante -->
-            <div class="col-12 col-md-8">
-                <h5><strong>Informações do Estudante</strong></h5>
-                <p><strong>Nome:</strong> João Silva</p>
-                <p><strong>Data de Nascimento:</strong> 10/05/2008</p>
-                <p><strong>Telefone:</strong> +244 912 345 678</p>
-                <p><strong>Responsável:</strong> Maria Silva</p>
-                <p><strong>Telefone do Responsável:</strong> +244 923 456 789</p>
-            </div>
+    <div class="card dados-pessoais">
+        <!-- Foto de Perfil -->
+        <div class="profile-photo-container" id="profile-photo">
+            <!-- Ícone de Câmera -->
+            <ion-icon name="camera-outline"></ion-icon>
+            <!-- Imagem de Perfil (escondida por padrão) -->
+            <img src="" alt="Foto de Perfil">
         </div>
 
-        <!-- Botões centralizados -->
-        <div class="buttons-container m-3 text-center">
-            <button class="btn btn-lista me-2">Adicionar</button>
-            <button class="btn btn-lista">Retirar</button>
+        <!-- Dados Pessoais -->
+        <div class="informacao-usuario">
+            <h5 class="card-title">Informações do Estudante</h5>
+            <p class="dados-usuario"><strong>Nome:</strong>{{ $helper->DadosUsuario('name') }}</p>
+            <p class="dados-usuario"><strong>Email:</strong> {{ $helper->DadosUsuario('email') }}</p>
+            <p class="dados-usuario"><strong>Telefone:</strong> +244 912 345 678</p>
+            <p class="dados-usuario"><strong>Endereço:</strong> Rua Principal, nº 123, Luanda</p>
+        </div>
+        <div class="btn-SelecaoEstudante">
+            <a href="" class="btn editar btn-custom dados-usuario">Adicionar<ion-icon name="add-circle-outline"></ion-icon></a>
+            <a href="" class="btn editar btn-custom dados-usuario">Remover<ion-icon name="remove-circle-outline"></ion-icon></a>
         </div>
     </div>
 </div>
