@@ -19,26 +19,31 @@ class ResponsavelController extends Controller
         
         DB::beginTransaction();
         try{
-            $user = User::create([
-                'name'=>$request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password), // Criptografando a senha
-                'tipo_usuario_id' => $request->tipo_usuario_id,
-            ]);
+            $imagePath = null;
+            if ($request->hasFile('foto')) 
+            {
+                $imagePath = $request->file('foto')->store('avatares', 'public');
+            } 
+            
+            $user = New User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password); 
+            $user->tipo_usuario_id = $request->tipo_usuario_id;
+            $user->save();
+            
+            $responsavel = New responsavel(); 
+            $responsavel->users_id = $user->id;
+            $responsavel->foto = $imagePath;
+            $responsavel->DataNascimento = $request->DataNascimento;
+            $responsavel->BI = $request->BI;
+            $responsavel->endereco = $request->endereco;
+            $responsavel->telefone = $request->telefone;
+            $responsavel->sexos_id = $request->sexos_id;
+            $responsavel->save();
 
-            // Verifica se a foto foi enviada
-            $path = $request->hasFile('foto') ? $request->file('foto')->store('fotos', 'public') : null;
-            dd($path);
-
-            responsavel::create([
-                'users_id'=>$user->id,
-                'foto'=>$path,
-                'DataNascimento'=>$request->DataNascimento,
-                'BI'=>$request->BI,
-                'telefone'=>$request->telefone,
-                'endereco'=>$request->endereco,
-                'sexos_id'=>$request->sexos_id,
-            ]);
+            
+           
 
             DB::commit();
         }catch(\Exception $e ){
@@ -54,6 +59,11 @@ class ResponsavelController extends Controller
 
     public function MainResponsavel(){
         
-        return view('Responsavel.MainResponsavel');
+        $user = Auth::user();
+
+        
+        $responsavel = $user->responsavel; 
+    
+        return view('Responsavel.MainResponsavel', compact('user', 'responsavel'));
     }
 }

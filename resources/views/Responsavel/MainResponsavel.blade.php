@@ -11,18 +11,22 @@
                     <!-- Foto de Perfil -->
                     <div class="profile-photo-container" id="profile-photo">
                         <!-- Ícone de Câmera -->
-                        <ion-icon name="camera-outline"></ion-icon>
+                       
                         <!-- Imagem de Perfil (escondida por padrão) -->
-                        <img src="" alt="Foto de Perfil">
+                        @if ($responsavel && $responsavel->foto)
+                        <img src="{{ asset('storage/'.$responsavel->foto) }}" alt="Foto de Perfil" style="object-fit: cover;">
+                    @else
+                    <ion-icon name="camera-outline"></ion-icon> 
+                    @endif
                     </div>
 
                     <!-- Dados Pessoais -->
                     <div>
                         <h5 class="card-title">Informações do Responsável</h5>
-                        <p><strong>Nome:</strong> João Silva</p>
-                        <p><strong>Email:</strong> joao.silva@example.com</p>
-                        <p><strong>Telefone:</strong> +244 912 345 678</p>
-                        <p><strong>Endereço:</strong> Rua Principal, nº 123, Luanda</p>
+                        <p><strong>Nome:</strong> {{ $user->name }}</p>
+                        <p><strong>Email:</strong> {{$user->email}}</p>
+                        <p><strong>Telefone:</strong> {{$responsavel ? $responsavel->telefone : 'Não informado'}}</p>
+                        <p><strong>Endereço:</strong> {{$responsavel ? $responsavel->endereco : 'Não informado'}}</p>
                     </div>
                     <a href="" class="btn editar .btn-custom">Editar<ion-icon name="pencil-outline"></ion-icon></a>
                 </div>

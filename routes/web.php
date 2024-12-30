@@ -18,7 +18,7 @@ Route::get('/auth/ResponsavelRegister',[AuthController::class, 'showResponsavelF
 Route::post('auth/ResponsavelRegister', [ResponsavelController::class, 'ResponsavelRegister'])->name('RegistarResponsavel');
 
 Route::get('/auth/EstudanteRegister',[AuthController::class, 'showEstudanteForm'])->name('TelaRegistoEstudante');
-Route::post('/auth/EstudanteRegister', [AuthController::class, 'register'])->name('RegistarEstudante');
+Route::post('/auth/EstudanteRegister', [EstudanteController::class, 'store'])->name('RegistarEstudante');
 Route::get('/auth/Selecao',[AuthController::class, 'SelecaoRegisto'])->name('SelecaoRegisto');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -43,10 +43,11 @@ Route::get('/Estudante/SelecaoEstudante',[EstudanteController::class,'SelecaoEst
 
 /* Escola */
 Route::get('/Escola/MainEscola',[EscolaController::class,'index'])->name('TelaEscola');
-Route::get('/Escola/Estudante',[EscolaController::class,'Estudante']);
+Route::get('/Escola/Estudante',[EscolaController::class,'Estudante'])->name('Escola.Estudante');
 Route::get('/Escola/Responsavel',[EscolaController::class,'Responsavel']);
 Route::get('/Escola/Viatura',[EscolaController::class,'Viatura']);
 Route::get('/Escola/Motorista',[EscolaController::class,'Motorista']);
 
 /* Responsavel Rotas */
-Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');
+//Usa os middlewares para permitir que apenas autorizados tenham acesso
+Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel')->middleware('auth');

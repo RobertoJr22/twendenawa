@@ -43,9 +43,12 @@ class User extends Authenticatable
         return $this->hasOne(escola::class, 'id','id');
     }
 
-    public function responsavels(){
-        return $this->hasOne(responsavel::class, 'id','id');
-    }
+   // No modelo User
+public function responsavel()
+{
+    return $this->hasOne(Responsavel::class, 'users_id'); 
+}
+
 
     public function motoristas(){
         return $this->hasOne(motorista::class, 'id','id');

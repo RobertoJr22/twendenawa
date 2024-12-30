@@ -12,6 +12,11 @@
         </div>
     </div>
     
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
     <!-- Tabela de Estudantes -->
     <div class="table-responsive">
         <table class="table table-striped table-bordered">

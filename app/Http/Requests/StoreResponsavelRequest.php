@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+
+use App\Rules\NBI;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreResponsavelRequest extends FormRequest
@@ -24,14 +26,12 @@ class StoreResponsavelRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-            'tipo_usuario_id' => 'required|exists:tipo_usuarios,id',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'password' => 'required|string|min:6|confirmed',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'DataNascimento' => 'required|date',
-            'BI' => 'required|string|max:14',
-            'telefone' => 'required|string|max:15',
             'endereco' => 'required|string|max:255',
-            'sexos_id' => 'required|exists:sexos,id',
+            'telefone' => 'required|string|max:15',
+            'BI' => ['required', New NBI],
         ];
     }
 }

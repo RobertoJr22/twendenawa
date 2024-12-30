@@ -19,7 +19,7 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-    
+
     // Exibir o Tela de selecao de tipo de registo
     public function SelecaoRegisto(){
         return view('auth.Selecao');
@@ -142,13 +142,13 @@ class AuthController extends Controller
                     'turnos_id'=>$request->turnos_id,
                 ]);
             }
-            
+
             elseif($user->tipo_usuario_id == 3) {
-                
-            } 
-            
+
+            }
+
             elseif($user->tipo_usuario_id == 4) {
-    
+
                 responsavel::create([
                     'users_id'=>$user->id,
                     'foto'=>$path,
@@ -158,20 +158,20 @@ class AuthController extends Controller
                     'endereco'=>$request->endereco,
                     'sexos_id'=>$request->sexos_id,
                 ]);
-    
-            } 
-            
-            elseif($user->tipo_usuario_id == 5) {
-                
+
             }
 
+            elseif($user->tipo_usuario_id == 5) {
+
+            }
+                dd($user);
             DB::commit();
 
         }catch(\Exception $e){
             DB::rollBack();
             return redirect()->back()->with('error', 'Erro ao cadastrar: ' . $e->getMessage());
         }
-        
+
 
         Auth::login($user); // Loga o usuário após o registro
 
