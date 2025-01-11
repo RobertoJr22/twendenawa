@@ -337,15 +337,12 @@ footer hr{
     margin-bottom: 20px;
 }
 
-/* Estilo da imagem de perfil */
 .profile-photo-container img {
     width: 100%;
     height: 100%;
     object-fit: cover; /* Ajusta a imagem para preencher o círculo */
-    display: none; /* Por padrão, a imagem não será exibida */
 }
 
-/* Ícone de câmera como placeholder */
 .profile-photo-container ion-icon {
     position: absolute;
     top: 50%;
@@ -355,14 +352,6 @@ footer hr{
     color: gray;
 }
 
-/* Quando houver uma imagem de perfil */
-.profile-photo-container.has-photo img {
-    display: block; /* Exibe a imagem */
-}
-
-.profile-photo-container.has-photo ion-icon {
-    display: none; /* Oculta o ícone */
-}
 
 /* PARA TODOS OS INPUTS */
 .form-control{
@@ -431,5 +420,37 @@ footer hr{
 }
 .informacao-usuario{
     margin-bottom: 10px;
+}
+
+.sucess{
+    width: 100%;
+    background-color: #155724f5;
+    color: #e9ecef;
+    text-align: center;
+    margin: 0;
+    padding: 8px;
+}
+
+.alert{
+    width: 100%;
+    background-color:#e5e90de1;
+    color: black;
+    text-align: center;
+    margin: 0;
+    padding: 8px;
+}
+
+.error{
+    width: 100%;
+    background-color: #d62c2c;
+    color: #e9ecef;
+    text-align: center;
+    margin: 0;
+    padding: 8px;
+}
+
+.table-responsive{
+    max-height: 300px; 
+    overflow-y: auto;
 }
 

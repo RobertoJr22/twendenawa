@@ -10,19 +10,22 @@
 
     <!-- Link do CSS -->
     <link rel="stylesheet" href="/css/estilo.css">
+
+    <script src="script.js"></script>
     
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-        <a class="navbar-brand" href="/"><img src="/img/Tlogo1.png" alt=""></a> <!-- Logo à esquerda -->
+        <a class="navbar-brand" href="/"><img src="/img/Tlogo3.png" alt=""></a> <!-- Logo à esquerda -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav"> <!-- Menu à direita -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" href="/">Página Inicial</a>
                 </li>
+                @guest
                 <li class="nav-item">
                     <a class="nav-link" href="/Escola/MainEscola">Dashboard</a>
                 </li>
@@ -35,6 +38,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/Motorista/MainMotorista">Motorista</a>
                 </li>
+                <li class="nav-item">
+                    <a id="login" class="btn" href="/auth/login">Login</a>
+                </li>
+                @endguest
                 @auth
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">
@@ -47,7 +54,22 @@
         </div>
     </nav>
     <main>
-        @yield('content')
+        <div class="container-fuid">
+            @if(session('sucess'))
+                <div class="sucess">
+                    <p>{{session('sucess')}}<ion-icon name="checkmark-outline"></ion-icon></p>
+                </div>
+            @elseif(session ('error'))
+                <div class="erro">
+                    <p>{{session('error')}}<ion-icon name="bug-outline"></ion-icon></p>
+                </div>
+            @elseif(session('alert'))
+                <div class="alert">
+                    <p>{{session('alert')}}<ion-icon name="alert-outline"></ion-icon></p>
+                </div>
+            @endif
+            @yield('content') 
+        </div>
     </main>
     <footer>
         <div class="TabelasFooter">
@@ -78,14 +100,13 @@
             &copy; Twendenawa 2024
         </div>
     </footer>
-
     <!-- Scripts do Bootstrap e jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     {{--IONICONS ABAIXO--}}
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    @yield('scripts')
 </body>
 </html>

@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-
-use App\Rules\NBI;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreResponsavelRequest extends FormRequest
+class StoreEscolaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,12 +25,9 @@ class StoreResponsavelRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'DataNascimento' => 'required|date',
-            'endereco' => 'required|string|max:255',
-            'telefone' => 'required|string|max:15',
+            'bairros_id' => 'required|exists:bairros,id',
             'tipo_usuario_id' => 'required|exists:tipo_usuarios,id',
-            'BI' => ['required', New NBI],
+            'telefone' => 'required|string|max:15',
         ];
     }
 }

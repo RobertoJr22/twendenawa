@@ -13,7 +13,7 @@ class EscolasSeeder extends Seeder
      */
     public function run(): void
     {
-        $ids = ['1'];
+        $ids = [1];
 
         foreach($ids as $id){
             DB::table('escolas')->updateOrInsert(

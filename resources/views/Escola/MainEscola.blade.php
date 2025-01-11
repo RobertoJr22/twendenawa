@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Dashboard')
+@section('title','Central de controlo - Escola')
 @section('content')
 <!-- Container centralizado com botões largos -->
 <div class="container d-flex flex-column align-items-center mt-5">

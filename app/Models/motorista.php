@@ -24,6 +24,8 @@ class motorista extends Model
     protected $cast = [
         'DataNascimento' => 'date',
     ];
+
+
     public function rotas(){
         return $this->belongsToMany(rota::class,'motoristas_rotas');
     }

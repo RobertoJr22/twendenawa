@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Bem-Vindo')
+@section('title','Twendenawa')
 @section('content')
 <form method="POST" action="{{ route('register') }}">
     @csrf

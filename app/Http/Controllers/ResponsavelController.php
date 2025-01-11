@@ -42,9 +42,6 @@ class ResponsavelController extends Controller
             $responsavel->sexos_id = $request->sexos_id;
             $responsavel->save();
 
-            
-           
-
             DB::commit();
         }catch(\Exception $e ){
             DB::rollBack();
@@ -52,7 +49,7 @@ class ResponsavelController extends Controller
         }
         
         Auth::login($user);
-        return redirect()->route('TelaResponsavel');
+        return redirect()->route('TelaResponsavel')->with('sucess','Responsavel cadastrado com sucesso!');
 
     }
 

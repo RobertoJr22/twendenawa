@@ -1,13 +1,12 @@
 @extends('layouts.main')
-@section('title','Dashboard')
+@section('title','Central de controlo - Admin')
 @section('content')
 <!-- Container centralizado com botões largos -->
 <div class="container d-flex flex-column align-items-center mt-5">
     <h2 class="text-center mb-4 fs-responsive">Central de controlo</h2>
-    <h3 class="text-center mb-4 fs-responsive"><strong>Instituição:</strong>{{$helper->DadosUsuario('name')}}</h3>
     
     <!-- Botão Escola -->
-    <a href="/Admin/TelaAdmin" class="btn-custom mb-3 btn-main-dash"><ion-icon name="home-outline"></ion-icon>Escola</a>
+    <a href="/Admin/ListaEscola" class="btn-custom mb-3 btn-main-dash"><ion-icon name="home-outline"></ion-icon>Escola</a>
 
     <!-- Botão Estudantes -->
     <a href="/Escola/Estudante" class="btn-custom mb-3 btn-main-dash"><ion-icon name="school-outline"></ion-icon>Estudantes</a>

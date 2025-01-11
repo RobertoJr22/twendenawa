@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title','Bem-Vindo')
+@section('title','Pagina Inicial')
 @section('content')
 
 <div class="container mt-5">
@@ -10,14 +10,11 @@
                 <div class="card dados-pessoais">
                     <!-- Foto de Perfil -->
                     <div class="profile-photo-container" id="profile-photo">
-                        <!-- Ícone de Câmera -->
-                       
-                        <!-- Imagem de Perfil (escondida por padrão) -->
                         @if ($responsavel && $responsavel->foto)
-                        <img src="{{ asset('storage/'.$responsavel->foto) }}" alt="Foto de Perfil" style="object-fit: cover;">
-                    @else
-                    <ion-icon name="camera-outline"></ion-icon> 
-                    @endif
+                            <img src="{{ asset('storage/'.$responsavel->foto) }}" alt="Foto de Perfil">
+                        @else
+                            <ion-icon name="camera-outline"></ion-icon>
+                        @endif
                     </div>
 
                     <!-- Dados Pessoais -->

@@ -32,14 +32,23 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
-
+    
         $credentials = $request->only('email', 'password');
-
+    
         if (Auth::attempt($credentials)) {
-            // Redirecionar para o home baseado no tipo de usuário
+            // Obter o usuário autenticado
             $user = Auth::user();
+    
+            // Verificar se o estado do usuário é 1 (ativo)
+            if ($user->estado != 1 && $user->estado == 0) {
+                Auth::logout(); // Desconectar o usuário
+                return redirect()->route('login')->withErrors(['error' => 'Sua conta foi desativada.']);
+            }
+    
+            // Regenerar a sessão após o login
             $request->session()->regenerate();
-
+    
+            // Redirecionar para a tela adequada dependendo do tipo de usuário
             if ($user->tipo_usuario_id == 1) { // Exemplo: Admin
                 return redirect()->route('TelaAdmin');
             } elseif ($user->tipo_usuario_id == 2) { // Exemplo: Estudante
@@ -52,9 +61,10 @@ class AuthController extends Controller
                 return redirect()->route('TelaEscola');
             }
         }
-
+    
         return back()->withErrors(['email' => 'As credenciais não coincidem com nossos registros.']);
     }
+    
 
     // Função de logout
 
@@ -83,7 +93,7 @@ class AuthController extends Controller
 
     // Processar o registro
 
-    public function register(Request $request)
+  /*  public function register(Request $request)
     {
         DB::beginTransaction();
         try{
@@ -187,5 +197,5 @@ class AuthController extends Controller
         } elseif($user->tipo_usuario_id == 5) {
             return redirect()->route('TelaEscola');
         }
-    }
+    }*/
 }

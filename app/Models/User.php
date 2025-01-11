@@ -39,7 +39,7 @@ class User extends Authenticatable
         return $this->belongsTo(tipo_usuario::class, 'tipo_usuario_id');
     }
 
-    public function escolas(){
+    public function escola(){
         return $this->hasOne(escola::class, 'id','id');
     }
 
