@@ -424,29 +424,32 @@ footer hr{
 
 .sucess{
     width: 100%;
-    background-color: #155724f5;
-    color: #e9ecef;
+    background-color:#28a745;
+    color: #01270a;
     text-align: center;
     margin: 0;
-    padding: 8px;
+    padding: 5px;
+    height: 40px;
 }
 
 .alert{
     width: 100%;
-    background-color:#e5e90de1;
+    background-color:#ffc107;
     color: black;
     text-align: center;
     margin: 0;
-    padding: 8px;
+    padding: 5px;
+    height: 40px;
 }
 
 .error{
     width: 100%;
-    background-color: #d62c2c;
+    background-color: #dc3545;
     color: #e9ecef;
     text-align: center;
     margin: 0;
-    padding: 8px;
+    padding: 5px;
+    height: 40px;
 }
 
 .table-responsive{

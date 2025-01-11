@@ -49,7 +49,7 @@ class ResponsavelController extends Controller
         }
         
         Auth::login($user);
-        return redirect()->route('TelaResponsavel')->with('sucess','Responsavel cadastrado com sucesso!');
+        return redirect()->route('TelaResponsavel')->with('sucess','Bem vindo ao Twendenawa!');
 
     }
 

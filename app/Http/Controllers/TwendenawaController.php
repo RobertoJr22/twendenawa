@@ -105,22 +105,26 @@ class TwendenawaController extends Controller
         $escola = escola::findOrFail($id);
 
         if($escola){
-            
-            // Atualiza o estado na tabela escolas
-            DB::table('escolas')
+            DB::beginTransaction();
+            try{
+                // Atualiza o estado na tabela escolas
+                DB::table('escolas')
                 ->where('id', $id)
-                ->where('estado', '1')
                 ->update(['estado' => 0]);
 
-            // Atualiza o estado na tabela usuarios, usando o usuario_id da escola
-            DB::table('usuarios')
-                ->where('id', $escola->usuario_id) // Usa a chave estrangeira usuario_id
-                ->where('estado', '1')
-                ->update(['estado' => 0]);
+                // Atualiza o estado na tabela usuarios, usando o usuario_id da escola
+                DB::table('users')
+                    ->where('id', $escola->users_id) // Usa a chave estrangeira usuario_id
+                    ->update(['estado' => 0]);
 
-            return redirect()->route('ListaEscola')->with('sucess','Escola excluida com sucesso');
+                DB::commit();
+                return redirect()->route('ListaEscola')->with('sucess','Escola excluida com sucesso');
+            }catch(\Exception $e){
+                DB::rollBack();
+                return redirect()->route('ListaEscola')->with('error','Ocorreu um erro:'.$e->getMessage());
+            }
         }else{
-            return redirect()->route('ListaEscola')->with('error','ocorreu algum erro');
+            return redirect()->route('ListaEscola')->with('error','Escola nao existe na base de dados');
         }
     
     }

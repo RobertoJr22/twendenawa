@@ -60,7 +60,7 @@
                     <p>{{session('sucess')}}<ion-icon name="checkmark-outline"></ion-icon></p>
                 </div>
             @elseif(session ('error'))
-                <div class="erro">
+                <div class="error">
                     <p>{{session('error')}}<ion-icon name="bug-outline"></ion-icon></p>
                 </div>
             @elseif(session('alert'))

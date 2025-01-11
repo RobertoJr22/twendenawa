@@ -8,6 +8,41 @@ use App\Http\Controllers\TwendenawaController;
 use App\Http\Controllers\EscolaController;
 use App\Http\Controllers\ResponsavelController;
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\VerificarEstadoUsuario;
+
+
+// Middleware para verificar o estado do usuario
+Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
+    // rotas protegidas aqui
+
+    /* Motorista Rotas */
+    Route::get('/Motorista/CadastrarMotorista',[MotoristaController::class, 'index'] );
+    Route::get('/Motorista/MainMotorista',[MotoristaController::class, 'MainMotorista'])->name('TelaMotorista');
+    /* Estudante Rotas */
+    Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );
+    Route::get('/Estudante/MainEstudante',[EstudanteController::class, 'MainEstudante'] )->name('TelaEstudante');
+    Route::get('/Estudante/DetalhesViagem',[EstudanteController::class,'DetalhesViagem']);
+    Route::get('/Estudante/InfoEstudante',[EstudanteController::class,'InfoEstudante']);
+    Route::get('/Estudante/SelecaoEstudante',[EstudanteController::class,'SelecaoEstudante']);
+    /* Escola */
+    Route::get('/Escola/MainEscola',[EscolaController::class,'index'])->name('TelaEscola');
+    Route::get('/Escola/Estudante',[EscolaController::class,'Estudante'])->name('Escola.Estudante');
+    Route::get('/Escola/Responsavel',[EscolaController::class,'Responsavel']);
+    Route::get('/Escola/Viatura',[EscolaController::class,'Viatura']);
+    Route::get('/Escola/Motorista',[EscolaController::class,'Motorista']);
+    /* Responsavel Rotas */
+    Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');
+
+    /*Admin*/
+    Route::get('/Admin/TelaAdm',[TwendenawaController::class,'TelaAdmin'])->name('TelaAdmin')->middleware('auth');
+    Route::get('/distritos/{municipiosId}',[TwendenawaController::class,'getDistritos']); //preencher input de distritos
+    Route::get('/bairros/{distritosId}',[TwendenawaController::class,'getBairros']); //preencher input de bairros
+    Route::get('/Admin/CadastrarEscola',[TwendenawaController::class,'ExibirCadastrarEscola']);
+    Route::post('/Admin/CadastrarEscola',[TwendenawaController::class,'CadastrarEscola'])->name('CadastrarEscola');
+    Route::get('/Admin/ListaEscola',[TwendenawaController::class, 'ExibirListaEscola'])->name('ListaEscola');
+    Route::delete('/escola/{id}',[TwendenawaController::class, 'DeletarEscola'])->name('DeletarEscola');
+
+});
 
 /* AUTENTICACAO */
 
@@ -31,33 +66,7 @@ Route::get('/', function () {
 /* Twendenawa Rotas */
 Route::get('/',[TwendenawaController::class, 'index']);
 
-/* Motorista Rotas */
-Route::get('/Motorista/CadastrarMotorista',[MotoristaController::class, 'index'] );
-Route::get('/Motorista/MainMotorista',[MotoristaController::class, 'MainMotorista'])->name('TelaMotorista')->middleware('auth');
 
-/* Estudante Rotas */
-Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );
-Route::get('/Estudante/MainEstudante',[EstudanteController::class, 'MainEstudante'] )->name('TelaEstudante')->middleware('auth');
-Route::get('/Estudante/DetalhesViagem',[EstudanteController::class,'DetalhesViagem']);
-Route::get('/Estudante/InfoEstudante',[EstudanteController::class,'InfoEstudante']);
-Route::get('/Estudante/SelecaoEstudante',[EstudanteController::class,'SelecaoEstudante']);
 
-/* Escola */
-Route::get('/Escola/MainEscola',[EscolaController::class,'index'])->name('TelaEscola')->middleware('auth');
-Route::get('/Escola/Estudante',[EscolaController::class,'Estudante'])->name('Escola.Estudante');
-Route::get('/Escola/Responsavel',[EscolaController::class,'Responsavel']);
-Route::get('/Escola/Viatura',[EscolaController::class,'Viatura']);
-Route::get('/Escola/Motorista',[EscolaController::class,'Motorista']);
 
-/* Responsavel Rotas */
-//Usa os middlewares para permitir que apenas autorizados tenham acesso
-Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel')->middleware('auth');
 
-/*Admin*/
-Route::get('/Admin/TelaAdm',[TwendenawaController::class,'TelaAdmin'])->name('TelaAdmin')->middleware('auth');
-Route::get('/distritos/{municipiosId}',[TwendenawaController::class,'getDistritos']); //preencher input de distritos
-Route::get('/bairros/{distritosId}',[TwendenawaController::class,'getBairros']); //preencher input de bairros
-Route::get('/Admin/CadastrarEscola',[TwendenawaController::class,'ExibirCadastrarEscola']);
-Route::post('/Admin/CadastrarEscola',[TwendenawaController::class,'CadastrarEscola'])->name('CadastrarEscola');
-Route::get('/Admin/ListaEscola',[TwendenawaController::class, 'ExibirListaEscola'])->name('ListaEscola');
-Route::delete('/escola/{id}',[TwendenawaController::class, 'DeletarEscola'])->name('DeletarEscola');

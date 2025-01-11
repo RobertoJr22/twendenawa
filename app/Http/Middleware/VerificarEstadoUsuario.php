@@ -23,8 +23,10 @@ class VerificarEstadoUsuario
             // Se o estado do usuário for 0 (desativado), desconecte-o e redirecione para o login
             if ($user->estado == 0) {
                 Auth::logout();  // Desconecta o usuário
-                return redirect()->route('login')->withErrors(['error' => 'Sua conta foi desativada.']);
+                return redirect()->route('login')->with('error','Sua conta foi desativada.');
             }
+        }else{
+            return redirect()->route('login')->with('alert','Faça o login');
         }
 
         return $next($request);  // Continua com a requisição se o estado for 1
