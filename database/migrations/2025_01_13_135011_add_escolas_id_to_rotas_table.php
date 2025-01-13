@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rotas', function (Blueprint $table) {
-            $table->id();
-            $table->string('nome')->unique();
-            $table->string('PontoA');
-            $table->string('PontoB')->unique();
-            $table->integer('estado')->default(1);
-            $table->timestamps();
+        Schema::table('rotas', function (Blueprint $table) {
+            $table->foreignId('escolas_id')->constrained('escolas');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rotas');
+        Schema::table('rotas', function (Blueprint $table) {
+            $table->dropColumn('escolas_id');
+        });
     }
 };

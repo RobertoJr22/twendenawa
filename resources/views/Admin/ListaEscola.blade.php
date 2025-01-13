@@ -38,12 +38,12 @@
                             <td>{{$escola->user->email}}</td>
                             <td>{{$escola->bairro->nome}}</td>
                             <td>{{$escola->telefone}}</td>
-                            <td>
-                                <button class="btn btn-sm btn-custom mb-1"><ion-icon name="create-outline"></ion-icon>Editar</button>
+                            <td id="action">
+                                <button class="btn btn-sm btn-custom action mb-1"><ion-icon name="create-outline"></ion-icon>Editar</button>
                                 <form action="{{route('DeletarEscola',$escola->id)}}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-custom mb-1"><ion-icon name="trash-outline"></ion-icon>Deletar</button>
+                                    <button class="btn btn-sm btn-custom action mb-1"><ion-icon name="trash-outline"></ion-icon>Deletar</button>
                                 </form>
                                 
                             </td>

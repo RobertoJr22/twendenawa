@@ -27,4 +27,8 @@ class escola extends Model
     public function veiculos(){
         return $this->hasMany(veiculo::class,'escolas_id');
     }
+
+    public function rotas(){
+        return $this->hasMany(rota::class,'escolas_id');
+    }
 }

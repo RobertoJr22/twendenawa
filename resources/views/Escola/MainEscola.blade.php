@@ -8,17 +8,14 @@
     <!-- Botão Estudantes -->
     <a href="/Escola/Estudante" class="btn-custom mb-3 btn-main-dash"><ion-icon name="school-outline"></ion-icon>Estudantes</a>
 
-    <!-- Botão Responsáveis -->
-    <a href="/Escola/Responsavel" class="btn-custom mb-3 btn-main-dash"><ion-icon name="people-outline"></ion-icon>Responsáveis</a>
-
     <!-- Botão Motoristas -->
     <a href="/Escola/Motorista" class="btn-custom mb-3 btn-main-dash"><ion-icon name="speedometer-outline"></ion-icon>Motoristas</a>
 
     <!-- Botão Viaturas -->
-    <a href="/Escola/Viatura" class="btn-custom mb-3 btn-main-dash"><ion-icon name="bus-outline"></ion-icon>Viaturas</a>
+    <a href="/Escola/Veiculo/CadastrarVeiculo" class="btn-custom mb-3 btn-main-dash"><ion-icon name="bus-outline"></ion-icon>Veiculos</a>
 
     <!-- Botão Rotas -->
-    <a href="#" class="btn-custom mb-3 btn-main-dash"><ion-icon name="share-social-outline"></ion-icon>Rotas</a>
+    <a href="/Escola/Rota/ListaRota" class="btn-custom mb-3 btn-main-dash"><ion-icon name="share-social-outline"></ion-icon>Rotas</a>
    
 </div>
 <div id="space"></div>

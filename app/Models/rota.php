@@ -12,6 +12,7 @@ class rota extends Model
         'nome',
         'PontoA',
         'PontoB',
+        'escolas_id',
     ];
 
     public function veiculos(){
@@ -23,5 +24,8 @@ class rota extends Model
 
     public function estudantes(){
         return $this->belongsToMany(estudante::class,'estudantes_rotas');
+    }
+    public function escola(){
+        return $this->belongsTo(escola::class,'escolas_id');
     }
 }

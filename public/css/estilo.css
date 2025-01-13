@@ -457,3 +457,10 @@ footer hr{
     overflow-y: auto;
 }
 
+#action{
+    display: flex;
+}
+.action{
+    margin: 5px;
+}
+

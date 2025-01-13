@@ -70,7 +70,6 @@ class TwendenawaController extends Controller
 
         }else{
             $escolas = escola::with('user','bairro')->get();
-
         }
 
         return view('Admin.ListaEscola', compact('escolas'));
