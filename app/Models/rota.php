@@ -15,12 +15,16 @@ class rota extends Model
         'escolas_id',
     ];
 
-    public function veiculos(){
-        return $this->belongsToMany(veiculo::class,'rotas_veiculos');
+    public function veiculos()
+    {
+        return $this->belongsToMany(Veiculo::class, 'motoristas_rotas_veiculos', 'rotas_id', 'veiculos_id');
     }
-    public function motoristas(){
-        return $this->belongsToMany(motorista::class,'motoristas_rotas');
+    
+    public function motoristas()
+    {
+        return $this->belongsToMany(Motorista::class, 'motoristas_rotas_veiculos', 'rotas_id', 'motoristas_id');
     }
+    
 
     public function estudantes(){
         return $this->belongsToMany(estudante::class,'estudantes_rotas');

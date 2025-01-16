@@ -34,9 +34,10 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
     Route::get('/Escola/Rota/CadastrarRota', [EscolaController::class, 'ExibirCadastrarRota']);
     Route::post('/Escola/Rota/CadastrarRota', [EscolaController::class, 'CadastrarRota'])->name('CadastrarRota');
     Route::get('/Escola/Rota/ListaRota',[EscolaController::class,'ListaRota'])->name('ListaRota');
-        //escola viaturas
+        //escola veiculos
     Route::get('/Escola/Veiculo/CadastrarVeiculo',[EscolaController::class, 'ExibirCadastrarVeiculo'])->name('ExibirCadastrarVeiculo');
     Route::post('/Escola/Veiculo/CadastrarVeiculo',[EscolaController::class, 'CadastrarVeiculo'])->name('CadastrarVeiculo');
+    Route::get('/Escola/Veiculo/ListaVeiculo',[EscolaController::class,'ListaVeiculo'])->name('ListaVeiculo');
     Route::get('/modelos/{marcaId}', [EscolaController::class, 'getModelos']);
     /* Responsavel Rotas */
     Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');

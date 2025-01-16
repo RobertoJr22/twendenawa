@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rotas_veiculos', function(Blueprint  $table){
+        Schema::create('motoristas_rotas_veiculos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rotas_id')->constrained('rotas');
             $table->foreignId('veiculos_id')->constrained('veiculos');
+            $table->foreignId('motoristas_id')->constrained('motoristas')->nullable(); // Campo nullable, pois pode não ter motorista
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rotas_veiculos');
+        Schema::dropIfExists('motoristas_rotas_veiculos');
     }
 };

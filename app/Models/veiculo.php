@@ -19,9 +19,16 @@ class veiculo extends Model
     ];
 
 
-    public function rotas(){
-        return $this->belongsToMany(rota::class,'rotas_veiculos');
+    public function rotas()
+    {
+        return $this->belongsToMany(Rota::class, 'motoristas_rotas_veiculos', 'veiculos_id', 'rotas_id');
     }
+    
+    public function motoristas()
+    {
+        return $this->belongsToMany(Motorista::class, 'motoristas_rotas_veiculos', 'veiculos_id', 'motoristas_id');
+    }
+    
 
     public function modelo(){
         return $this->belongsTo(modelo::class,'modelos_id');

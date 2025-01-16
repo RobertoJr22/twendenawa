@@ -26,9 +26,16 @@ class motorista extends Model
     ];
 
 
-    public function rotas(){
-        return $this->belongsToMany(rota::class,'motoristas_rotas');
+    public function rotas()
+    {
+        return $this->belongsToMany(Rota::class, 'motoristas_rotas_veiculos', 'motoristas_id', 'rotas_id');
     }
+    
+    public function veiculos()
+    {
+        return $this->belongsToMany(Veiculo::class, 'motoristas_rotas_veiculos', 'motoristas_id', 'veiculos_id');
+    }
+    
 
     public function sexo(){
         return $this->belongsTo(sexo::class,'sexos_id');

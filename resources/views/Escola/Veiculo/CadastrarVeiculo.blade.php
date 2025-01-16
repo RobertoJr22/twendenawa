@@ -46,18 +46,6 @@
             </div>
 
 
-            <!-- rotas -->
-            <div class="form-group mb-3">
-                <label for="rota">Rotas</label>
-                <select class="form-control" id="rota" name="rotas_id">
-                    <option value="">Selecione a rota do veículo:</option>
-                    @foreach ($rotas as $rota)
-                        <option value="{{ $rota->id }}">{{ $rota->nome }} - {{$rota->PontoA}} - {{$rota->PontoB}}</option>
-                    @endforeach
-                </select>
-            </div>
-
-
             <!-- Botão de Ação -->
             <button type="submit" class="btn btn-custom w-100">Salvar Cadastro</button>
         </form>

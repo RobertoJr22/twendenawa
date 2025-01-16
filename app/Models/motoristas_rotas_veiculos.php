@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class rotas_veiculos extends Model
+class motoristas_rotas_veiculos extends Model
 {
-    protected $table = 'rotas_veiculos';
+    protected $table = 'motoristas_rotas_veiculos';
 
     protected $fillable = [
-        'rotas_id',
         'veiculos_id',
+        'motoristas_id',
+        'rotas_id',
         'estado'
     ];
 }

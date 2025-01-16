@@ -6,7 +6,8 @@ use App\Models\escola;
 use App\Models\rota;
 use App\Models\marca;
 use App\Models\modelo;
-use App\Models\rotas_veiculos;
+use App\Models\motorista;
+use app\Models\motoristas_rotas_veiculos;
 use App\Models\veiculo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -115,13 +116,7 @@ class EscolaController extends Controller
                 $veiculo->Matricula = $request->matricula;
                 $veiculo->VIN = $request->VIN;
                 $veiculo->escolas_id = $user->id;
-                $veiculo->save();
-
-                $rotas_veiculos = new rotas_veiculos();
-                $rotas_veiculos->rotas_id = $request->rotas_id;
-                $rotas_veiculos->veiculos_id = $veiculo->id;
-                $rotas_veiculos->save();
-
+                $veiculo->save();               
             }
             DB::commit();
             return redirect()->back()->with('sucess','Veiculo cadastrado com sucesso');
@@ -132,15 +127,33 @@ class EscolaController extends Controller
     }
 
     public function getModelos($marcaId)
-{
-    $modelos = Modelo::where('marcas_id', $marcaId)->get();
+    {
+        $modelos = Modelo::where('marcas_id', $marcaId)->get();
 
-    if ($modelos->isEmpty()) {
-        return response()->json(['message' => 'Nenhum modelo encontrado'], 404);
+        if ($modelos->isEmpty()) {
+            return response()->json(['message' => 'Nenhum modelo encontrado'], 404);
+        }
+
+        return response()->json($modelos);
     }
 
-    return response()->json($modelos);
-}
+    public function ListaVeiculo(Request $request)
+    {
+        $search = $request->input('search');
+        $user = Auth::user();
+    
+        if ($search) {
+            //
+        } else {
+            // Caso não haja pesquisa, busca todos os veículos da escola
+            $veiculos = veiculo::with(['modelo.marcas', 'rotas', 'motoristas'])
+                ->where('escolas_id', $user->id)
+                ->get();
+        }        
+    
+        return view('Escola.Veiculo.ListaVeiculo', compact('veiculos'));
+    }
+    
 
    
 
