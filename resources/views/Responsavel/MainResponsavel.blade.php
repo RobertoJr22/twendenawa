@@ -11,7 +11,7 @@
                     <!-- Foto de Perfil -->
                     <div class="profile-photo-container" id="profile-photo">
                         @if ($responsavel && $responsavel->foto)
-                            <img src="{{ asset('storage/'.$responsavel->foto) }}" alt="Foto de Perfil">
+                            <img src="{{ asset('storage/'.$responsavel->foto) }}" alt="">
                         @else
                             <ion-icon name="camera-outline"></ion-icon>
                         @endif

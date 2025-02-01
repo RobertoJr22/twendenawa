@@ -43,6 +43,14 @@
                 </li>
                 @endguest
                 @auth
+                @if(auth()->user() && (auth()->user()->tipo_usuario_id == 2 || auth()->user()->tipo_usuario_id == 4))
+                    <li class="nav-item">
+                        <a id="Pagamentos" class="nav-link" href="">Pagamentos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="Conexões" class="nav-link" href="">Conexões</a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf

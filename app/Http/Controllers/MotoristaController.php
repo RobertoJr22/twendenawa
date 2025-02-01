@@ -18,9 +18,8 @@ class MotoristaController extends Controller
 
     public function MainMotorista(){
 
-        $user = Auth::user();
-        $motorista = $user->motorista;
+
         
-        return view('Motorista.MainMotorista', compact('user','motorista'));
+        return view('Motorista.MainMotorista');
     }
 }

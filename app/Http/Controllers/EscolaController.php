@@ -143,16 +143,28 @@ class EscolaController extends Controller
         $user = Auth::user();
     
         if ($search) {
-            //
+            $veiculos = veiculo::where('VIN', 'like', '%'.$search.'%')
+            ->orWhere('capacidade', 'like', '%'.$search.'%')
+            ->orWhere('Matricula', 'like', '%'.$search.'%')
+            ->where('estado', 1)
+            ->where('escolas_id', $user->id)
+            ->orWhereHas('modelo', function ($query) use ($search) {
+                $query->where('nome', 'like', '%'.$search.'%');
+            })
+            ->orWhereHas('modelo.marcas', function ($query) use ($search) {
+                $query->where('nome', 'like', '%'.$search.'%');
+            })
+            ->get();
         } else {
             // Caso não haja pesquisa, busca todos os veículos da escola
             $veiculos = veiculo::with(['modelo.marcas', 'rotas', 'motoristas'])
                 ->where('escolas_id', $user->id)
                 ->get();
-        }        
+        }
     
         return view('Escola.Veiculo.ListaVeiculo', compact('veiculos'));
     }
+    
     
 
    

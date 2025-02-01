@@ -12,9 +12,8 @@
                     <!-- Ícone de Câmera -->
                     <ion-icon name="camera-outline"></ion-icon>
                     <!-- Imagem de Perfil (escondida por padrão) -->
-                    <img src="" alt="Foto de Perfil">
+                    <img src="" alt="">
                 </div>
-
                 <!-- Dados Pessoais -->
                 <div>
                     <h5 class="card-title">Informações do Motorista</h5>

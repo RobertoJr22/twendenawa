@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreStudentRequest;
+use Illuminate\Support\Facades\Auth;
 
 class EstudanteController extends Controller
 {
@@ -16,6 +17,8 @@ class EstudanteController extends Controller
     }
 
     public function MainEstudante(){
+
+
         return view('Estudante.MainEstudante');
     }
 
