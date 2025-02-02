@@ -9,10 +9,11 @@
             <div class="card dados-pessoais">
                 <!-- Foto de Perfil -->
                 <div class="profile-photo-container" id="profile-photo">
-                    <!-- Ícone de Câmera -->
-                    <ion-icon name="camera-outline"></ion-icon>
-                    <!-- Imagem de Perfil (escondida por padrão) -->
-                    <img src="" alt="">
+                    @if ($motorista && $motorista->foto)
+                        <img src="{{ asset('storage/'.$motorista->foto) }}" alt="">
+                    @else
+                        <ion-icon name="camera-outline"></ion-icon>
+                    @endif
                 </div>
                 <!-- Dados Pessoais -->
                 <div>

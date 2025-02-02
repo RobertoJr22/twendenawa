@@ -15,8 +15,7 @@ use App\Http\Middleware\VerificarEstadoUsuario;
 Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
     // rotas protegidas aqui
 
-    /* Motorista Rotas */
-    Route::get('/Motorista/CadastrarMotorista',[MotoristaController::class, 'index'] );
+    /* Motorista */
     Route::get('/Motorista/MainMotorista',[MotoristaController::class, 'MainMotorista'])->name('TelaMotorista');
     /* Estudante Rotas */
     Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );
@@ -29,7 +28,6 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
     Route::get('/Escola/Estudante',[EscolaController::class,'Estudante'])->name('Escola.Estudante');
     Route::get('/Escola/Responsavel',[EscolaController::class,'Responsavel']);
     Route::get('/Escola/Viatura',[EscolaController::class,'Viatura']);
-    Route::get('/Escola/Motorista',[EscolaController::class,'Motorista']);
         //escola rotas
     Route::get('/Escola/Rota/CadastrarRota', [EscolaController::class, 'ExibirCadastrarRota']);
     Route::post('/Escola/Rota/CadastrarRota', [EscolaController::class, 'CadastrarRota'])->name('CadastrarRota');
@@ -39,7 +37,11 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
     Route::post('/Escola/Veiculo/CadastrarVeiculo',[EscolaController::class, 'CadastrarVeiculo'])->name('CadastrarVeiculo');
     Route::get('/Escola/Veiculo/ListaVeiculo',[EscolaController::class,'ListaVeiculo'])->name('ListaVeiculo');
     Route::get('/modelos/{marcaId}', [EscolaController::class, 'getModelos']);
-    /* Responsavel Rotas */
+        //escola Motorista
+    Route::get('/Escola/Motorista/ListaMotorista',[EscolaController::class, 'ListaMotorista'])->name('ListaMotorista');
+    Route::get('/Escola/Motorista/CadastrarMotorista',[EscolaController::class,'ExibirCadastrarMotorista'])->name('ExibirCadastrarMotorista');
+    Route::post('/Escola/Motorista/CadastrarMotorista',[EscolaController::class, 'CadastrarMotorista'])->name('CadastrarMotorista');
+    /* Responsavel */
     Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');
 
     /*Admin*/

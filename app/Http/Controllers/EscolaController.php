@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\escola;
 use App\Models\rota;
 use App\Models\marca;
@@ -12,6 +11,11 @@ use App\Models\veiculo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StoreMotoristaRequest;
+use App\Models\carteira;
+use App\Models\turno;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class EscolaController extends Controller
 { 
@@ -169,12 +173,61 @@ class EscolaController extends Controller
 
    
 
-    public function Estudante(){
-        return view('Escola.Estudante');
+
+    public function ExibirCadastrarMotorista(){
+        $turnos = turno::all();
+        return view('Escola.Motorista.CadastrarMotorista',compact('turnos'));
+    }
+    
+    public function ListaMotorista(){
+        
+        return view('Escola.Motorista.ListaMotorista');
     }
 
-    public function Motorista(){
-        return view('Escola.Motorista');
+    public function CadastrarMotorista(StoreMotoristaRequest $request){
+
+        DB::beginTransaction();
+        try{
+            $imagePath = null;
+            if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+                $imagePath = $request->file('foto')->store('avatares', 'public');
+            }
+
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->tipo_usuario_id = $request->tipo_usuario_id;
+            $user->save();
+
+            $motorista = new motorista();
+            $motorista->users_id = $user->id;
+            $motorista->foto = $imagePath;
+            $motorista->DataNascimento = $request->DataNascimento;
+            $motorista->BI = $request->BI;
+            $motorista->endereco = $request->endereco;
+            $motorista->telefone = $request->telefone;
+            $motorista->sexos_id = $request->sexos_id;
+            $motorista->turnos_id = $request->turnos_id;
+            $motorista->save();
+
+            $carteira = new carteira();
+            $carteira->NumeroCarta = $request->NumeroCarta;
+            $carteira->motoristas_id = $motorista->id;
+            $carteira->save();
+
+            DB::commit();
+            
+        }catch(\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->with('erro', 'Erro ao cadastrar Motorista: ' . $e->getMessage());
+        }
+
+        return redirect()->route('ListaMotorista')->with('sucess','Motorista Cadastrado com sucesso');
+    }
+
+    public function Estudante(){
+        return view('Escola.Estudante');
     }
 
     public function Responsavel(){

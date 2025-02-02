@@ -9,7 +9,7 @@
     <a href="/Escola/Estudante" class="btn-custom mb-3 btn-main-dash"><ion-icon name="school-outline"></ion-icon>Estudantes</a>
 
     <!-- Botão Motoristas -->
-    <a href="/Escola/Motorista" class="btn-custom mb-3 btn-main-dash"><ion-icon name="speedometer-outline"></ion-icon>Motoristas</a>
+    <a href="/Escola/Motorista/ListaMotorista" class="btn-custom mb-3 btn-main-dash"><ion-icon name="speedometer-outline"></ion-icon>Motoristas</a>
 
     <!-- Botão Viaturas -->
     <a href="/Escola/Veiculo/ListaVeiculo" class="btn-custom mb-3 btn-main-dash"><ion-icon name="bus-outline"></ion-icon>Veiculos</a>

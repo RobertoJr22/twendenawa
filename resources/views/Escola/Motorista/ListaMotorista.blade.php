@@ -6,11 +6,15 @@
     <h2 class="text-center mb-4 fs-responsive">Dashboard de Motoristas</h2>
 
     <!-- Barra de Pesquisa de Motoristas -->
-    <div class="row justify-content-center mb-3">
-        <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="Pesquisar motorista...">
+    <form action="{{route('ListaMotorista')}}" method="get">
+        @csrf
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6 col-sm-8 col-10">
+                <input type="text" class="form-control" name="search" placeholder="Pesquisar Motorista... " value="{{request('search')}}">
+            </div>
+            <button class="btn" type="submit">Pesquisar</button>
         </div>
-    </div>
+     </form>
 
     <!-- Tabela de Motoristas -->
     <div class="table-responsive">
@@ -52,7 +56,7 @@
 
     <!-- Botão de Cadastrar Novo Motorista -->
     <div class="text-center mt-3">
-        <a href="/Motorista/CadastrarMotorista" class="btn btn-custom">Cadastrar Novo Motorista</a>
+        <a href="/Escola/Motorista/CadastrarMotorista" class="btn btn-custom">Cadastrar Novo Motorista</a>
     </div>
 </div>
 <div id="space"></div>
