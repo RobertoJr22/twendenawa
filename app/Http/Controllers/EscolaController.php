@@ -6,7 +6,7 @@ use App\Models\rota;
 use App\Models\marca;
 use App\Models\modelo;
 use App\Models\motorista;
-use app\Models\motoristas_rotas_veiculos;
+use App\Models\motoristas_rotas_veiculos;
 use App\Models\veiculo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -167,64 +167,27 @@ class EscolaController extends Controller
         }
     
         return view('Escola.Veiculo.ListaVeiculo', compact('veiculos'));
-    }
-    
-    
-
-   
-
-
-    public function ExibirCadastrarMotorista(){
-        $turnos = turno::all();
-        return view('Escola.Motorista.CadastrarMotorista',compact('turnos'));
-    }
+    }  
     
     public function ListaMotorista(){
+
+        $user = Auth::user();
+
+        $motoristas = motoristas_rotas_veiculos::with([
+            'rota.escola',   // Pega a escola associada à rota
+            'veiculo.modelo.marcas', // Pega a marca do veículo via modelo
+            'motorista.carteira', // Pega a carteira do motorista
+            'motorista.user',
+            'motorista.turno'
+        ])
+        ->whereHas('rota', function ($query) use ($user) {
+            $query->where('escolas_id', $user->id);
+        })
+        ->get();    
         
-        return view('Escola.Motorista.ListaMotorista');
+        return view('Escola.Motorista.ListaMotorista',compact('motoristas','user'));
     }
 
-    public function CadastrarMotorista(StoreMotoristaRequest $request){
-
-        DB::beginTransaction();
-        try{
-            $imagePath = null;
-            if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
-                $imagePath = $request->file('foto')->store('avatares', 'public');
-            }
-
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->tipo_usuario_id = $request->tipo_usuario_id;
-            $user->save();
-
-            $motorista = new motorista();
-            $motorista->users_id = $user->id;
-            $motorista->foto = $imagePath;
-            $motorista->DataNascimento = $request->DataNascimento;
-            $motorista->BI = $request->BI;
-            $motorista->endereco = $request->endereco;
-            $motorista->telefone = $request->telefone;
-            $motorista->sexos_id = $request->sexos_id;
-            $motorista->turnos_id = $request->turnos_id;
-            $motorista->save();
-
-            $carteira = new carteira();
-            $carteira->NumeroCarta = $request->NumeroCarta;
-            $carteira->motoristas_id = $motorista->id;
-            $carteira->save();
-
-            DB::commit();
-            
-        }catch(\Exception $e){
-            DB::rollBack();
-            return redirect()->back()->with('erro', 'Erro ao cadastrar Motorista: ' . $e->getMessage());
-        }
-
-        return redirect()->route('ListaMotorista')->with('sucess','Motorista Cadastrado com sucesso');
-    }
 
     public function Estudante(){
         return view('Escola.Estudante');

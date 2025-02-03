@@ -37,10 +37,9 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
     Route::post('/Escola/Veiculo/CadastrarVeiculo',[EscolaController::class, 'CadastrarVeiculo'])->name('CadastrarVeiculo');
     Route::get('/Escola/Veiculo/ListaVeiculo',[EscolaController::class,'ListaVeiculo'])->name('ListaVeiculo');
     Route::get('/modelos/{marcaId}', [EscolaController::class, 'getModelos']);
-        //escola Motorista
+        //escola motoristas
     Route::get('/Escola/Motorista/ListaMotorista',[EscolaController::class, 'ListaMotorista'])->name('ListaMotorista');
-    Route::get('/Escola/Motorista/CadastrarMotorista',[EscolaController::class,'ExibirCadastrarMotorista'])->name('ExibirCadastrarMotorista');
-    Route::post('/Escola/Motorista/CadastrarMotorista',[EscolaController::class, 'CadastrarMotorista'])->name('CadastrarMotorista');
+
     /* Responsavel */
     Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');
 
@@ -55,18 +54,26 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
 
 });
 
-/* AUTENTICACAO */
+/* AUTENTICACAO ou login */
 
 Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/auth/login', [AuthController::class, 'login']);
 
-//Route::get('/auth/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+/* Registro de Motoristas */
+Route::get('/auth/MotoristaRegister',[AuthController::class,'showMotoristaForm'])->name('TelaRegistoMotorista');
+Route::post('/auth/MotoristaRegister',[MotoristaController::class, 'RegistrarMotorista'])->name('RegistarMotorista');
+/* Registro de Responsaveis */
 Route::get('/auth/ResponsavelRegister',[AuthController::class, 'showResponsavelForm'])->name('TelaRegistoResponsavel');
 Route::post('auth/ResponsavelRegister', [ResponsavelController::class, 'ResponsavelRegister'])->name('RegistarResponsavel');
 
+/* Registro de Estudantes */
 Route::get('/auth/EstudanteRegister',[AuthController::class, 'showEstudanteForm'])->name('TelaRegistoEstudante');
 Route::post('/auth/EstudanteRegister', [EstudanteController::class, 'store'])->name('RegistarEstudante');
+
+/* Tela de selecao do tipo de usuario */
 Route::get('/auth/Selecao',[AuthController::class, 'SelecaoRegisto'])->name('SelecaoRegisto');
+
+/* Rota de logout*/
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 

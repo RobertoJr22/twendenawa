@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Cadastrar Motorista')
+@section('title','Pagina inicial')
 @section('content')
 
 <div class="container mt-5">
@@ -18,13 +18,40 @@
                 <!-- Dados Pessoais -->
                 <div>
                     <h5 class="card-title">Informações do Motorista</h5>
-                    <p><strong>Nome:</strong> {{$helper->DadosUsuario('name')}}</p>
-                    <p><strong>Veículo:</strong> Minibus Azul</p>
-                    <p><strong>Telefone:</strong> +244 912 345 678</p>
-                    <p><strong>Placa do Veículo:</strong> ABC1234</p>
+                    <p><strong>Nome:</strong>{{$user->name}}</p>
+                    <p><strong>DataNascimento:</strong>{{$motorista->DataNascimento}}</p>
+                    <p><strong>Telefone:</strong>{{$motorista->telefone}}</p>
+                    <p><strong>Numero da carta:</strong>{{$carteira->NumeroCarta}}</p>
+                    <p><strong>Turno:</strong>{{ $turno ? $turno->nome . '-' . $turno->HoraIda . '-' . $turno->HoraRegresso : 'Sem informação' }}</p>
+                    <p><strong>BI:</strong>{{$motorista->BI}}</p>
                 </div>
                 <a href="" class="btn editar .btn-custom">Editar<ion-icon name="pencil-outline"></ion-icon></a>
             </div>
+            
+            <!-- Informacao do veiculo -->
+            @if($dados)
+            <div class="card dados-pessoais" id="InformacaoVeiculo">
+                <!-- Dados veiculo -->
+                <div>
+                    <h5 class="card-title">Informações do veiculo</h5>
+                    <p><strong>Escola:</strong>{{$dados->veiculo->escola->user->name}}</p>
+                    <p><strong>Marca:</strong>{{$dados->veiculo->modelo->marcas->nome}}</p>
+                    <p><strong>Modelo:</strong>{{$dados->veiculo->modelo->nome}}</p>
+                    <p><strong>Matricula:</strong>{{$dados->veiculo->Matricula}}</p>
+                    <p><strong>VIN do Veículo:</strong>{{$dados->veiculo->VIN}}</p>
+                    <p><strong>Capacidade:</strong>{{$dados->veiculo->capacidade}}</p>
+                    <p><strong>Rota:</strong>{{ $dados->rota ? $dados->rota->nome . '-' . $dados->rota->PontoA . '-' . $dados->rota->PontoB : 'Sem informação' }}</p>
+                </div>
+            </div>
+            @else
+            <div class="card dados-pessoais" id="InformacaoVeiculo">
+                <!-- Dados veiculo -->
+                <div>
+                    <h5 class="card-title">Informações do veiculo</h5>
+                    <h6>Sem dados associados</h6>
+                </div>
+            </div>
+            @endif
         </div>
 
         <!-- Coluna direita (outro card) -->
@@ -50,10 +77,9 @@
                 <!-- Viagens Ativas -->
                 <div class="card">
                     <div class="card-header">
-                        Viagens Ativas <ion-icon name="bus-outline"></ion-icon>
+                        Estudantes a bordo <ion-icon name="bus-outline"></ion-icon>
                     </div>
                     <div class="card-body">
-                        <p><strong>Estudantes a bordo:</strong></p>
                         <div class="list-group">
                             <a href="#" id="btn-lista" class="btn d-flex justify-content-between align-items-center mb-3">
                                 <span>João Silva</span>

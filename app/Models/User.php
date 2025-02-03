@@ -40,7 +40,7 @@ class User extends Authenticatable
     }
 
     public function escola(){
-        return $this->hasOne(escola::class, 'id','id');
+        return $this->hasOne(escola::class, 'users_id');
     }
 
    // No modelo User
@@ -50,12 +50,12 @@ public function responsavel()
 }
 
 
-    public function motoristas(){
-        return $this->hasOne(motorista::class, 'id','id');
+    public function motorista(){
+        return $this->hasOne(motorista::class, 'users_id');
     }
 
-    public function estudantes(){
-        return $this->hasOne(estudante::class, 'id','id');
+    public function estudante(){
+        return $this->hasOne(estudante::class, 'users_id');
     }
 
     /**

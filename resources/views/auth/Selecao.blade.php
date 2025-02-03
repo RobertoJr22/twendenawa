@@ -10,6 +10,9 @@
 
     <!-- Botão Responsáveis -->
     <a href="/auth/ResponsavelRegister" class="btn-custom mb-3 btn-main-dash"><ion-icon name="people-outline"></ion-icon>Responsável</a>
+
+    <!-- Botão Motoristas -->
+    <a href="/auth/MotoristaRegister" class="btn-custom mb-3 btn-main-dash"><ion-icon name="people-outline"></ion-icon>Motorista</a>
 </div>
 <div id="space"></div>
 @endsection

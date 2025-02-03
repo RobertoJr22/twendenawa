@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Models\turno;
 
 class AuthController extends Controller
 {
@@ -88,6 +89,12 @@ class AuthController extends Controller
     public function showEstudanteForm()
     {
         return view('auth.EstudanteRegister');
+    }
+
+    public function showMotoristaForm()
+    {
+        $turnos = turno::all();
+        return view('auth.MotoristaRegister',compact('turnos'));
     }
 
 

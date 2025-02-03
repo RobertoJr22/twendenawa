@@ -25,38 +25,37 @@
                     <th>Nome</th>
                     <th>Telefone</th>
                     <th>Licença</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Turno</th>
+                    <th>Rota</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
+                @foreach( $motoristas as $motorista)
                 <tr>
-                    <td>1</td>
-                    <td>Pedro Santos</td>
-                    <td>(99) 99999-9999</td>
-                    <td>12345-AB</td>
+                    <td>{{$motorista->motorista->id}}</td>
+                    <td>{{$motorista->motorista->user->name}}</td>
+                    <td>{{$motorista->motorista->telefone}}</td>
+                    <td>{{$motorista->motorista->carteira->NumeroCarta}}</td>
+                    <td>{{$motorista->veiculo->modelo->marcas->nome}}</td>
+                    <td>{{$motorista->veiculo->modelo->nome}}</td>
+                    <td>{{$motorista->motorista->turno->nome}}-{{$motorista->motorista->turno->HoraIda}}-{{$motorista->motorista->turno->HoraRegresso}}</td>
+                    <td>{{$motorista->rota->nome}}-{{$motorista->rota->PontoA}}-{{$motorista->rota->PontoB}}</td>
                     <td>
                         <button class="btn btn-sm btn-custom">Editar</button>
-                        <button class="btn btn-sm btn-custom">Deletar</button>
+                        <button class="btn btn-sm btn-custom">Desvincular</button>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Lucas Pereira</td>
-                    <td>(88) 88888-8888</td>
-                    <td>67890-CD</td>
-                    <td>
-                        <button class="btn btn-sm btn-custom">Editar</button>
-                        <button class="btn btn-sm btn-custom">Deletar</button>
-                    </td>
-                </tr>
-                <!-- Adicione mais linhas conforme necessário -->
+                @endforeach
             </tbody>
         </table>
     </div>
 
     <!-- Botão de Cadastrar Novo Motorista -->
     <div class="text-center mt-3">
-        <a href="/Escola/Motorista/CadastrarMotorista" class="btn btn-custom">Cadastrar Novo Motorista</a>
+        <a href="/Escola/Motorista/Associar" class="btn btn-custom">Novo</a>
     </div>
 </div>
 <div id="space"></div>
