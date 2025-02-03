@@ -39,6 +39,7 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
     Route::get('/modelos/{marcaId}', [EscolaController::class, 'getModelos']);
         //escola motoristas
     Route::get('/Escola/Motorista/ListaMotorista',[EscolaController::class, 'ListaMotorista'])->name('ListaMotorista');
+    Route::get('/Escola/Motorista/AdAssociar',[EscolaController::class, 'ExibirAdAssociar'])->name('AdAssociar');
 
     /* Responsavel */
     Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');
@@ -55,13 +56,13 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
 });
 
 /* AUTENTICACAO ou login */
-
 Route::get('/auth/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 /* Registro de Motoristas */
 Route::get('/auth/MotoristaRegister',[AuthController::class,'showMotoristaForm'])->name('TelaRegistoMotorista');
 Route::post('/auth/MotoristaRegister',[MotoristaController::class, 'RegistrarMotorista'])->name('RegistarMotorista');
+
 /* Registro de Responsaveis */
 Route::get('/auth/ResponsavelRegister',[AuthController::class, 'showResponsavelForm'])->name('TelaRegistoResponsavel');
 Route::post('auth/ResponsavelRegister', [ResponsavelController::class, 'ResponsavelRegister'])->name('RegistarResponsavel');

@@ -55,7 +55,10 @@
 
     <!-- Botão de Cadastrar Novo Motorista -->
     <div class="text-center mt-3">
-        <a href="/Escola/Motorista/Associar" class="btn btn-custom">Novo</a>
+        <a href="/Escola/Motorista/AdAssociar" class="btn btn-custom">Novo Motorista</a>
+    </div>
+    <div class="text-center mt-3">
+        <a href="/Escola/Motorista/AdAssociar" class="btn btn-custom">Associar</a>
     </div>
 </div>
 <div id="space"></div>

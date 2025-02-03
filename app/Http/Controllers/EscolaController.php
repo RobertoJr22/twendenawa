@@ -183,21 +183,47 @@ class EscolaController extends Controller
         ->whereHas('rota', function ($query) use ($user) {
             $query->where('escolas_id', $user->id);
         })
-        ->get();    
+        ->whereIn('estado', [1, 2]) // Adiciona a condição de estado ser 1 ou 2
+        ->get();
+
         
         return view('Escola.Motorista.ListaMotorista',compact('motoristas','user'));
     }
 
 
-    public function Estudante(){
-        return view('Escola.Estudante');
-    }
+    public function ExibirAdAssociar(){
+        $user = Auth::user();
 
-    public function Responsavel(){
-        return view('Escola.Responsavel');
-    }
+        $escola = $user->escola;
 
-    public function Viatura(){
-        return view('Escola.Viatura');
+        $rotas = rota::where('escolas_id',$escola->id)->get();
+
+
+        $veiculos = motoristas_rotas_veiculos::with(['veiculo.modelo.marcas'])
+                    ->where('estado', '!=', 1)  // Filtra onde o estado é diferente de 1
+                    ->whereHas('veiculo', function($query) use ($escola) {
+                        $query->where('escolas_id', $escola->id);  // Condição para veiculos onde escolas_id é igual ao id do usuário
+                    })
+                    ->get();
+    
+                        
+
+        $motoristas = motoristas_rotas_veiculos::with([
+            'rota.escola',         // Relacionamento com a escola via rota
+            'veiculo',             // Relacionamento com o veículo
+            'veiculo.modelo.marcas', // Relacionamento com o modelo e marcas do veículo
+            'motorista.carteira',  // Relacionamento com a carteira do motorista
+            'motorista.user',       // Relacionamento com o usuário do motorista
+            'Motorista.turno'
+        ])
+        ->where('estado', 2)  // Filtrando onde o estado é igual a 2
+        ->whereHas('rota', function($query) use ($escola) {
+            $query->where('escolas_id', $escola->id);  // Filtrando pela condição escolas_id igual ao $user->id
+        })
+        ->get();
+                
+        
+
+        return view('Escola.Motorista.AdAssociar',compact('user','rotas', 'motoristas', 'veiculos'));
     }
 }
