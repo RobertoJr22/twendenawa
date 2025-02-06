@@ -27,38 +27,44 @@
                     <th>Licença</th>
                     <th>Marca</th>
                     <th>Modelo</th>
-                    <th>Turno</th>
                     <th>Rota</th>
+                    <th>Turno</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach( $motoristas as $motorista)
-                <tr>
-                    <td>{{$motorista->motorista->id}}</td>
-                    <td>{{$motorista->motorista->user->name}}</td>
-                    <td>{{$motorista->motorista->telefone}}</td>
-                    <td>{{$motorista->motorista->carteira->NumeroCarta}}</td>
-                    <td>{{$motorista->veiculo->modelo->marcas->nome}}</td>
-                    <td>{{$motorista->veiculo->modelo->nome}}</td>
-                    <td>{{$motorista->motorista->turno->nome}}-{{$motorista->motorista->turno->HoraIda}}-{{$motorista->motorista->turno->HoraRegresso}}</td>
-                    <td>{{$motorista->rota->nome}}-{{$motorista->rota->PontoA}}-{{$motorista->rota->PontoB}}</td>
-                    <td>
-                        <button class="btn btn-sm btn-custom">Editar</button>
-                        <button class="btn btn-sm btn-custom">Desvincular</button>
-                    </td>
-                </tr>
-                @endforeach
+            @foreach($motoristas as $motorista)
+            <tr>
+            <td>{{ $motorista->id }}</td>
+            <td>{{ $motorista->nome ?? 'N/A' }}</td>
+            <td>{{ $motorista->telefone ?? 'N/A' }}</td>
+            <td>{{ $motorista->licenca ?? 'N/A' }}</td>
+
+            @if($motorista->estado == 2)
+                <td>{{ $motorista->marcas ?? 'N/A' }}</td>
+                <td>{{ $motorista->modelos ?? 'N/A' }}</td>
+                <td>{{ $motorista->rotas ?? 'N/A' }}</td>
+            @else
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>N/A</td>
+            @endif
+
+            <td>{{ $motorista->Turnos ?? 'N/A' }}</td>
+            <td>
+                <button class="btn btn-sm btn-custom">Editar</button>
+                <button class="btn btn-sm btn-custom">Desvincular</button>
+            </td>
+        </tr>
+            @endforeach
+
             </tbody>
         </table>
     </div>
 
     <!-- Botão de Cadastrar Novo Motorista -->
     <div class="text-center mt-3">
-        <a href="/Escola/Motorista/AdAssociar" class="btn btn-custom">Novo Motorista</a>
-    </div>
-    <div class="text-center mt-3">
-        <a href="/Escola/Motorista/AdAssociar" class="btn btn-custom">Associar</a>
+        <a href="/Escola/Motorista/AdAssociar" class="btn btn-custom">Adicionar/Associar Motorista</a>
     </div>
 </div>
 <div id="space"></div>

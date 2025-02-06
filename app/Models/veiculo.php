@@ -37,4 +37,10 @@ class veiculo extends Model
     public function escola(){
         return $this->belongsTo(escola::class,'escolas_id');
     }
+
+    public function motoristas_rotas_veiculos()
+    {
+        return $this->hasMany(motoristas_rotas_veiculos::class, 'veiculos_id');
+    }
+
 }

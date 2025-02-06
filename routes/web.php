@@ -40,6 +40,7 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
         //escola motoristas
     Route::get('/Escola/Motorista/ListaMotorista',[EscolaController::class, 'ListaMotorista'])->name('ListaMotorista');
     Route::get('/Escola/Motorista/AdAssociar',[EscolaController::class, 'ExibirAdAssociar'])->name('AdAssociar');
+    Route::post('/Escola/Motorista/AdAssociar',[EscolaController::class, 'Associar'])->name('Associar');
 
     /* Responsavel */
     Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreMotoristaRequest;
 use App\Models\carteira;
+use App\Models\escolas_motoristas;
 use App\Models\turno;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -46,42 +47,66 @@ class EscolaController extends Controller
 
         } else {
             
-            return redirect()->route('alguma-rota')->with('alert', 'Área não permitida');
+            return redirect()->back()->with('alert', 'Área não permitida');
         }
     }
     
-    public function CadastrarRota(Request $request){
+    public function CadastrarRota(Request $request)
+    {
         $user = Auth::user();
-
-        if($user->tipo_usuario_id == 5){
-
-            try{
-                $rota = new rota();
-                $rota->nome = $request->nome;
-                $rota->PontoA = $request->pontoA;
-                $rota->PontoB = $request->pontoB;
-                $rota->escolas_id = $user->id;
+        $escola = $user->escola;
+    
+        $nome = $request->input('nome');
+        $pontoA = $request->input('pontoA');
+        $pontoB = $request->input('pontoB');
+    
+        if ($user->tipo_usuario_id == 5) {
+            if ($pontoA === $pontoB) {
+                return redirect()->back()->with('error', 'Erro: Ponto A idêntico ao Ponto B.');
+            }
+    
+            // Verificar se já existe uma rota com o mesmo PontoB para a mesma escola
+            $rotaExistente = DB::table('rotas')
+                ->where('escolas_id', $escola->id)
+                ->where('pontoB', $pontoB)
+                ->count();
+    
+            if ($rotaExistente > 0) {
+                return redirect()->back()->with('error', 'Erro: Essa escola já tem essa rota.');
+            }
+    
+            try {
+                $rota = new Rota();
+                $rota->nome = $nome;
+                $rota->pontoA = $pontoA;
+                $rota->pontoB = $pontoB;
+                $rota->escolas_id = $escola->id;
                 $rota->save();
+    
+                return redirect()->route('ListaRota')->with('sucess', 'Rota cadastrada com sucesso!');
 
-            }catch(\Exception $e){
-                return redirect()->back()->with('error','Ocorreu algum erro no cadastro: '.$e->getMessage());
-            }   
-            return redirect()->route('ListaRota')->with('sucess','Rota cadastrada com sucesso');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Erro no cadastro: ' . $e->getMessage());
+            }
         }
-
+    
+        return redirect()->back()->with('error', 'Ação não permitida.');
     }
+    
+
     public function ListaRota(Request $request){
         $search = $request->input('search');
         $user = Auth::user();
+        $escola = $user->escola;
 
         if($search){
             $rotas = rota::where('nome','like','%'.$search.'%')
             ->orwhere('PontoA','like','%'.$search.'%')
             ->orwhere('PontoB','like','%'.$search.'%')
-            ->where('escolas_id',$user->id)->get();
+            ->where('escolas_id',$escola->id)->get();
                     
         }else{
-            $rotas = rota::where('escolas_id',$user->id)->get();
+            $rotas = rota::where('escolas_id',$escola->id)->get();
         }
         
 
@@ -113,13 +138,15 @@ class EscolaController extends Controller
         DB::beginTransaction();
         try{
             $user = Auth::user();
+            $escola=$user->escola;
+            
             if($user->tipo_usuario_id == 5){
                 $veiculo = new veiculo();
                 $veiculo->modelos_id = $request->modelos_id;
                 $veiculo->capacidade = $request->capacidade;
                 $veiculo->Matricula = $request->matricula;
                 $veiculo->VIN = $request->VIN;
-                $veiculo->escolas_id = $user->id;
+                $veiculo->escolas_id = $escola->id;
                 $veiculo->save();               
             }
             DB::commit();
@@ -172,22 +199,15 @@ class EscolaController extends Controller
     public function ListaMotorista(){
 
         $user = Auth::user();
+        $escola = $user->escola;
 
-        $motoristas = motoristas_rotas_veiculos::with([
-            'rota.escola',   // Pega a escola associada à rota
-            'veiculo.modelo.marcas', // Pega a marca do veículo via modelo
-            'motorista.carteira', // Pega a carteira do motorista
-            'motorista.user',
-            'motorista.turno'
-        ])
-        ->whereHas('rota', function ($query) use ($user) {
-            $query->where('escolas_id', $user->id);
-        })
-        ->whereIn('estado', [1, 2]) // Adiciona a condição de estado ser 1 ou 2
-        ->get();
-
-        
-        return view('Escola.Motorista.ListaMotorista',compact('motoristas','user'));
+        try {
+            $motoristas = DB::select('CALL GetMotoristasByEscola(?)', [$escola->id]);
+    
+            return view('Escola.Motorista.ListaMotorista', compact('motoristas'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erro ao listar motoristas: ' . $e->getMessage());
+        }
     }
 
 
@@ -199,31 +219,92 @@ class EscolaController extends Controller
         $rotas = rota::where('escolas_id',$escola->id)->get();
 
 
-        $veiculos = motoristas_rotas_veiculos::with(['veiculo.modelo.marcas'])
-                    ->where('estado', '!=', 1)  // Filtra onde o estado é diferente de 1
-                    ->whereHas('veiculo', function($query) use ($escola) {
-                        $query->where('escolas_id', $escola->id);  // Condição para veiculos onde escolas_id é igual ao id do usuário
-                    })
-                    ->get();
-    
-                        
-
-        $motoristas = motoristas_rotas_veiculos::with([
-            'rota.escola',         // Relacionamento com a escola via rota
-            'veiculo',             // Relacionamento com o veículo
-            'veiculo.modelo.marcas', // Relacionamento com o modelo e marcas do veículo
-            'motorista.carteira',  // Relacionamento com a carteira do motorista
-            'motorista.user',       // Relacionamento com o usuário do motorista
-            'Motorista.turno'
-        ])
-        ->where('estado', 2)  // Filtrando onde o estado é igual a 2
-        ->whereHas('rota', function($query) use ($escola) {
-            $query->where('escolas_id', $escola->id);  // Filtrando pela condição escolas_id igual ao $user->id
+        $veiculos = veiculo::with('modelo.marcas')
+        ->where('escolas_id', $escola->id)
+        ->where(function ($query) {
+            $query->whereDoesntHave('motoristas_rotas_veiculos')
+                  ->orWhereHas('motoristas_rotas_veiculos', function ($subQuery) {
+                      $subQuery->where('estado', 0);
+                  });
         })
-        ->get();
+        ->get();                  
+
+        $motoristas = escolas_motoristas::with(['motorista.turno', 'escola'])
+        ->where('escolas_id', $escola->id)
+        ->where('estado', 1)
+        ->whereDoesntHave('motorista.motoristas_rotas_veiculos', function ($query) {
+            $query->where('estado', 0);  // Verifica se não há registros com estado 0
+        })
+        ->get();    
                 
-        
 
         return view('Escola.Motorista.AdAssociar',compact('user','rotas', 'motoristas', 'veiculos'));
     }
+
+    public function Associar(Request $request){
+
+        if($request->opcao == 1){
+            try{
+
+                $verif = motoristas_rotas_veiculos:: where('motoristas_id',$request->motoristas_id)
+                                                    ->where('estado', 1)->first();
+                if($verif){
+                    return redirect()->back()->with('error','Motorista esta associado a um veiculo e uma rota');
+                }else{
+                    $associacao = new motoristas_rotas_veiculos();
+                    $associacao->motoristas_id = $request->motoristas_id;
+                    $associacao->veiculos_id = $request->veiculos_id;
+                    $associacao->rotas_id = $request->rotas_id;
+                    $associacao->save();
+        
+                    escolas_motoristas::where('estado',1)
+                                        ->where('motoristas_id',$request->motoristas_id)
+                                        ->update(['estado'=>2]);
+                }
+
+            }catch(\Exception $e){
+                return redirect()->back()->with('error','Erro ao associar motorista, rota e veiculo'.$e->getMessage());
+            }
+
+            return redirect()->route('ListaMotorista')->with('sucess','Associação feita com sucesso');
+
+        }elseif($request->opcao == 2){
+
+            $motorista = motorista::where('BI',$request->BI)->first();
+
+            if($motorista){
+                $verif = escolas_motoristas ::where('motoristas_id',$motorista->id)
+                                            ->wherein('estado',[1,2])->first();
+                if($verif){
+                    return redirect()->back()->with('erro','Motorista ja está associado à essa escola');
+                }else{
+                    $verifestado0 = escolas_motoristas ::where('motoristas_id',$motorista->id)
+                                            ->where('estado',0)->first();
+                    if($verifestado0){
+                        $verifestado0->update(['estado'=>1]);
+                        return redirect()->route('ListaMotorista')->with('sucess','Motorista adicionado');
+                    }else{
+    
+                        $escola = Auth::user()->escola;
+                        if (!$escola) {
+                            return redirect()->back()->with('error', 'Escola não encontrada para o usuário.');
+                        }
+    
+                        $conexao = new escolas_motoristas();
+    
+                        $conexao->motoristas_id = $motorista->id;
+                        $conexao->escolas_id = $escola->id;
+                        $conexao->save();
+    
+                        return redirect()->route('ListaMotorista')->with('sucess','Motorista adicionado');
+                    }
+                }
+            }else{
+                return redirect()->back()->with('error','Motorista não encontrado');
+            }
+
+        }
+    }
+
+
 }

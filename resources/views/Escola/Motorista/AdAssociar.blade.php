@@ -7,17 +7,19 @@
         <div class="col-md-6">
             <div class="card p-4">
                 <h2 class="text-center mb-4 fs-responsive">Adicionar novo motorista</h2>
-                <form method="POST" action="" enctype="multipart/form-data">
+                <form method="POST" action="{{route('Associar')}}" enctype="multipart/form-data">
                     @csrf
+                    <!-- Campo para BI -->
                     <div class="mb-3">
-                        <label for="nome" class="form-label">Nome:</label>
-                        <input type="text" class="form-control" name="name" value="{{old('name')}}">
+                        <label for="BI" class="form-label">BI:</label>
+                        <input type="text" class="form-control" name="BI" value="{{old('BI')}}">
                     </div>
-                    <div class="mb-3">
-                        <label for="DataNascimento" class="form-label">Data de nascimento:</label>
-                        <input type="date" class="form-control" name="DataNascimento" value="{{old('DataNascimento')}}">
-                    </div>
-                    <button type="submit" class="btn btn-custom w-100">Salvar Cadastro</button>
+                    
+                    <input type="hidden" name="opcao" value="2">
+
+                    <button type="submit" class="btn btn-custom w-100">Adicionar</button>
+
+                    
                 </form>
             </div>
         </div>
@@ -26,7 +28,7 @@
         <div class="col-md-6">
             <div class="card p-4">
                 <h2 class="text-center mb-4 fs-responsive">Associar</h2>
-                <form method="POST" action="" enctype="multipart/form-data">
+                <form method="POST" action="{{route('Associar')}}" enctype="multipart/form-data">
                     @csrf
                     <!-- Campo de Rota -->
                     <div class="mb-3">
@@ -42,7 +44,7 @@
                         <label for="veiculos_id" class="form-label">Veiculo:</label>
                         <select name="veiculos_id" class="form-control form-select">
                             @foreach($veiculos as $veiculo)
-                            <option value="{{$veiculo->veiculo->id}}">{{$veiculo->veiculo->modelo->nome}}-{{$veiculo->veiculo->modelo->marcas->nome}}-{{$veiculo->veiculo->Matricula}}</option>
+                            <option value="{{$veiculo->id}}">{{$veiculo->modelo->nome}}-{{$veiculo->modelo->marcas->nome}}-{{$veiculo->Matricula}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -55,6 +57,9 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <input type="hidden" name="opcao" value="1">
+
                     <button type="submit" class="btn btn-custom w-100">Associar</button>
                 </form>
             </div>

@@ -30,6 +30,11 @@ class motorista extends Model
     {
         return $this->belongsToMany(Rota::class, 'motoristas_rotas_veiculos', 'motoristas_id', 'rotas_id');
     }
+
+    public function escolas()
+    {
+        return $this->belongsToMany(Rota::class, 'escolas_motoristas', 'motoristas_id', 'escolas_id');
+    }
     
     public function veiculos()
     {
@@ -56,5 +61,11 @@ class motorista extends Model
     public function DadosViagems(){
         return $this->hasMany(DadosViagem::class,'motoristas_id');
     }
+
+    public function motoristas_rotas_veiculos()
+    {
+        return $this->hasMany(motoristas_rotas_veiculos::class, 'motoristas_id');
+    }
+
 
 }

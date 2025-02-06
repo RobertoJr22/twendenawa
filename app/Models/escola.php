@@ -15,6 +15,10 @@ class escola extends Model
         'estado',
     ];
 
+    public function motoristas()
+    {
+        return $this->belongsToMany(Rota::class, 'escolas_motoristas', 'motoristas_id', 'escolas_id');
+    }
 
     public function user(){
         return $this->belongsTo(User::class,'users_id');
