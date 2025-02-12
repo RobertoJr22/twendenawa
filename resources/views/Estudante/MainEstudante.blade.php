@@ -6,35 +6,67 @@
         <div class="row g-4">
             <!-- Coluna esquerda (dados pessoais) -->
             <div class="col-md-4">
+                <!--DADOS PESSOAIS-->
                 <div class="card dados-pessoais">
                     <!-- Foto de Perfil -->
                     <div class="profile-photo-container" id="profile-photo">
-                        <!-- Ícone de Câmera -->
-                        <ion-icon name="camera-outline"></ion-icon>
-                        <!-- Imagem de Perfil (escondida por padrão) -->
-                        <img src="" >
+                        @if ($estudante && $estudante->foto)
+                            <img src="{{ asset('storage/'.$estudante->foto) }}" alt="">
+                        @else
+                            <ion-icon name="camera-outline"></ion-icon>
+                        @endif
                     </div>
-
                     <!-- Dados Pessoais -->
                     <div>
                         <h5 class="card-title">Informações do Estudante</h5>
-                        <p><strong>Nome:</strong>{{ $helper->DadosUsuario('name') }}</p>
-                        <p><strong>Email:</strong> {{ $helper->DadosUsuario('email') }}</p>
-                        <p><strong>Telefone:</strong> +244 912 345 678</p>
-                        <p><strong>Endereço:</strong> Rua Principal, nº 123, Luanda</p>
+                        <p><strong>Nome:</strong>{{$user->name}}</p>
+                        <p><strong>Email:</strong>{{ $user->email}}</p>
+                        <p><strong>Telefone:</strong>{{$estudante->telefone}}</p>
+                        <p><strong>Endereço:</strong>{{$estudante->endereco}}</p>
+                        <p><strong>Turno:</strong>{{$turno->nome}}-{{$turno->HoraIda}}-{{$turno->HoraRegresso}}</p>
+                        @if($rota === null)
+                            <p><strong>Rota:</strong>Sem rota</p>
+                        @else
+                            <p><strong>Rota:</strong>{{$rota->nome}}-{{$rota->PontoA}}-{{$rota->PontoB}}</p> 
+                        @endif                    
                     </div>
                     <a href="" class="btn editar btn-custom">Editar<ion-icon name="pencil-outline"></ion-icon></a>
                 </div>
-                <!-- Dados responsavel -->
+                <!-- Instituicao de ensino -->
                 <div class="card" id="dados-responsavel">
                     <div class="card-header">
-                        Dados do Responsável
+                        Escola do estudante
                     </div>
                     <div class="card-body">
-                        <p><ion-icon name="person-outline"></ion-icon>:&nbsp; João Silva</p>
-                        <p><ion-icon name="mail-outline"></ion-icon>:&nbsp; joao.silva@example.com</p>
-                        <p><ion-icon name="call-outline"></ion-icon>:&nbsp; +244 912 345 678</p>
-                        <p><ion-icon name="home-outline"></ion-icon>:&nbsp; Rua Principal, nº 123, Luanda</p>
+                        @if($escola === null)
+                            <span>O usuário não está vinculado à uma escola</span>
+                        @else
+                            <p><strong>Nome:</strong>{{$escola->nome}}</p>
+                            <p><strong>Municipio:</strong>{{$escola->municipio}}</p>
+                            <p><strong>Bairro:</strong>{{$escola->bairro}}</p>
+                            <p><strong>Email:</strong>{{ $escola->email}}</p>
+                            <p><strong>Telefone:</strong>{{$escola->telefone}}</p>
+                        @endif
+                    </div>
+                </div>
+                <!-- Responsaveis do estudante -->
+                <div class="card" id="dados-responsavel">
+                    <div class="card-header">
+                        Responsáveis do estudante
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                        @if ($responsaveis->isEmpty())
+                            <span>Nenhum Responsável adicionado</span>
+                        @else
+                            @foreach($responsaveis as $responsavel)
+                                <a href="/Estudante/DetalhesResponsavel" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
+                                    <span>{{ $responsavel->nome }}</span>
+                                    <span>Ver Mais</span>
+                                </a>
+                            @endforeach
+                        @endif
+                        </div>
                     </div>
                 </div>
             </div>

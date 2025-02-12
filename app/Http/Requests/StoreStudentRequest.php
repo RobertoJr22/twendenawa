@@ -29,6 +29,9 @@ class StoreStudentRequest extends FormRequest
             'DataNascimento' => 'required|date',
             'endereco' => 'required|string|max:255',
             'telefone' => 'required|string|max:15',
+            'turnos_id' => 'required|exists:turnos,id',
+            'sexos_id' => 'required|exists:Sexos,id',
+            'tipo_usuario_id' => 'required|exists:tipo_usuarios,id',
         ];
     }
 }

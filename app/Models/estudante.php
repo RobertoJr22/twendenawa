@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class estudante extends Model
 {
-    protected $table = 'motoristas';
+    protected $table = 'estudantes';
 
     protected $fillable = [
         'users_id',
@@ -36,7 +36,7 @@ class estudante extends Model
     }
 
     public function turno(){
-        return $this->belongsTo(turno::class,'turnos');
+        return $this->belongsTo(turno::class,'turnos_id');
     }
 
     public function user(){

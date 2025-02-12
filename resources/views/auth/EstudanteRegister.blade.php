@@ -16,7 +16,7 @@
                         <!-- Campo de Nome -->
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome:</label>
-                            <input type="text" class="form-control" name="name">
+                            <input type="text" class="form-control" name="name" value="{{old('name')}}">
                             @error('name')
                             <p class="text-danger text-sm">{{ $message }}</p>
                            @enderror
@@ -26,7 +26,7 @@
                         <!-- Campo de Data de Nascimento -->
                         <div class="mb-3">
                             <label for="DataNascimento" class="form-label">Data de nascimento:</label>
-                            <input type="date" class="form-control" name="DataNascimento" id="DataNascimento">
+                            <input type="date" class="form-control" name="DataNascimento" id="DataNascimento" value="{{old('DataNascimento')}}">
                             @error('DataNascimento')
                             <p class="text-danger text-sm">{{ $message }}</p>
                            @enderror
@@ -35,7 +35,7 @@
                         <!-- Campo de Endereco -->
                         <div class="mb-3">
                             <label for="Endereco" class="form-label">Endereco:</label>
-                            <input type="text" class="form-control" name="endereco" id="Endereco">
+                            <input type="text" class="form-control" name="endereco" id="Endereco" value="{{old('endereco')}}">
                             @error('endereco')
                             <p class="text-danger text-sm">{{ $message }}</p>
                            @enderror
@@ -53,7 +53,7 @@
                         <!-- Campo de Telefone -->
                         <div class="mb-3">
                             <label for="telefone" class="form-label">Telefone:</label>
-                            <input type="number" class="form-control" name="telefone" id="telefone">
+                            <input type="number" class="form-control" name="telefone" id="telefone" value="{{old('telefone')}}">
                             @error('telefone')
                             <p class="text-danger text-sm">{{ $message }}</p>
                            @enderror
@@ -62,44 +62,26 @@
                         <!-- Campo de foto -->
                         <div class="mb-3">
                             <label for="foto" class="form-label">coloca uma foto:</label>
-                            <input type="file" class="form-control" name="foto" id="foto" placeholder="opcional">
+                            <input type="file" class="form-control" name="foto" id="foto" placeholder="opcional" value="{{old('foto')}}">
                             @error('foto')
                             <p class="text-danger text-sm">{{ $message }}</p>
                            @enderror
-                        </div>
-
-                        <!-- Campo de Escola -->
-                        <div class="mb-3">
-                            <label for="escolas_id" class="form-label">Escola:</label>
-                            <select name="escolas_id" id="escolas_id" class="form-control form-select" required>
-                                <option value="1">Colegio Arco iris</option>
-                                <option value="2">Colegio Ulumbo</option>
-                            </select>
-                        </div>
-
-
-                        <!-- Campo de Rotas -->
-                        <div class="mb-3">
-                            <label for="rotas_id" class="form-label">Rota:</label>
-                            <select name="rotas_id" id="rotas_id" class="form-control form-select" required>
-                                <option value="1">Ulumbo1</option>
-                                <option value="2">Ulumbo2</option>
-                            </select>
                         </div>
 
                         <!-- Campo de Turno -->
                         <div class="mb-3">
                             <label for="turnos_id" class="form-label">Turno:</label>
                             <select name="turnos_id" id="turnos_id" class="form-control form-select" required>
-                                <option value="1">Manha</option>
-                                <option value="2">Tarde</option>
+                                @foreach($turnos as $turno)
+                                <option value="{{$turno->id}}">{{$turno->nome}}-{{$turno->HoraIda}}-{{$turno->HoraRegresso}}</option>
+                                @endforeach
                             </select>
                         </div>
 
                         <!-- Campo de Email -->
                         <div class="mb-3">
                             <label for="email" class="form-label">Email:</label>
-                            <input type="email" class="form-control" name="email">
+                            <input type="email" class="form-control" name="email" value="{{old('email')}}">
                             @error('email')
                             <p class="text-danger text-sm">{{ $message }}</p>
                            @enderror
@@ -108,7 +90,7 @@
                         <!-- Campo de Senha -->
                         <div class="mb-3">
                             <label for="password" class="form-label">Senha:</label>
-                            <input type="password" class="form-control" name="password">
+                            <input type="password" class="form-control" name="password" ">
                             @error('password')
                             <p class="text-danger text-sm">{{ $message }}</p>
                            @enderror

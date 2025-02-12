@@ -139,7 +139,7 @@ class EscolaController extends Controller
         try{
             $user = Auth::user();
             $escola=$user->escola;
-            
+
             if($user->tipo_usuario_id == 5){
                 $veiculo = new veiculo();
                 $veiculo->modelos_id = $request->modelos_id;
@@ -218,16 +218,7 @@ class EscolaController extends Controller
 
         $rotas = rota::where('escolas_id',$escola->id)->get();
 
-
-        $veiculos = veiculo::with('modelo.marcas')
-        ->where('escolas_id', $escola->id)
-        ->where(function ($query) {
-            $query->whereDoesntHave('motoristas_rotas_veiculos')
-                  ->orWhereHas('motoristas_rotas_veiculos', function ($subQuery) {
-                      $subQuery->where('estado', 0);
-                  });
-        })
-        ->get();                  
+        $veiculos = DB::select('CALL GetVeiculosDisponiveis(?)', [$escola->id]);                 
 
         $motoristas = escolas_motoristas::with(['motorista.turno', 'escola'])
         ->where('escolas_id', $escola->id)
@@ -243,30 +234,57 @@ class EscolaController extends Controller
 
     public function Associar(Request $request){
 
-        if($request->opcao == 1){
-            try{
-
-                $verif = motoristas_rotas_veiculos:: where('motoristas_id',$request->motoristas_id)
-                                                    ->where('estado', 1)->first();
-                if($verif){
-                    return redirect()->back()->with('error','Motorista esta associado a um veiculo e uma rota');
-                }else{
-                    $associacao = new motoristas_rotas_veiculos();
-                    $associacao->motoristas_id = $request->motoristas_id;
-                    $associacao->veiculos_id = $request->veiculos_id;
-                    $associacao->rotas_id = $request->rotas_id;
-                    $associacao->save();
+        if ($request->opcao == 1) {
+            try {
+                $motorista_id = $request->input('motoristas_id');
+                $veiculo_id = $request->input('veiculos_id');
         
-                    escolas_motoristas::where('estado',1)
-                                        ->where('motoristas_id',$request->motoristas_id)
-                                        ->update(['estado'=>2]);
+                // Verifica se o motorista já está associado a um veículo e rota com estado = 1
+                $verif = motoristas_rotas_veiculos::where('motoristas_id', $motorista_id)
+                    ->where('estado', 1)
+                    ->first();
+        
+                if ($verif) {
+                    return redirect()->back()->with('error', 'Este motorista já está associado a um veículo e uma rota.');
                 }
-
-            }catch(\Exception $e){
-                return redirect()->back()->with('error','Erro ao associar motorista, rota e veiculo'.$e->getMessage());
-            }
-
-            return redirect()->route('ListaMotorista')->with('sucess','Associação feita com sucesso');
+        
+                // Busca o turno do motorista informado
+                $turno_id = DB::table('motoristas')
+                    ->where('id', $motorista_id)
+                    ->value('turnos_id');
+        
+                if (!$turno_id) {
+                    return redirect()->back()->with('error', 'Motorista inserido não existe no sistema.');
+                }
+        
+                // Verifica se já existe um motorista associado ao mesmo veículo no mesmo turno
+                $existe = DB::table('motoristas_rotas_veiculos as mr')
+                    ->join('motoristas as m', 'mr.motoristas_id', '=', 'm.id')
+                    ->where('mr.veiculos_id', $veiculo_id)
+                    ->where('mr.estado', 1)
+                    ->where('m.turnos_id', $turno_id)
+                    ->exists();
+        
+                if ($existe) {
+                    return redirect()->back()->with('error', 'Já existe um motorista associado a este veículo no mesmo turno.');
+                }
+        
+                // Realiza a associação de motorista, rota e veículo
+                motoristas_rotas_veiculos::create([
+                    'motoristas_id' => $motorista_id,
+                    'veiculos_id' => $veiculo_id,
+                    'rotas_id' => $request->input('rotas_id')
+                ]);
+        
+                // Atualiza o estado do motorista na tabela escolas_motoristas
+                escolas_motoristas::where('estado', 1)
+                    ->where('motoristas_id', $motorista_id)
+                    ->update(['estado' => 2]);
+        
+                return redirect()->route('ListaMotorista')->with('success', 'Associação feita com sucesso.');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Erro ao associar motorista, rota e veículo: ' . $e->getMessage());
+            }        
 
         }elseif($request->opcao == 2){
 

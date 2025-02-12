@@ -63,7 +63,7 @@ class AuthController extends Controller
             }
         }
     
-        return back()->withErrors(['email' => 'As credenciais não coincidem com nossos registros.']);
+        return redirect()->back()->with('error','As credenciais não coincidem com nossos registros.');
     }
     
 
@@ -88,7 +88,8 @@ class AuthController extends Controller
 
     public function showEstudanteForm()
     {
-        return view('auth.EstudanteRegister');
+        $turnos = turno::select('id','nome','HoraIda','HoraRegresso')->get();
+        return view('auth.EstudanteRegister', compact('turnos'));
     }
 
     public function showMotoristaForm()
