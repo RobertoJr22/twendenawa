@@ -17,12 +17,11 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
 
     /* Motorista */
     Route::get('/Motorista/MainMotorista',[MotoristaController::class, 'MainMotorista'])->name('TelaMotorista');
-    /* Estudante Rotas */
+    /* Estudante*/
     Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );
     Route::get('/Estudante/MainEstudante',[EstudanteController::class, 'MainEstudante'] )->name('TelaEstudante');
-    Route::get('/Estudante/DetalhesViagem',[EstudanteController::class,'DetalhesViagem']);
-    Route::get('/Estudante/InfoEstudante',[EstudanteController::class,'InfoEstudante']);
     Route::get('/Estudante/SelecaoEstudante',[EstudanteController::class,'SelecaoEstudante']);
+    Route::get('/Estudante/PagamentosEstudante',[EstudanteController::class,'PagamentosEstudante']);
     /* Escola */
     Route::get('/Escola/MainEscola',[EscolaController::class,'index'])->name('TelaEscola');
     Route::get('/Escola/Estudante',[EscolaController::class,'Estudante'])->name('Escola.Estudante');
@@ -44,6 +43,12 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
 
     /* Responsavel */
     Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');
+    Route::get('/Estudante/DetalhesViagem/{id}',[ResponsavelController::class,'DetalhesViagem'])->name('DetalhesViagem');
+    Route::get('/Estudante/InfoEstudante/{id}',[ResponsavelController::class,'InfoEstudante'])->name('InfoEstudante');
+    Route::get('/Responsavel/conexao',[ResponsavelController::class,'ExibirConexao'])->name('ExibirConexao');
+    Route::get('/Responsavel/MainResponsavel/{id}',[ResponsavelController::class,'DesfazerConexao'])->name('DesfazerConexao');
+    Route::get('/AcaoConexao/{id}/{acao}/{tipousuario}', [ResponsavelController::class, 'AcaoConexao'])->name('AcaoConexao');
+
 
     /*Admin*/
     Route::get('/Admin/TelaAdm',[TwendenawaController::class,'TelaAdmin'])->name('TelaAdmin')->middleware('auth');

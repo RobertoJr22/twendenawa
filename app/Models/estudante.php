@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable; // Importe o trait
 
 class estudante extends Model
 {
+    use Notifiable; // Habilita as notificações
+    
     protected $table = 'estudantes';
 
     protected $fillable = [

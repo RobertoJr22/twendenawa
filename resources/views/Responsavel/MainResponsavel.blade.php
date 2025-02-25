@@ -39,55 +39,59 @@
                         </div>
                         <div class="card-body">
                             <p><strong>Estudantes em Viagem:</strong></p>
-                            <div class="list-group">
-                                <a href="/Estudante/DetalhesViagem" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
-                                    <span>João Silva</span>
-                                    <span>Ver Mais</span>
-                                </a>
-                                <a href="/Estudante/DetalhesViagem" class="student-link btn btn-lista  d-flex justify-content-between align-items-center mb-3">
-                                    <span>Maria Souza</span>
-                                    <span>Ver Mais</span>
-                                </a>
-                                <a href="/Estudante/DetalhesViagem" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
-                                    <span>Pedro Almeida</span>
-                                    <span>Ver Mais</span>
-                                </a>
+                            <div class="list-group overflow">
+                                @if($viagens->isEmpty())
+                                    <span>Sem estudantes em viagens ativas</span>
+                                @else
+                                    @foreach($viagens as $viagem)
+                                    <a href="{{route('DetalhesViagem',$viagens->IdEstudante)}}" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
+                                        <span>{{$viagem->NomeEstudante}}</span>
+                                        <span>Ver Mais</span>
+                                    </a>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>
 
-                    <!-- Notificações -->
+                    <!-- Seção de Notificações -->
                     <div class="card mt-3">
-                        <div class="card-header">
-                            Notificações&nbsp; <ion-icon name="notifications-outline"></ion-icon>
+                            <div class="card-header">
+                                Notificações&nbsp; <ion-icon name="notifications-outline"></ion-icon>
+                            </div>
+                            <div class="card-body notificacoes">
+                                @if($notificacoes->isEmpty())
+                                    <p>Nenhuma notificação no momento.</p>
+                                @else
+                                    <ul class="list-group">
+                                        @foreach($notificacoes as $notificacao)
+                                            <li class="list-group-item">
+                                                {{ $notificacao->data['mensagem'] }}<br>
+                                                <small class="text-muted">{{ $notificacao->created_at->diffForHumans() }}</small>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <ul class="list-group">
-                                <li class="list-group-item">Estudante João Silva entrou no veículo às 07:30. <span class="text-muted">(Hoje)</span></li>
-                                <li class="list-group-item">Estudante João Silva chegou ao destino às 08:15. <span class="text-muted">(Hoje)</span></li>
-                            </ul>
-                        </div>
-                    </div>
 
                     <!-- Estudantes Sob Responsabilidade -->
                     <div class="card mt-3">
                         <div class="card-header">
-                            Estudantes Sob Sua Responsabilidade&nbsp;<ion-icon name="people-outline"></ion-icon>
+                            Estudantes de sua tutela&nbsp;<ion-icon name="people-outline"></ion-icon>
                         </div>
                         <div class="card-body">
-                            <div class="list-group">
-                                <a href="/Estudante/InfoEstudante" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
-                                    <span>João Silva</span>
-                                    <span>Ver Mais</span>
-                                </a>
-                                <a href="/Estudante/InfoEstudante" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
-                                    <span>Maria Souza</span>
-                                    <span>Ver Mais</span>
-                                </a>
-                                <a href="/Estudante/InfoEstudante" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
-                                    <span>Pedro Almeida</span>
-                                    <span>Ver Mais</span>
-                                </a>
+                            <div class="list-group overflow">
+                                @if($estudantes->isEmpty())
+                                    <span>Sem estudantes associados a ti</span>
+                                @else
+                                    @foreach($estudantes as $estudante)
+                                        <a href="{{route('InfoEstudante', $estudante->id)}}" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
+                                            <span>{{$estudante->nome}}</span>
+                                            <span>Ver Mais</span>
+                                        </a>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -463,5 +463,8 @@ footer hr{
 .action{
     margin: 5px;
 }
-
+.notificacoes, .overflow {
+    max-height: 400px; /* Define um limite de altura para a área de notificações */
+    overflow-y: auto;  /* Exibe a rolagem vertical quando necessário */
+}
 

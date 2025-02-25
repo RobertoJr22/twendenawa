@@ -45,10 +45,10 @@
                 @auth
                 @if(auth()->user() && (auth()->user()->tipo_usuario_id == 2 || auth()->user()->tipo_usuario_id == 4))
                     <li class="nav-item">
-                        <a id="Pagamentos" class="nav-link" href="">Pagamentos</a>
+                        <a id="Pagamentos" class="nav-link" href="/Estudante/PagamentosEstudante">Pagamentos</a>
                     </li>
                     <li class="nav-item">
-                        <a id="Conexões" class="nav-link" href="">Conexões</a>
+                        <a id="Conexões" class="nav-link" href="/Responsavel/conexao">Conexões</a>
                     </li>
                 @endif
                 <li class="nav-item">

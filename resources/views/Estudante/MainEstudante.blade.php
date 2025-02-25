@@ -55,7 +55,7 @@
                         Responsáveis do estudante
                     </div>
                     <div class="card-body">
-                        <div class="list-group">
+                        <div class="list-group overflow">
                         @if ($responsaveis->isEmpty())
                             <span>Nenhum Responsável adicionado</span>
                         @else
@@ -89,16 +89,24 @@
                             <button class="btn btn-custom">Ver Detalhes</button>
                         </div>
                     </div>
-                        <!-- Notificações Recentes -->
-                        <div class="card">
+                    <!-- Notificações Recentes -->
+                    <div class="card">
                         <div class="card-header">
-                            Notificações Recentes <ion-icon name="notifications-outline"></ion-icon>
+                            Notificações<ion-icon name="notifications-outline"></ion-icon>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body notificacoes">
+                        @if($notificacoes->isEmpty())
+                            <p>Nenhuma notificação no momento.</p>
+                        @else
                             <ul class="list-group">
-                                <li class="list-group-item">Viagem iniciada às 07:30. <span class="text-muted">(Hoje)</span></li>
-                                <li class="list-group-item">Você desembarcou às 08:15. <span class="text-muted">(Ontem)</span></li>
+                                @foreach($notificacoes as $notificacao)
+                                    <li class="list-group-item">
+                                        {{ $notificacao->data['mensagem'] }}<br>
+                                        <small class="text-muted">{{ $notificacao->created_at->diffForHumans() }}</small>
+                                    </li>
+                                @endforeach
                             </ul>
+                        @endif
                         </div>
                     </div>
                     <!-- Histórico de Viagens -->

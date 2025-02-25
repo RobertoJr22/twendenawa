@@ -18,8 +18,11 @@ class EstudanteController extends Controller
 
     public function MainEstudante(){
         $user = Auth::user();
+
         $estudante = $user->estudante;
+
         $turno = $estudante->turno;
+
         $rota = DB::table('rotas as t1')
                     ->join('estudantes_rotas as t2','t2.rotas_id','=','t1.id')
                     ->where('t2.estudantes_id','=',$estudante->id)
@@ -43,9 +46,11 @@ class EstudanteController extends Controller
                     ->where('t3.estudantes_id','=',$estudante->id)
                     ->select('t4.name as nome', 't1.telefone as telefone', 't4.email as email', 't7.nome as municipio', 't5.nome as bairro')
                     ->first();
-                
+        
+        // Recupera as notificações do responsável, ordenando as mais recentes primeiro
+        $notificacoes = $estudante->notifications()->orderBy('created_at', 'desc')->get();
 
-        return view('Estudante.MainEstudante', compact('estudante','turno','rota', 'user', 'escola','responsaveis'));
+        return view('Estudante.MainEstudante', compact('estudante','turno','rota', 'user', 'escola','responsaveis', 'notificacoes'));
     }
 
     public function DetalhesViagem(){
@@ -97,5 +102,9 @@ class EstudanteController extends Controller
 
     public function SelecaoEstudante(){
         return view('Estudante.SelecaoEstudante');
+    }
+
+    public function PagamentosEstudante(){
+        return view('Estudante.PagamentosEstudante');
     }
 }
