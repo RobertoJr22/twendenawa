@@ -6,24 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class DadosViagem extends Model
 {
-    protected $table ='DadosViagems';
+    protected $table = 'dados_viagems';
 
     protected $fillable = [
         'estudantes_id',
-        'motoristas_id',
         'viagems_id',
+        'relatorio',
         'estado',
     ];
 
-    public function estudantes(){
-        return $this->belongsTo(estudante::class,'estudantes_id');
+    public function estudante()
+    {
+        return $this->belongsTo(Estudante::class, 'estudantes_id');
     }
 
-    public function motoristas(){
-        return $this->belongsTo(motorista::class,'motoristas');
+    public function viagem()
+    {
+        return $this->belongsTo(Viagem::class, 'viagems_id');
     }
 
-    public function viagems(){
-        return $this->belongsTo(viagem::class,'viagems_id');
-    }
 }

@@ -80,13 +80,17 @@
                             Viagem Atual <ion-icon name="bus-outline"></ion-icon>
                         </div>
                         <div class="card-body">
-                            <p><strong>Veículo:</strong> Minibus Azul</p>
-                            <p><strong>Motorista:</strong> João Silva</p>
-                            <p><strong>Local de Partida:</strong> Escola Técnica</p>
-                            <p><strong>Local de Destino:</strong> Rua Principal</p>
-                            <p><strong>Horário de Início:</strong> 07:30</p>
-                            <p><strong>Horário Estimado de Chegada:</strong> 08:15</p>
+                        @if(!$viagem)
+                            <p>Sem viagem no momento</p>
+                        @else
+                            <p><strong>Veículo:</strong> {{ $viagem->marca ?? 'Desconhecido' }} {{ $viagem->modelo ?? '' }} {{ $viagem->Matricula ?? 'Sem matrícula' }}</p>
+                            <p><strong>Motorista:</strong> {{ $viagem->motorista ?? 'Não informado' }}</p>
+                            <p><strong>Local de Partida:</strong> {{ $viagem->PontoA ?? 'Não informado' }}</p>
+                            <p><strong>Local de Destino:</strong> {{ $viagem->PontoB ?? 'Não informado' }}</p>
+                            <p><strong>Horário de Início:</strong> {{ $viagem->HoraIda ?? 'Não definido' }}</p>
+                            <p><strong>Horário Estimado de Chegada:</strong> {{ $viagem->HoraRegresso ?? 'Não definido' }}</p>
                             <button class="btn btn-custom">Ver Detalhes</button>
+                        @endif
                         </div>
                     </div>
                     <!-- Notificações Recentes -->
@@ -98,7 +102,7 @@
                         @if($notificacoes->isEmpty())
                             <p>Nenhuma notificação no momento.</p>
                         @else
-                            <ul class="list-group">
+                            <ul class="list-group notificacoes">
                                 @foreach($notificacoes as $notificacao)
                                     <li class="list-group-item">
                                         {{ $notificacao->data['mensagem'] }}<br>

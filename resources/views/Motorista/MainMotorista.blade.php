@@ -40,7 +40,7 @@
                     <p><strong>Matricula:</strong>{{$dados->veiculo->Matricula}}</p>
                     <p><strong>VIN do Veículo:</strong>{{$dados->veiculo->VIN}}</p>
                     <p><strong>Capacidade:</strong>{{$dados->veiculo->capacidade}}</p>
-                    <p><strong>Rota:</strong>{{ $dados->rota ? $dados->rota->nome . '-' . $dados->rota->PontoA . '-' . $dados->rota->PontoB : 'Sem informação' }}</p>
+                    <p><strong>Rota:</strong>{{ $dados->rota ? $dados->rota->nome . '-' . $dados->rota->PontoA . '-' . $dados->rota->PontoB : 'Sem rota' }}</p>
                 </div>
             </div>
             @else
@@ -74,21 +74,23 @@
                         </div>
                     </div>                   
                 </div>
-                <!-- Viagens Ativas -->
+                <!-- Estudantes a bordo -->
                 <div class="card">
                     <div class="card-header">
                         Estudantes a bordo <ion-icon name="bus-outline"></ion-icon>
                     </div>
                     <div class="card-body">
-                        <div class="list-group">
-                            <a href="#" id="btn-lista" class="btn d-flex justify-content-between align-items-center mb-3">
-                                <span>João Silva</span>
-                                <span>Ver Mais</span>
-                            </a>
-                            <a href="#" id="btn-lista" class="btn  d-flex justify-content-between align-items-center mb-3">
-                                <span>Maria Souza</span>
-                                <span>Ver Mais</span>
-                            </a>
+                        <div class="list-group notificacoes">
+                            @if($aBordo->isEmpty())
+                                <p>Sem estudantes a bordo</p>
+                            @else
+                                @foreach($aBordo as $estudante)
+                                    <a href="#" id="btn-lista" class="btn d-flex justify-content-between align-items-center mb-3">
+                                        <span>$estudante->nome</span>
+                                        <span>Ver Mais</span>
+                                    </a>
+                                @endforeach
+                            @endif
                         </div>
                         <!-- Botão de Voltar -->
                         <div class="text-center">

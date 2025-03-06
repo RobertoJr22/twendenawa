@@ -4,15 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreResponsavelRequest;
 use app\Models;
+use App\Models\estudante;
 use App\Models\estudantes_responsavels;
 use App\Models\responsavel;
 use App\Models\User;
+use App\Notifications\EstudanteEventNotification;
 use Exception;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Notifications\StudentEventNotification;
+
 
 class ResponsavelController extends Controller
 {
@@ -219,16 +223,10 @@ class ResponsavelController extends Controller
             }elseif($request->input('TipoUsuario') == 4){
                 $SearchEstudante = DB::table('estudantes as t1')
                                 ->join('users as t2','t2.id','=','t1.users_id')
-                                ->join('turnos as t3','t3.id','=','t1.turnos_id')
-                                ->join('estudantes_rotas as t4','t4.estudantes_id','=','t1.id')
-                                ->join('rotas as t5','t5.id','=','t4.rotas_id')
-                                ->join('escolas as t6','t6.id','=','t5.escolas_id')
-                                ->join('users as t7','t7.id','=','t6.users_id')
                                 ->select(
                                     't1.id as id',
                                     't1.telefone as telefone',
                                     't2.name as nome',
-                                    't7.name as instituicao',
                                     't1.foto as foto'
                                         )
                                 ->where('t1.id','=',$request->input('search'))
@@ -270,32 +268,76 @@ class ResponsavelController extends Controller
    public function AcaoConexao($id,$acao,$tipousuario){
         switch($acao){
             /* 
-                0 = pedir conexao
-                1 = remover conexao
-                2 = Aceitar conexao 
+                0 = enviar pedido
+                1 = desfazer pedido
+                2 = Aceitar pedido
+                3 = Negar pedido
+                4 = Cancelar pedido
             */
             case 0:
                 if($tipousuario == 4){
-                    $afetado = DB::table('estudantes_responsavels')
-                                ->where('responsavels_id','=',Auth::user()->responsavel->id)
-                                ->where('estudantes_id','=',$id)
-                                ->where('estado','=',0)
-                                ->update(['estado'=>2]);
-                    if($afetado > 0){
-                        return redirect()->back()->with('sucess','Pedido enviado com sucesso');
+                    $buscar = db::table('estudantes_responsavels')
+                    ->where('estado','=',0)
+                    ->where('estudantes_id','=',$id)
+                    ->where('responsavels_id','=',Auth::user()->responsavel->id)
+                    ->first();
+
+                    if($buscar){
+                        $afetado = DB::table('estudantes_responsavels')
+                        ->where('responsavels_id','=',Auth::user()->responsavel->id)
+                        ->where('estudantes_id','=',$id)
+                        ->where('estado','=',0)
+                        ->update(['estado'=>2]);
+                        if($afetado > 0){  
+                            EstudanteEventNotification::NotifyEstudante('pedido_conexao',$id,Auth::user()->responsavel->id);                      
+                            return redirect()->back()->with('sucess','Pedido enviado com sucesso');
+                        }else{
+                            return redirect()->back()->with('error','Erro ao efectuar o pedido de conexão');
+                        }
                     }else{
-                        return redirect()->back()->with('error','Erro ao efectuar o pedido de conexão');
+                        $novoPedido = new estudantes_responsavels();
+                        $novoPedido->estudantes_id = $id;
+                        $novoPedido->responsavels_id = Auth::user()->responsavel->id;
+                        $novoPedido->estado = 2;
+                        $novoPedido->save();
+                        if($novoPedido->save()){
+                            EstudanteEventNotification::NotifyEstudante('pedido_conexao',$id,Auth::user()->responsavel->id);
+                            return redirect()->back()->with('sucess','Pedido enviado com sucesso');
+                        }else{
+                            return redirect()->back()->with('error','Erro ao efectuar o pedido de conexão');
+                        }
                     }
                 }elseif($tipousuario == 2){
-                    $afetado = DB::table('estudantes_responsavels')
-                                ->where('responsavels_id','=',$id)
-                                ->where('estudantes_id','=',Auth::user()->estudante->id)
-                                ->where('estado','=',0)
-                                ->update(['estado'=>4]);
-                    if($afetado > 0){
-                        return redirect()->back()->with('sucess','Pedido enviado com sucesso');
+                    $buscar = db::table('estudantes_responsavels')
+                    ->where('estado','=',0)
+                    ->where('responsavels_id','=',$id)
+                    ->where('estudantes_id','=',Auth::user()->estudante->id)
+                    ->first();
+
+                    if($buscar){
+                        $afetado = DB::table('estudantes_responsavels')
+                        ->where('responsavels_id','=',$id)
+                        ->where('estudantes_id','=',Auth::user()->estudante->id)
+                        ->where('estado','=',0)
+                        ->update(['estado'=>4]);
+                        if($afetado > 0){   
+                            StudentEventNotification::notifyResponsaveis('pedido_conexao', Auth::user()->estudante, $id);                     
+                            return redirect()->back()->with('sucess','Pedido enviado com sucesso');
+                        }else{
+                            return redirect()->back()->with('error','Erro ao efectuar o pedido de conexão');
+                        }
                     }else{
-                        return redirect()->back()->with('error','Erro ao efectuar o pedido de conexão');
+                        $novoPedido = new estudantes_responsavels();
+                        $novoPedido->estudantes_id = Auth::user()->estudante->id;
+                        $novoPedido->responsavels_id = $id;
+                        $novoPedido->estado = 4;
+                        $novoPedido->save();
+                        if($novoPedido->save()){
+                            StudentEventNotification::notifyResponsaveis('pedido_conexao', Auth::user()->estudante, $id);
+                            return redirect()->back()->with('sucess','Pedido enviado com sucesso');
+                        }else{
+                            return redirect()->back()->with('error','Erro ao efectuar o pedido de conexão');
+                        }
                     }
                 }
                 break;
@@ -307,6 +349,7 @@ class ResponsavelController extends Controller
                                 ->where('estado','=',1)
                                 ->update(['estado'=>0]);
                     if($afetado > 0){
+                        EstudanteEventNotification::NotifyEstudante('remocao_conexao',$id,Auth::user()->responsavel->id);
                         return redirect()->back()->with('sucess','Conexão desfeita com sucesso');
                     }else{
                         return redirect()->back()->with('error','Erro ao desfazer a conexão');
@@ -318,6 +361,7 @@ class ResponsavelController extends Controller
                                 ->where('estado','=',1)
                                 ->update(['estado'=>0]);
                     if($afetado > 0){
+                        StudentEventNotification::notifyResponsaveis('remocao_conexao',Auth::user()->estudante,$id);
                         return redirect()->back()->with('sucess','Conexão desfeita com sucesso');
                     }else{
                         return redirect()->back()->with('error','Erro ao desfazer a conexão');
@@ -332,6 +376,7 @@ class ResponsavelController extends Controller
                                 ->where('estado','=',4)
                                 ->update(['estado'=>1]);
                     if($afetado > 0){
+                        EstudanteEventNotification::NotifyEstudante('aceite_conexao',$id,Auth::user()->responsavel->id);
                         return redirect()->back()->with('sucess','Pedido de conexão aceite');
                     }else{
                         return redirect()->back()->with('error','Erro ao aceitar o pedido de conexão');
@@ -343,6 +388,7 @@ class ResponsavelController extends Controller
                                 ->where('estudantes_id','=',Auth::user()->estudante->id)
                                 ->update(['estado'=>1]);
                     if($afetado > 0){
+                        StudentEventNotification::notifyResponsaveis('aceite_conexao',Auth::user()->estudante,$id);
                         return redirect()->back()->with('sucess','Pedido de conexão aceite');
                     }else{
                         return redirect()->back()->with('error','Erro ao aceitar o pedido de conexão');
@@ -357,6 +403,7 @@ class ResponsavelController extends Controller
                                 ->where('estado','=',4)
                                 ->update(['estado'=>0]);
                     if($afetado > 0){
+                        EstudanteEventNotification::NotifyEstudante('negacao_conexao',$id,Auth::user()->responsavel->id);
                         return redirect()->back()->with('sucess','Pedido de conexão negado');
                     }else{
                         return redirect()->back()->with('error','Erro ao negar pedido de conexão');
@@ -368,6 +415,7 @@ class ResponsavelController extends Controller
                                 ->where('estudantes_id','=',Auth::user()->estudante->id)
                                 ->update(['estado'=>0]);
                     if($afetado > 0){
+                        StudentEventNotification::notifyResponsaveis('negacao_conexao',Auth::user()->estudante,$id);
                         return redirect()->back()->with('sucess','Pedido de conexão negado');
                     }else{
                         return redirect()->back()->with('error','Erro ao negar pedido de conexão');
@@ -391,7 +439,7 @@ class ResponsavelController extends Controller
                                 ->where('responsavels_id','=',$id)
                                 ->where('estado','=',4)
                                 ->where('estudantes_id','=',Auth::user()->estudante->id)
-                                ->update(['estado'=>1]);
+                                ->update(['estado'=>0]);
                     if($afetado > 0){
                         return redirect()->back()->with('sucess','Pedido de conexão cancelado');
                     }else{

@@ -38,8 +38,7 @@
                             <h5 class="card-title">Informações do Estudante</h5>
                             <p><strong>Nome:</strong>{{$SearchEstudante->nome}}</p>
                             <p><strong>Telefone:</strong>{{$SearchEstudante->telefone}}</p>
-                            <p><strong>Instuição:</strong>{{$SearchEstudante->instituicao}}</p>
-                            @if($estado->estado == 0)
+                            @if(!$estado || $estado->estado == 0)
                                 <a href="{{route('AcaoConexao',[$SearchEstudante->id,0,auth()->user()->tipo_usuario_id])}}" class="btn btn-custom">Pedir conexão</a>
                             @elseif($estado->estado == 1)
                                 <a href="{{route('AcaoConexao',[$SearchEstudante->id,1,auth()->user()->tipo_usuario_id])}}" class="btn btn-custom">Desfazer conexão</a>
@@ -66,7 +65,7 @@
                             <h5 class="card-title">Informações do Responsável</h5>
                             <p><strong>Nome:</strong>{{$SearchResponsavel->nome}}</p>
                             <p><strong>Telefone:</strong>{{$SearchResponsavel->telefone}}</p>
-                            @if($estado->estado == 0)
+                            @if(!$estado || $estado->estado == 0)
                                 <a href="{{route('AcaoConexao',[$SearchResponsavel->id,0,auth()->user()->tipo_usuario_id])}}" class="btn btn-custom">Pedir conexão</a>
                             @elseif($estado->estado == 1)
                                 <a href="{{route('AcaoConexao',[$SearchResponsavel->id,1,auth()->user()->tipo_usuario_id])}}" class="btn btn-custom">Desfazer conexão</a>

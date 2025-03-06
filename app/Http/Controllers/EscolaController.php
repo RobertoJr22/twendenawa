@@ -178,7 +178,7 @@ class EscolaController extends Controller
             ->orWhere('capacidade', 'like', '%'.$search.'%')
             ->orWhere('Matricula', 'like', '%'.$search.'%')
             ->where('estado', 1)
-            ->where('escolas_id', $user->id)
+            ->where('escolas_id', $user->escola->id)
             ->orWhereHas('modelo', function ($query) use ($search) {
                 $query->where('nome', 'like', '%'.$search.'%');
             })
@@ -188,8 +188,8 @@ class EscolaController extends Controller
             ->get();
         } else {
             // Caso não haja pesquisa, busca todos os veículos da escola
-            $veiculos = veiculo::with(['modelo.marcas', 'rotas', 'motoristas'])
-                ->where('escolas_id', $user->id)
+            $veiculos = veiculo::with(['modelo.marcas', 'rotas', 'motoristas.User'])
+                ->where('escolas_id', $user->escola->id)
                 ->get();
         }
     

@@ -3,7 +3,7 @@
 @section('content')
 <!-- Container principal da Dashboard -->
 <div class="container mt-5">
-    <h2 class="text-center mb-4 fs-responsive">Lista de Escolas</h2>
+    <h2 class="text-center mb-4 fs-responsive">Lista de Veículos</h2>
     
     <!-- Barra de Pesquisa -->
      <form action="{{route('ListaVeiculo')}}" method="get">
@@ -51,7 +51,7 @@
                         <td>
                             @if($veiculo->motoristas->isNotEmpty())
                                 @foreach($veiculo->motoristas as $motorista)
-                                    {{$motorista->nome}}
+                                    {{$motorista->User->name}}
                                 @endforeach
                             @else
                                 Sem motorista

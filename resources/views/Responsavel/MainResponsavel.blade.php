@@ -59,11 +59,11 @@
                             <div class="card-header">
                                 Notificações&nbsp; <ion-icon name="notifications-outline"></ion-icon>
                             </div>
-                            <div class="card-body notificacoes">
+                            <div class="card-body">
                                 @if($notificacoes->isEmpty())
                                     <p>Nenhuma notificação no momento.</p>
                                 @else
-                                    <ul class="list-group">
+                                    <ul class="list-group notificacoes">
                                         @foreach($notificacoes as $notificacao)
                                             <li class="list-group-item">
                                                 {{ $notificacao->data['mensagem'] }}<br>

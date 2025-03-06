@@ -37,9 +37,21 @@ class MotoristaController extends Controller
             'motorista.carteira'   // Carteira do motorista
         ])
         ->first(); // Pegando apenas um resultado
+
+        $aBordo = DB::table('dados_viagems as t1')
+                    ->where('t1.estado','=',1)
+                    ->join('estudantes as t2','t2.id','=','t1.estudantes_id')
+                    ->join('users as t3','t3.id','=','t2.users_id')
+                    ->join('viagems as t4','t4.id','=','t1.viagems_id')
+                    ->where('t4.estado','=',1)
+                    ->select(
+                        't2.id',
+                        't3.name as nome'
+                    )->get();
+                    
     
         
-        return view('Motorista.MainMotorista', compact('user', 'motorista','dados', 'carteira','turno','rota'));
+        return view('Motorista.MainMotorista', compact('user', 'motorista','dados', 'carteira','turno','rota','aBordo'));
     }
 
     public function RegistrarMotorista(StoreMotoristaRequest $request){

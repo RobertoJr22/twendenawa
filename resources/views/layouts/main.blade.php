@@ -50,6 +50,9 @@
                     <li class="nav-item">
                         <a id="Conexões" class="nav-link" href="/Responsavel/conexao">Conexões</a>
                     </li>
+                    <li class="nav-item">
+                        <a id="notificações" class="nav-link" href="/Responsavel/conexao">Notificações</a>
+                    </li>
                 @endif
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">

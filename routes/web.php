@@ -17,10 +17,12 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
 
     /* Motorista */
     Route::get('/Motorista/MainMotorista',[MotoristaController::class, 'MainMotorista'])->name('TelaMotorista');
+    Route::get('/Estudante/{id}',[EstudanteController::class, 'adicionarAbordo'])->name('AdicionarAbordo');
+    Route::get('/Estudante/{id}',[EstudanteController::class, 'removerEstudanteAbordo'])->name('RemoverAbordo');
     /* Estudante*/
     Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );
     Route::get('/Estudante/MainEstudante',[EstudanteController::class, 'MainEstudante'] )->name('TelaEstudante');
-    Route::get('/Estudante/SelecaoEstudante',[EstudanteController::class,'SelecaoEstudante']);
+    Route::get('/Estudante/SelecaoEstudante',[EstudanteController::class,'SelecaoEstudante'])->name('aBordo');
     Route::get('/Estudante/PagamentosEstudante',[EstudanteController::class,'PagamentosEstudante']);
     /* Escola */
     Route::get('/Escola/MainEscola',[EscolaController::class,'index'])->name('TelaEscola');
