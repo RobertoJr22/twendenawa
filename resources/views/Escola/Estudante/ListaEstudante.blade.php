@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Dashboard')
+@section('title','Estudantes')
 @section('content')
 <!-- Container principal da Dashboard -->
 <div class="container mt-5">
@@ -7,16 +7,15 @@
     
     <!-- Barra de Pesquisa -->
     <div class="row justify-content-center mb-4">
-        <div class="col-md-6 col-sm-8 col-10">
-            <input type="text" class="form-control" placeholder="Pesquisar estudante...">
-        </div>
+        <form action="{{route('BuscaEstudante')}}" method="post">
+            @csrf
+            <div class="input-group mb-4">
+                <input name="search" value="{{ request('search')}}" type="text" class="form-control" placeholder="Pesquisar estudante...">
+                <button class="btn btn-primary" type="submit">Pesquisar</button>
+            </div>
+        </form>
     </div>
-    
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+
     <!-- Tabela de Estudantes -->
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
@@ -25,39 +24,34 @@
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Email</th>
-                    <th>Curso</th>
+                    <th>Turno</th>
+                    <th>Rota</th>
+                    <th>Telefone</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>1</td>
-                    <td>João Silva</td>
-                    <td>joao.silva@example.com</td>
-                    <td>Engenharia</td>
+                @foreach($busca as $b)
+                    <td>{{$b->id}}</td>
+                    <td>{{$b->nome}}</td>
+                    <td>{{$b->email}}</td>
+                    <td>{{$b->turno}}</td>
+                    <td>{{$b->rota}}</td>
+                    <td>{{$b->telefone}}</td>
                     <td>
                         <button class="btn btn-sm btn-custom mb-1">Editar</button>
                         <button class="btn btn-sm btn-custom mb-1">Deletar</button>
                     </td>
+                @endforeach
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Maria Oliveira</td>
-                    <td>maria.oliveira@example.com</td>
-                    <td>Medicina</td>
-                    <td>
-                        <button class="btn btn-sm btn-custom mb-1">Editar</button>
-                        <button class="btn btn-sm btn-custom mb-1">Deletar</button>
-                    </td>
-                </tr>
-                <!-- Adicione mais linhas conforme necessário -->
             </tbody>
         </table>
     </div>
 
     <!-- Botão de Cadastrar Novo Estudante -->
     <div class="text-center mt-4">
-        <a class="btn btn-custom" href="/Estudante/CadastrarEstudante">Cadastrar Novo Estudante</a>
+        <a class="btn btn-custom" href="{{ route('ExibirCadastrarEstudante') }}">Cadastrar Novo Estudante</a>
     </div>
 </div>
 <div id="space"></div>

@@ -94,7 +94,7 @@
                         </div>
                     </div>
                     <!-- Notificações Recentes -->
-                    <div class="card">
+                    <div class="card" id="MsgNotificacoes">
                         <div class="card-header">
                             Notificações<ion-icon name="notifications-outline"></ion-icon>
                         </div>

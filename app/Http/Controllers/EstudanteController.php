@@ -51,7 +51,7 @@ class EstudanteController extends Controller
                     ->first();
         $viagem = DB::table('viagems as t1')
                     ->join('dados_viagems as t2', 't1.id', '=', 't2.viagems_id')
-                    ->join('motoristas as t3', 't2.motoristas_id', '=', 't3.id')
+                    ->join('motoristas as t3', 't1.motoristas_id', '=', 't3.id')
                     ->join('users as t4', 't4.id', '=', 't3.users_id')
                     ->join('turnos as t5', 't5.id', '=', 't3.turnos_id')
                     ->join('motoristas_rotas_veiculos as t6', function($join) {
@@ -129,6 +129,7 @@ class EstudanteController extends Controller
     }
 
     public function SelecaoEstudante(Request $request) {
+
         $motorista = Auth::user()->motorista;
         $estudante = null;
         $Info = "Pesquisa pelo identificador do estudante.";
@@ -176,7 +177,7 @@ class EstudanteController extends Controller
     
         // Obter dados do motorista
         $DadosMotorista = DB::table('users as t1')
-            ->join('escola as t2', 't1.id', '=', 't2.users_id')
+            ->join('escolas as t2', 't1.id', '=', 't2.users_id')
             ->join('veiculos as t3', 't2.id', '=', 't3.escolas_id')
             ->join('motoristas_rotas_veiculos as t4', 't3.id', '=', 't4.veiculos_id')
             ->join('motoristas as t5', 't5.id', '=', 't4.motoristas_id')
@@ -198,7 +199,7 @@ class EstudanteController extends Controller
     
         // Verificar se o estudante tem uma instituição ativa
         $VerifEscola = estudantes_rotas::where('estudantes_id', $estudante->id)
-            ->where('estado', 1)
+            ->where('estados', 1)
             ->exists();
     
         if (!$VerifEscola) {
@@ -207,7 +208,7 @@ class EstudanteController extends Controller
     
         // Obter dados do estudante
         $DadosEstudante = DB::table('users as t1')
-            ->join('escola as t2', 't1.id', '=', 't2.users_id')
+            ->join('escolas as t2', 't1.id', '=', 't2.users_id')
             ->join('rotas as t3', 't2.id', '=', 't3.escolas_id')
             ->join('estudantes_rotas as t4', 't3.id', '=', 't4.rotas_id')
             ->join('estudantes as t5', 't5.id', '=', 't4.estudantes_id')
@@ -290,7 +291,7 @@ class EstudanteController extends Controller
     
         return redirect()->back()->with('error', 'Erro ao adicionar estudante.');
     } 
-      
+
     public function removerEstudanteAbordo($id) {
         $motorista = Auth::user()->motorista;
     
@@ -321,6 +322,43 @@ class EstudanteController extends Controller
             ->update(['estudantes_id' => null]);
     
         return redirect()->back()->with('success', 'Estudante removido com sucesso.');
+    }
+
+    public function EnviarRelatorio(Request $request){
+        
+        // Validação simples
+        $request->validate([
+            'relatorio' => 'required|string|max:1000',
+        ]);
+        
+        // Obter o motorista logado
+        $motorista = Auth::user()->motorista;
+        
+        // Verificar se existe uma viagem ativa para o motorista
+        $viagemAtiva = DB::table('viagems')
+            ->where('motoristas_id', $motorista->id)
+            ->whereIn('estado', [1, 2])
+            ->first();
+    
+        
+        if (!$viagemAtiva) {
+            return redirect()->back()->with('error', 'Nenhuma viagem ativa encontrada para registrar o relatório.');
+        }
+        
+        // Registrar o relatório na tabela dados_viagems
+
+        $inserido = DB::table('dados_viagems')->insert([
+            'viagems_id'   => $viagemAtiva->id,
+            'relatorio'    => $request->input('relatorio'),
+            'created_at'   => now(),
+            'updated_at'   => now(),
+        ]);
+        
+        if ($inserido) {
+            return redirect()->back()->with('sucess', 'Relatório enviado com sucesso.');
+        }
+        
+        return redirect()->back()->with('error', 'Erro ao registrar o relatório.');
     }
      
 }

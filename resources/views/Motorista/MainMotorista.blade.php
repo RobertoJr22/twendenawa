@@ -105,8 +105,11 @@
                         Relatório de Eventualidades <ion-icon name="alert-circle-outline"></ion-icon>
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control" rows="4" placeholder="Informe qualquer eventualidade na viagem..."></textarea>
-                        <button class="btn .btn-custom mt-3">Enviar Relatório</button>
+                        <form action="{{route('EnviarRelatorio')}}" method="post">
+                            @csrf
+                            <textarea class="form-control" name="relatorio" rows="4" placeholder="Informe qualquer eventualidade na viagem..."></textarea>
+                            <button type="submit" class="btn .btn-custom mt-3">Enviar Relatório</button>
+                        </form>
                     </div>
                 </div>
             </div>

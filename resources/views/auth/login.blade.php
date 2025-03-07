@@ -29,7 +29,10 @@
 
                         <!-- Botão de Login -->
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn">Login</button>
+                            <button type="submit" class="btn w-100">Login</button>
+                        </div>
+                        <div class="cadastrar">
+                            <a href="/auth/Selecao" class="cadastrar-link">Cadastrar-se aqui</a>
                         </div>
                     </div>
                 </div>

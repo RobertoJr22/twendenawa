@@ -468,3 +468,16 @@ footer hr{
     overflow-y: auto;  /* Exibe a rolagem vertical quando necessário */
 }
 
+.cadastrar-link {
+    color: black;           /* Cor preta */
+    font-size: 10pt;         /* Tamanho 10pt */
+    display: block;         /* Para centralizar */
+    text-align: center;      /* Centralizado */
+    text-decoration: none;   /* Remove sublinhado, se preferir */
+    width: auto;
+    padding: 10px;
+}
+.cadastrar-link:hover {
+    color:#e5e90d;          /* Fica amarelo ao passar o cursor */
+}
+

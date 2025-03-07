@@ -50,8 +50,21 @@
                     <li class="nav-item">
                         <a id="Conexões" class="nav-link" href="/Responsavel/conexao">Conexões</a>
                     </li>
+                    @php
+                        $currentPage = url()->current(); // Obtém a URL atual
+                        if(auth()->user() && (auth()->user()->tipo_usuario_id == 2 )){
+                            $targetPage = route('TelaEstudante');
+                        }
+                        else{
+                            $targetPage = route('TelaResponsavel');
+                        }
+                    @endphp
                     <li class="nav-item">
-                        <a id="notificações" class="nav-link" href="/Responsavel/conexao">Notificações</a>
+                        @if($currentPage == $targetPage)
+                            <a id="notificações" class="nav-link" href="#MsgNotificacoes">Notificações</a>
+                        @else
+                        <a id="notificações" class="nav-link" href="{{$targetPage}}#MsgNotificacoes">Notificações</a>
+                        @endif
                     </li>
                 @endif
                 <li class="nav-item">

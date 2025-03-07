@@ -6,7 +6,7 @@
     <h2 class="text-center mb-4 fs-responsive">Pesquisar Estudante</h2>
 
     <!-- Barra de Pesquisa -->
-    <form action="{{ route('aBordo') }}" method="get">
+    <form action="{{ route('selecaoEstudante') }}" method="get">
         @csrf
         <div class="input-group mb-4">
             <input type="text" class="form-control" name="search" placeholder="Digite o Id do estudante..." value="{{ request('search') }}">

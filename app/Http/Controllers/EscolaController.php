@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreMotoristaRequest;
 use App\Models\carteira;
 use App\Models\escolas_motoristas;
+use App\Models\estudantes_rotas;
 use App\Models\turno;
 use App\Models\User;
+use App\Models\estudante;
 use Illuminate\Support\Facades\Hash;
 
 class EscolaController extends Controller
@@ -324,5 +326,81 @@ class EscolaController extends Controller
         }
     }
 
+    public function ListaEstudante(Request $request)
+    {
+        $escola = Auth::user()->escola;
+    
+        $busca = DB::table('users as t1')
+            ->join('estudantes as t2', 't1.id', '=', 't2.users_id')
+            ->join('turnos as t3', 't3.id', '=', 't2.turnos_id')
+            ->join('estudantes_rotas as t4', 't4.estudantes_id', '=', 't2.id')
+            ->join('rotas as t5', 't5.id', '=', 't4.rotas_id')
+            ->select(
+                't2.id',
+                't1.name as nome',
+                't1.email',
+                't2.telefone',
+                't5.nome as rota',
+                't5.PontoA',
+                't5.PontoB',
+                't3.nome as turno'
+            )
+            ->where('t4.estados', 1)
+            ->where('t5.escolas_id', $escola->id);
+    
+        // Adiciona a busca se houver input 'search'
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $busca->where(function ($q) use ($search) {
+                $q->where('t1.name', 'like', "%$search%")
+                  ->orWhere('t2.id', 'like', "%$search%");
+            });
+        }
+    
+        $busca = $busca->get();
+    
+        return view('Escola.Estudante.ListaEstudante', compact('busca', 'escola'));
+    }
+    public function ExibirCadastrarEstudante(){
+
+        $rotas = rota::where('escolas_id',Auth::user()->escola->id)->get();
+        
+        return view('Escola.Estudante.CadastrarEstudante',compact('rotas'));
+    }
+
+    public function CadastrarEstudante(Request $request){
+
+        $estudanteId = $request->input('id');
+        $rotaId = $request->input('rotasId');
+
+        $result = estudante::find($estudanteId);
+
+        if(!$result){
+            return redirect()->back()->with('error','Usuário não encontrado, verifica o número de identificação.');
+        }
+
+        $result = estudantes_rotas::where('estudantes_id',$estudanteId)
+                                    ->where('estados',1)->exists();
+        if($result){
+            return redirect()->back()->with('error','Estudante ja faz parte da intituição e possui uma rota');
+        }
+
+        $RotaDesativa = estudantes_rotas::where('estudantes_id',$estudanteId)
+                                    ->where('rotas_id',(int)$rotaId)->first();
+
+        if($RotaDesativa){
+            $RotaDesativa->update(['estados' => 1]);
+
+            return redirect()->route('ListaEstudante')->with('sucess','Estudante cadastrado com sucesso');
+        }
+
+        $novo = new estudantes_rotas();
+        $novo->estudantes_id = $estudanteId;
+        $novo->rotas_id = (int)$rotaId;
+        $novo->save();
+
+        return redirect()->route('ListaEstudante')->with('sucess','Estudante cadastrado com sucesso');
+    }
+    
 
 }

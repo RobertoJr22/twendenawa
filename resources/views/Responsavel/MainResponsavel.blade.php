@@ -55,7 +55,7 @@
                     </div>
 
                     <!-- Seção de Notificações -->
-                    <div class="card mt-3">
+                    <div class="card mt-3" id="MsgNotificacoes">
                             <div class="card-header">
                                 Notificações&nbsp; <ion-icon name="notifications-outline"></ion-icon>
                             </div>

@@ -17,16 +17,20 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
 
     /* Motorista */
     Route::get('/Motorista/MainMotorista',[MotoristaController::class, 'MainMotorista'])->name('TelaMotorista');
-    Route::get('/Estudante/{id}',[EstudanteController::class, 'adicionarAbordo'])->name('AdicionarAbordo');
-    Route::get('/Estudante/{id}',[EstudanteController::class, 'removerEstudanteAbordo'])->name('RemoverAbordo');
+    Route::get('/Estudante/SelecaoEstudante',[EstudanteController::class,'SelecaoEstudante'])->name('selecaoEstudante');
+    Route::get('/Estudante/{id}/adicionar', [EstudanteController::class, 'adicionarAbordo'])->name('AdicionarAbordo');
+    Route::get('/Estudante/{id}/remover', [EstudanteController::class, 'removerEstudanteAbordo'])->name('RemoverAbordo');
+    Route::post('/EnviarRelatorio/Viagem', [EstudanteController::class, 'EnviarRelatorio'])->name('EnviarRelatorio');
     /* Estudante*/
     Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );
     Route::get('/Estudante/MainEstudante',[EstudanteController::class, 'MainEstudante'] )->name('TelaEstudante');
-    Route::get('/Estudante/SelecaoEstudante',[EstudanteController::class,'SelecaoEstudante'])->name('aBordo');
     Route::get('/Estudante/PagamentosEstudante',[EstudanteController::class,'PagamentosEstudante']);
     /* Escola */
     Route::get('/Escola/MainEscola',[EscolaController::class,'index'])->name('TelaEscola');
-    Route::get('/Escola/Estudante',[EscolaController::class,'Estudante'])->name('Escola.Estudante');
+    Route::get('/Escola/Estudante',[EscolaController::class,'ListaEstudante'])->name('ListaEstudante');
+    Route::post('/Escola/Estudante',[EscolaController::class,'ListaEstudante'])->name('BuscaEstudante');
+    Route::get('/Escola/Estudante/CadastrarEstudante',[EscolaController::class, 'ExibirCadastrarEstudante'])->name('ExibirCadastrarEstudante');
+    Route::post('/Escola/Estudante/CadastrarEstudante',[EscolaController::class, 'CadastrarEstudante'])->name('InscreverEstudante');
     Route::get('/Escola/Responsavel',[EscolaController::class,'Responsavel']);
     Route::get('/Escola/Viatura',[EscolaController::class,'Viatura']);
         //escola rotas
