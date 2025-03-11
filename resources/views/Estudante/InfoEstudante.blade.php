@@ -8,38 +8,36 @@
     <div class="container" style="max-width: 600px;">
         <h2 class="text-center mb-4">Informações do Estudante</h2>
 
-        @foreach($estudantes as $estudante)
         <div class="card mb-3">
             <div class="card-body text-center">
-                <div class="mb-3">
-                    @if (!empty($estudante->foto))
-                        <img src="{{ asset('storage/' . $estudante->foto) }}" alt="Foto do Estudante" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                <div class="profile-photo-container" id="profile-photo" style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden; margin: 0 auto;">
+                    @if ($estudantes && $estudantes->foto)
+                        <img src="{{ asset('storage/' . $estudantes->foto) }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                     @else
-                        <ion-icon name="camera-outline" style="font-size: 50px;"></ion-icon>
+                        <ion-icon name="camera-outline" style="font-size: 50px; display: block; margin: auto;"></ion-icon>
                     @endif
                 </div>
-                <p><strong>Nome:</strong> {{ $estudante->NomeEstudante ?: 'Sem dados' }}</p>
-                <p><strong>Escola:</strong> {{ $estudante->escola ?: 'Sem dados' }}</p>
-                <p><strong>Data de Nascimento:</strong> {{ $estudante->datanascimento ?: 'Sem dados' }}</p>
-                <p><strong>Telefone:</strong> {{ $estudante->telefone ?: 'Sem dados' }}</p>
+                <p><strong>Nome:</strong> {{ $estudantes->NomeEstudante ?: 'Sem dados' }}</p>
+                <p><strong>Escola:</strong> {{ $estudantes->escola ?: 'Sem dados' }}</p>
+                <p><strong>Data de Nascimento:</strong> {{ $estudantes->datanascimento ?: 'Sem dados' }}</p>
+                <p><strong>Telefone:</strong> {{ $estudantes->telefone ?: 'Sem dados' }}</p>
                 <p>
                     <strong>Turno:</strong>
-                    {{ $estudante->Turno ?: 'Sem dados' }} -
-                    {{ $estudante->HoraIda ?: 'Sem dados' }} -
-                    {{ $estudante->HoraRegresso ?: 'Sem dados' }}
+                    {{ $estudantes->Turno ?: 'Sem dados' }} -
+                    {{ $estudantes->HoraIda ?: 'Sem dados' }} -
+                    {{ $estudantes->HoraRegresso ?: 'Sem dados' }}
                 </p>
                 <p>
                     <strong>Rota:</strong>
-                    {{ $estudante->NomeRota ?: 'Sem dados' }} -
-                    {{ $estudante->PontoA ?: 'Sem dados' }} -
-                    {{ $estudante->PontoB ?: 'Sem dados' }}
+                    {{ $estudantes->NomeRota ?: 'Sem dados' }} -
+                    {{ $estudantes->PontoA ?: 'Sem dados' }} -
+                    {{ $estudantes->PontoB ?: 'Sem dados' }}
                 </p>
                 <div class="text-center">
-                    <a href="{{ route('DesfazerConexao',$estudante->id)}}" class="btn">Remover da lista</a>
+                    <a href="{{ route('DesfazerConexao',$estudantes->id)}}" class="btn">Desfazer Conexão</a>
                 </div>
             </div>
         </div>
-        @endforeach
 
     </div>
 </div>

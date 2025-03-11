@@ -11,8 +11,8 @@
                     @csrf
                     <!-- Campo para BI -->
                     <div class="mb-3">
-                        <label for="BI" class="form-label">BI:</label>
-                        <input type="text" class="form-control" name="BI" value="{{old('BI')}}">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" class="form-control" name="username" value="{{old('username')}}">
                     </div>
                     
                     <input type="hidden" name="opcao" value="2">
@@ -44,7 +44,7 @@
                         <label for="veiculos_id" class="form-label">Veiculo:</label>
                         <select name="veiculos_id" class="form-control form-select">
                             @foreach($veiculos as $veiculo)
-                            <option value="{{$veiculo->id}}">{{$veiculo->marca}}-{{$veiculo->modelo}}-{{$veiculo->matricula}}</option>
+                            <option value="{{$veiculo->id}}">{{$veiculo->marca}}-{{$veiculo->modelo}}-{{$veiculo->Matricula}}</option>
                             @endforeach
                         </select>
                     </div>

@@ -21,6 +21,7 @@
                         <h5 class="card-title">Informações do Estudante</h5>
                         <p><strong>Nome:</strong>{{$user->name}}</p>
                         <p><strong>Email:</strong>{{ $user->email}}</p>
+                        <p><strong>Username:</strong>{{ $user->username}}</p>
                         <p><strong>Telefone:</strong>{{$estudante->telefone}}</p>
                         <p><strong>Endereço:</strong>{{$estudante->endereco}}</p>
                         <p><strong>Turno:</strong>{{$turno->nome}}-{{$turno->HoraIda}}-{{$turno->HoraRegresso}}</p>
@@ -60,7 +61,7 @@
                             <span>Nenhum Responsável adicionado</span>
                         @else
                             @foreach($responsaveis as $responsavel)
-                                <a href="/Estudante/DetalhesResponsavel" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
+                                <a href="{{route('InfoResponsavel',$responsavel->id)}}" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
                                     <span>{{ $responsavel->nome }}</span>
                                     <span>Ver Mais</span>
                                 </a>
@@ -102,7 +103,7 @@
                         @if($notificacoes->isEmpty())
                             <p>Nenhuma notificação no momento.</p>
                         @else
-                            <ul class="list-group notificacoes">
+                            <ul class="list-group">
                                 @foreach($notificacoes as $notificacao)
                                     <li class="list-group-item">
                                         {{ $notificacao->data['mensagem'] }}<br>

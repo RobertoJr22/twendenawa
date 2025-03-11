@@ -25,6 +25,7 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
     Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );
     Route::get('/Estudante/MainEstudante',[EstudanteController::class, 'MainEstudante'] )->name('TelaEstudante');
     Route::get('/Estudante/PagamentosEstudante',[EstudanteController::class,'PagamentosEstudante']);
+    Route::get('/Responsavel/InfoResponsavel/{id}',[EstudanteController::class,'InfoResponsavel'])->name('InfoResponsavel');
     /* Escola */
     Route::get('/Escola/MainEscola',[EscolaController::class,'index'])->name('TelaEscola');
     Route::get('/Escola/Estudante',[EscolaController::class,'ListaEstudante'])->name('ListaEstudante');

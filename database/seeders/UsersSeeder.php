@@ -12,24 +12,31 @@ class UsersSeeder extends Seeder
      */
     public function run(): void
     {
-        $emails = ['ulumbo@gmail.com', 'admin@twendenawa.com'];
-        $i = 5;
+        DB::table('users')->updateOrInsert(
+            ['email' => 'ulumbo@gmail.com'],
+            [
+                'name' => 'Colégio Ulumbo',
+                'email' => 'ulumbo@gmail.com',
+                'username'=>'Colégio_Ulumbo',
+                'password' => bcrypt('000000'),
+                'tipo_usuario_id' => 5,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
 
-        if($i == 5){
-            foreach($emails as $email){
-                DB::table('users')->updateOrInsert(
-                    ['email'=>$email],
-                    ['name'=>'Ulumbo','email'=>$email,'password'=>bcrypt('000000'),'tipo_usuario_id'=>$i, 'created_at'=>now(), 'updated_at'=>now()]
-                );
-                $i-=4;
-            }
-        }elseif($i == 1){
-            foreach($emails as $email){
-                DB::table('users')->updateOrInsert(
-                    ['email'=>'admin@twendenawa.com'],
-                    ['name'=>'Roberto Mbuta','email'=>'admin@twendenawa.com','password'=>bcrypt('000000'),'tipo_usuario_id'=>$i, 'created_at'=>now(), 'updated_at'=>now()]
-                );
-            }
-        }
+        // Usuário admin (tipo_usuario_id = 1)
+        DB::table('users')->updateOrInsert(
+            ['email' => 'admin@twendenawa.com'],
+            [
+                'name' => 'Admin',
+                'email' => 'admin@twendenawa.com',
+                'password' => bcrypt('000000'),
+                'username'=>'Admin_',
+                'tipo_usuario_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
     }
 }

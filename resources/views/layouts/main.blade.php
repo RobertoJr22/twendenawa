@@ -11,6 +11,8 @@
     <!-- Link do CSS -->
     <link rel="stylesheet" href="/css/estilo.css">
 
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
+
     <script src="script.js"></script>
     
 </head>
@@ -27,16 +29,13 @@
                 </li>
                 @guest
                 <li class="nav-item">
-                    <a class="nav-link" href="/Escola/MainEscola">Dashboard</a>
+                    <a class="nav-link" href="">Estudante</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Estudante/MainEstudante">Estudante</a>
+                    <a class="nav-link" href="">Responsavel</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Responsavel/MainResponsavel">Responsavel</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Motorista/MainMotorista">Motorista</a>
+                    <a class="nav-link" href="">Motorista</a>
                 </li>
                 <li class="nav-item">
                     <a id="login" class="btn" href="/auth/login">Login</a>

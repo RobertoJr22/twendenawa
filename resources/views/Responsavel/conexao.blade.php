@@ -7,7 +7,7 @@
         @csrf
         <div class="row justify-content-center mb-4">
             <div class="col-md-6 col-sm-8 col-10">
-                <input type="text" class="form-control" name="search" placeholder="Pesquisar pelo id..." value="{{ request('search') }}">
+                <input type="text" class="form-control" name="search" placeholder="Pesquisar pelo username..." value="{{ request('search') }}">
             </div>
             <div class="col-auto">
                 <button class="btn btn-primary" type="submit">Pesquisar</button>

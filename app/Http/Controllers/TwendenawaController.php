@@ -83,6 +83,7 @@ class TwendenawaController extends Controller
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
             $user->tipo_usuario_id = $request->tipo_usuario_id;
+            $user->username = User::generateUniqueUsername($user->name);
             $user->save();
 
             $escola = new escola();

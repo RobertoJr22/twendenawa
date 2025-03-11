@@ -220,7 +220,24 @@ class EscolaController extends Controller
 
         $rotas = rota::where('escolas_id',$escola->id)->get();
 
-        $veiculos = DB::select('CALL GetVeiculosDisponiveis(?)', [$escola->id]);                 
+        /*$veiculos = DB::select('CALL GetVeiculosDisponiveis(?)', [$escola->id]);*/
+        
+        $veiculos = DB::table('veiculos as t2')
+        ->leftJoin('motoristas_rotas_veiculos as t1', 't2.id', '=', 't1.veiculos_id')
+        ->join('modelos as t3', 't3.id', '=', 't2.modelos_id')
+        ->join('marcas as t4', 't4.id', '=', 't3.marcas_id')
+        ->join('escolas as t5','t5.id','=','t2.escolas_id')
+        ->select(
+            't2.id',
+            't2.Matricula',
+            't4.nome as marca',
+            't3.nome as modelo'
+        )
+        ->where(function ($query) {
+            $query->whereNull('t1.veiculos_id') // Veículos que não estão na tabela t1
+                  ->orWhere('t1.estado', 0); // Veículos que estão na tabela t1 com estado = 1
+        })->where('t5.id',$escola->id)
+        ->get();
 
         $motoristas = escolas_motoristas::with(['motorista.turno', 'escola'])
         ->where('escolas_id', $escola->id)
@@ -290,7 +307,7 @@ class EscolaController extends Controller
 
         }elseif($request->opcao == 2){
 
-            $motorista = motorista::where('BI',$request->BI)->first();
+            $motorista = motorista::where('username',$request->username)->first();
 
             if($motorista){
                 $verif = escolas_motoristas ::where('motoristas_id',$motorista->id)
@@ -370,23 +387,52 @@ class EscolaController extends Controller
 
     public function CadastrarEstudante(Request $request){
 
-        $estudanteId = $request->input('id');
+        $username = $request->input('username');
         $rotaId = $request->input('rotasId');
 
-        $result = estudante::find($estudanteId);
+        $estudante = DB::table('estudantes as t1')
+        ->join('users as t2','t2.id','=','t1.users_id')
+        ->select(
+            't1.id'
+        )
+        ->where('t2.username',$username)
+        ->where('t2.estado',1)->first();
 
-        if(!$result){
-            return redirect()->back()->with('error','Usuário não encontrado, verifica o número de identificação.');
+        if(!$estudante){
+            return redirect()->back()->with('error','Usuário não encontrado, verifica o username.');
         }
 
-        $result = estudantes_rotas::where('estudantes_id',$estudanteId)
-                                    ->where('estados',1)->exists();
-        if($result){
-            return redirect()->back()->with('error','Estudante ja faz parte da intituição e possui uma rota');
+        $JaRota = DB::table('estudantes_rotas as t1')
+        ->where('t1.rotas_id',$rotaId)
+        ->where('t1.estudantes_id','=',$estudante->id)
+        ->where('t1.estados',1)->exists(); 
+        
+        if($JaRota){
+            return redirect()->back()->with('error','O estudante ja faz parte dessa rota');
         }
 
-        $RotaDesativa = estudantes_rotas::where('estudantes_id',$estudanteId)
-                                    ->where('rotas_id',(int)$rotaId)->first();
+        $JaEscola = DB::table('estudantes_rotas as t1')
+        ->join('rotas as t2','t2.id','=','t1.rotas_id')
+        ->where('t1.estudantes_id','=',$estudante->id)
+        ->where('t2.escolas_id',Auth::user()->escola->id)
+        ->where('t1.estados',1)->exists();
+
+        if($JaEscola){
+            return redirect()->back()->with('error','Estudante ja faz parte da instituição e possui uma outra rota');
+        }
+
+        $OutraEscola = DB::table('estudantes_rotas as t1')
+        ->where('t1.estudantes_id','=',$estudante->id)
+        ->where('t1.estados',1)->exists();
+
+        if($OutraEscola){
+            return redirect()->back()->with('error','Estudante pertence a outra instituição');
+        }
+        
+
+        $RotaDesativa = estudantes_rotas::where('estudantes_id',$estudante->id)
+                                    ->where('rotas_id',(int)$rotaId)
+                                    ->where('estados',0)->first();
 
         if($RotaDesativa){
             $RotaDesativa->update(['estados' => 1]);
@@ -395,8 +441,9 @@ class EscolaController extends Controller
         }
 
         $novo = new estudantes_rotas();
-        $novo->estudantes_id = $estudanteId;
+        $novo->estudantes_id = $estudante->id;
         $novo->rotas_id = (int)$rotaId;
+        $novo->estado = 2;
         $novo->save();
 
         return redirect()->route('ListaEstudante')->with('sucess','Estudante cadastrado com sucesso');

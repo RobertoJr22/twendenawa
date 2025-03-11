@@ -21,6 +21,7 @@
                     <div>
                         <h5 class="card-title">Informações do Responsável</h5>
                         <p><strong>Nome:</strong> {{ $user->name }}</p>
+                        <p><strong>Username:</strong>{{ $user->username}}</p>
                         <p><strong>Email:</strong> {{$user->email}}</p>
                         <p><strong>Telefone:</strong> {{$responsavel ? $responsavel->telefone : 'Não informado'}}</p>
                         <p><strong>Endereço:</strong> {{$responsavel ? $responsavel->endereco : 'Não informado'}}</p>
@@ -37,7 +38,7 @@
                         <div class="card-header">
                             Viagens Ativas&nbsp; <ion-icon name="bus-outline"></ion-icon>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body notificacoes">
                             <p><strong>Estudantes em Viagem:</strong></p>
                             <div class="list-group overflow">
                                 @if($viagens->isEmpty())

@@ -24,8 +24,8 @@
                         
                         <!--Campo para Id estudante-->
                         <div class="mb-3">
-                            <label for="id" class="form-label">Id do estudante:</label>
-                            <input type="number" name="id" id="id" class="form-control" required>
+                            <label for="username" class="form-label">Username:</label>
+                            <input type="text" name="username" id="username" class="form-control" placeholder="Coloca aqui o username do estudante.." required>
                         </div>
 
 

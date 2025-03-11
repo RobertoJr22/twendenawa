@@ -20,24 +20,27 @@ use App\Notifications\StudentEventNotification;
 
 class ResponsavelController extends Controller
 {
-    public function ResponsavelRegister(StoreResponsavelRequest $request){
-        
+    public function ResponsavelRegister(StoreResponsavelRequest $request)
+    {
         DB::beginTransaction();
-        try{
+        try {
             $imagePath = null;
-            if ($request->hasFile('foto')) 
-            {
+            if ($request->hasFile('foto')) {
                 $imagePath = $request->file('foto')->store('avatares', 'public');
-            } 
+            }
             
-            $user = New User();
+            $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password); 
             $user->tipo_usuario_id = $request->tipo_usuario_id;
+            
+            // Gera o username automaticamente baseado no nome do usuário
+            $user->username = User::generateUniqueUsername($user->name);
+            
             $user->save();
             
-            $responsavel = New responsavel(); 
+            $responsavel = new Responsavel(); 
             $responsavel->users_id = $user->id;
             $responsavel->foto = $imagePath;
             $responsavel->DataNascimento = $request->DataNascimento;
@@ -48,15 +51,15 @@ class ResponsavelController extends Controller
             $responsavel->save();
 
             DB::commit();
-        }catch(\Exception $e ){
+        } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Erro ao cadastrar: ' . $e->getMessage());
         }
         
         Auth::login($user);
         return redirect()->route('TelaResponsavel')->with('sucess','Bem vindo ao Twendenawa');
-
     }
+
 
 
     public function MainResponsavel(){
@@ -98,54 +101,60 @@ class ResponsavelController extends Controller
         $user = Auth::user();
        
         $responsavel = $user->responsavel;
+        $relatorios = collect();
 
-        $viagem = DB::table('DadosViagem as t1')
-            ->join('estudantes as t2', 't1.estudantes_id', '=', 't2.id')
-            ->join('motoristas as t3', 't1.motoristas_id', '=', 't3.id')
-            ->join('users as t4', 't4.id', '=', 't3.users_id')
-            ->join('users as t5', 't5.id', '=', 't2.users_id')
-            ->join('estudantes_responsavels as t6', 't6.estudantes_id', '=', 't2.id')
-            ->join('responsavels as t7', 't7.id', '=', 't6.responsavels_id')
-            ->join('Motoristas_rotas_veiculos as t8', 't8.motoristas_id', '=', 't3.id')
-            ->join('veiculos as t9', 't9.id', '=', 't8.veiculos_id')
-            ->join('rotas as t10', 't10.id', '=', 't8.rotas_id')
-            ->join('turnos as t11', 't11.id', '=', 't3.turnos_id')
-            ->join('modelo as t12', 't12.id', '=', 't9.modelos_id')
-            ->join('marcas as t13', 't13.id', '=', 't12.marcas_id')
-            ->join('viagems as t14', 't14.id', '=', 't1.viagems_id')
-            ->join('escolas as t15', 't15.id', '=', 't10.escolas_id')
-            ->join('users as t16', 't16.id', '=', 't15.users_id')
-            ->where('t7.id', '=', $responsavel->id)
-            ->where('t14.estado', '=', 1)
-            ->where('t2.id','=',$id)
-            ->select(
-            't14.id as NumeroDaViagem',
-            't5.name as NomeEstudante',
-            't4.name as NomeMotorista',
-            't2.telefone as TelefoneEstudante',
-            't3.telefone as TelefoneMotorista',
-            't3.BI as BilheteMotorista',
-            't9.Matricula as Matricula',
-            't13.nome as Marca',
-            't12.nome as Modelo',
-            't11.nome as TurnoMotorista',
-            't10.nome as rotaMotorista',
-            't10.PontoA as PontoA',
-            't10.PontoB as PontoB',
-            't2.DataNascimento as DataNascimento',      // Para cálculo da idade
-            't16.name as Instituicao',                   // Nome da instituição
-            't7.telefone as TelefoneResponsavel',        // Contato do responsável
-            't14.hora_inicio as HoraInicio',             // Hora de início da viagem
-            't14.destino as Destino',                    // Destino da viagem
-            't14.estado as Estado',                      // Estado da viagem (para exibir "Em Andamento")
-            't9.placa as Placa',                         // Placa do veículo
-            't9.capacidade as Capacidade',               // Capacidade do veículo
-            't1.relatorio as Relatorio',                 // Relatório de eventualidades
-            't1.created_at as RelatorioData'             // Data do relatório
+        $viagem = DB::table('viagems as t1')
+        ->leftJoin('dados_viagems as t2','t2.viagems_id','=','t1.id')
+        ->join('estudantes as t3','t2.estudantes_id','=','t3.id')
+        ->join('users as t4','t4.id','=','t3.users_id')  //para estudantes
+        ->join('estudantes_rotas as t5','t5.estudantes_id','=','t3.id')
+        ->join('rotas as t6','t6.id','=','t5.rotas_id')
+        ->join('escolas as t7','t7.id','=','t6.escolas_id')
+        ->join('turnos as t8','t8.id','=','t3.turnos_id')
+        ->join('motoristas as t9','t9.id','=','t1.motoristas_id')
+        ->join('users as t10','t10.id','=','t9.users_id') // users para motorista
+        ->join('motoristas_rotas_veiculos as t11','t11.motoristas_id','=','t9.id')
+        ->join('veiculos as t12','t12.id','=','t11.veiculos_id')
+        ->join('modelos as t13','t13.id','=','t12.modelos_id')
+        ->join('marcas as t14','t14.id','=','t13.marcas_id')
+        ->join('users as t15','t15.id','=','t7.users_id')  //para  escolas
+        ->select(
+            't1.id',
+            't4.name as Estudante',
+            't3.DataNascimento',
+            't15.name as Escola',
+            't7.telefone as TelEscola',
+            't10.name as Motorista',
+            't9.telefone as TelMotorista',
+            't1.updated_at as HoraInicio',
+            't6.nome as rota',
+            't6.PontoA',
+            't6.PontoB',
+            't8.HoraInicio',
+            't8.HoraRegresso',
+            't14.nome as marca',
+            't13.nome as modelo',
+            't12.Matricula',
+            't12.capacidade',
+            't8.nome as Turno'
         )
+        ->where('t1.estado', 2)
+        ->where('t11.estado', 1)
+        ->where('t3.id',$id)
         ->first();
 
-        return view('/Escola/DetalhesViagem',compact('viagem', 'user', 'responsavel'));
+        if($viagem && $viagem->id){
+            $relatorios = DB::table('dados_viagems as t1')
+                            ->join('viagems as t2','t2.id','=','t1.viagems_id')
+                            ->select(
+                                't1.relatorio',
+                                't1.created_at'
+                            )
+                            ->where('t2.id',$viagem->id)
+                            ->get();
+        }
+
+        return view('Estudante.DetalhesViagem',compact('viagem', 'user', 'responsavel', 'relatorios'));
     }
 
     public function InfoEstudante($id)
@@ -154,45 +163,62 @@ class ResponsavelController extends Controller
         $responsavel = $user->responsavel;
     
         $estudantes = DB::table('estudantes as t1')
-            ->join('users as t2', 't2.id', '=', 't1.users_id')
-            ->join('estudantes_responsavels as t3', 't3.estudantes_id', '=', 't1.id')
-            ->join('turnos as t4', 't4.id', '=', 't1.turnos_id')
-            ->join('estudantes_rotas as t5', 't5.estudantes_id', '=', 't1.id')
-            ->join('rotas as t6', 't6.id', '=', 't5.rotas_id')
-            ->join('escolas as t7', 't7.id', '=', 't6.escolas_id')
-            ->join('users as t8', 't8.id', '=', 't7.users_id')
-            ->where('t3.estado', '=', 1)
-            ->where('t3.responsavels_id', '=', $responsavel->id)
-            ->select(
-                't4.HoraRegresso as HoraRegresso',
-                't4.HoraIda as HoraIda',
-                't4.nome as Turno',
-                't6.PontoB as PontoB',
-                't6.PontoA as PontoA',
-                't6.nome as NomeRota',
-                't8.name as escola',
-                't2.name as NomeEstudante',
-                't1.DataNascimento as datanascimento',
-                't1.telefone',
-                't1.foto as foto',
-                't1.id as id'
-            )
-            ->get();
+        ->join('users as t2', 't2.id', '=', 't1.users_id')
+        ->join('estudantes_responsavels as t3', 't3.estudantes_id', '=', 't1.id')
+        ->join('turnos as t4', 't4.id', '=', 't1.turnos_id')
+        ->leftJoin('estudantes_rotas as t5', 't5.estudantes_id', '=', 't1.id')
+        ->leftJoin('rotas as t6', 't6.id', '=', 't5.rotas_id')
+        ->leftJoin('escolas as t7', 't7.id', '=', 't6.escolas_id')
+        ->leftJoin('users as t8', 't8.id', '=', 't7.users_id')
+        ->where('t3.estado', '=', 1)
+        ->where('t3.responsavels_id', '=', $responsavel->id)
+        ->where('t1.id', $id)
+        ->select(
+            't4.HoraRegresso as HoraRegresso',
+            't4.HoraIda as HoraIda',
+            't4.nome as Turno',
+            't6.PontoB as PontoB',
+            't6.PontoA as PontoA',
+            't6.nome as NomeRota',
+            't8.name as escola',
+            't2.name as NomeEstudante',
+            't1.DataNascimento as datanascimento',
+            't1.telefone',
+            't1.foto as foto',
+            't1.id as id'
+        )
+        ->first();
+    
     
         return view('Estudante.InfoEstudante', compact('estudantes'));
     }
 
     public function DesfazerConexao($id){
+        
+        if(Auth::check() && Auth::user()->tipo_usuario_id == 4){
+            $responsavel = Auth::user()->responsavel;
 
-        $responsavel = Auth::user()->responsavel;
+            $atualizar = DB::table('estudantes_responsavels')->where('estudantes_id','=',$id)
+                                                ->where('responsavels_id','=',$responsavel->id)
+                                                ->where('estado', 1)
+                                                ->update(['estado'=> 0]);
+            if($atualizar){
+                return redirect()->route('TelaResponsavel')->with('sucess','Estudante removido da tua lista');
+            }else{
+                return redirect()->back()->with('error','Erro ao remover estudante da tua lista');
+            }
+        }elseif(Auth::check() && Auth::user()->tipo_usuario_id == 2){
+            $estudante = Auth::user()->estudante;
 
-        $atualizar = DB::table('estudantes_responsavels')->where('estudantes_id','=',$id)
-                                            ->where('responsavels_id','=',$responsavel->id)
-                                            ->update(['estado'=> 0]);
-        if($atualizar){
-            return redirect()->route('TelaResponsavel')->with('sucess','Estudante removido da tua lista');
-        }else{
-            return redirect()->back()->with('error','Erro ao remover estudante da tua lista');
+            $atualizar = DB::table('estudantes_responsavels')->where('estudantes_id',$estudante->id)
+                                                ->where('responsavels_id',$id)
+                                                ->where('estado', 1)
+                                                ->update(['estado'=> 0]);
+            if($atualizar){
+                return redirect()->route('TelaEstudante')->with('sucess','Responsável removido da tua lista');
+            }else{
+                return redirect()->back()->with('error','Erro ao remover estudante da tua lista');
+            }
         }
     }
 
@@ -203,24 +229,28 @@ class ResponsavelController extends Controller
         $SearchResponsavel = null;
         $SearchEstudante = null;
         $estado = null;
-
+        
+        
         if($request->filled('search')){
             if($request->input('TipoUsuario') == 2){
+                $EstudanteId = Auth::user()->estudante->id;
                 $SearchResponsavel = DB::table('responsavels as t1')->join('users as t2','t2.id','=','t1.users_id')
                                                             ->select(
                                                                 't1.id as id',                                                                't1.telefone as telefone',
                                                                 't2.name as nome',
                                                                 't1.foto as foto'
                                                                     )
-                                                            ->where('t1.id','=',$request->input('search'))
+                                                            ->where('t2.username','=',$request->input('search'))
                                                             ->first();
                 if($SearchResponsavel){
                     $estado = DB::table('estudantes_responsavels as t1')
-                                ->where('responsavels_id','=', $SearchResponsavel->id)
-                                ->select('t1.estado as estado')
+                                ->where('responsavels_id', $SearchResponsavel->id)
+                                ->where('estudantes_id', $EstudanteId)
+                                ->select('t1.estado')
                                 ->first();
                 }
             }elseif($request->input('TipoUsuario') == 4){
+                $ResponsavelId = Auth::user()->responsavel->id;
                 $SearchEstudante = DB::table('estudantes as t1')
                                 ->join('users as t2','t2.id','=','t1.users_id')
                                 ->select(
@@ -229,11 +259,12 @@ class ResponsavelController extends Controller
                                     't2.name as nome',
                                     't1.foto as foto'
                                         )
-                                ->where('t1.id','=',$request->input('search'))
+                                ->where('t2.username',$request->input('search'))
                                 ->first();
                 if($SearchEstudante){
                     $estado = DB::table('estudantes_responsavels as t1')
-                            ->where('estudantes_id','=', $SearchEstudante->id)
+                            ->where('estudantes_id', $SearchEstudante->id)
+                            ->where('t1.responsavels_id',$ResponsavelId)
                             ->select('t1.estado as estado')
                             ->first();
                 }
@@ -265,6 +296,7 @@ class ResponsavelController extends Controller
 
         return view('Responsavel.conexao', compact('estudantes','responsaveis','SearchEstudante','SearchResponsavel','estado'));
    }
+   
    public function AcaoConexao($id,$acao,$tipousuario){
         switch($acao){
             /* 

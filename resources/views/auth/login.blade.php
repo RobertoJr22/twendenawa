@@ -28,8 +28,13 @@
                         </div>
 
                         <!-- Botão de Login -->
-                        <div class="d-grid gap-2">
+                        <div class="d-grid gap-2" style="margin: 3px;">
                             <button type="submit" class="btn w-100">Login</button>
+                        </div>
+                        <div style="display: flex; align-items: center; text-align: center;">
+                        <hr style="flex: 1; border: none; border-top: 1px solid #000;">
+                        <span style="padding: 0 10px;">ou</span>
+                        <hr style="flex: 1; border: none; border-top: 1px solid #000;">
                         </div>
                         <div class="cadastrar">
                             <a href="/auth/Selecao" class="cadastrar-link">Cadastrar-se aqui</a>

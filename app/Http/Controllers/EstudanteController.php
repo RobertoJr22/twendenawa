@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\estudante;
 use App\Models\User;
+use App\Models\responsavel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreStudentRequest;
@@ -36,7 +37,7 @@ class EstudanteController extends Controller
                     ->join('estudantes_responsavels as t3', 't3.responsavels_id', '=', 't1.id')
                     ->where('t3.estudantes_id', '=', $estudante->id)
                     ->where('t3.estado', '=', 1)
-                    ->select('t2.name as nome')
+                    ->select('t2.name as nome','t1.id')
                     ->get();
         $escola = DB::table('escolas as t1')
                     ->join('rotas as t2','t2.escolas_id','=','t1.id')
@@ -100,6 +101,10 @@ class EstudanteController extends Controller
             $user->email = $request->email;
             $user->password = Hash::make($request->password); 
             $user->tipo_usuario_id = $request->tipo_usuario_id;
+
+            // Gera o username automaticamente baseado no nome do usuário
+            $user->username = User::generateUniqueUsername($user->name);
+
             $user->save();
             
             $estudante = New estudante(); 
@@ -132,7 +137,7 @@ class EstudanteController extends Controller
 
         $motorista = Auth::user()->motorista;
         $estudante = null;
-        $Info = "Pesquisa pelo identificador do estudante.";
+        $Info = "Pesquisa pelo nome de utilizador do estudante.";
         $abordo = false;
     
         if ($request->filled('search')) {
@@ -140,7 +145,7 @@ class EstudanteController extends Controller
                 ->join('users as t2', 't2.id', '=', 't1.users_id')
                 ->where('t2.estado', 1)
                 ->where('t1.estado', 1)
-                ->where('t1.id', $request->input('search')) // Adicionado filtro de pesquisa
+                ->where('t2.username', $request->input('search')) // Adicionado filtro de pesquisa
                 ->select(
                     't1.id',
                     't2.name as nome',
@@ -359,6 +364,28 @@ class EstudanteController extends Controller
         }
         
         return redirect()->back()->with('error', 'Erro ao registrar o relatório.');
+    }
+
+    public function InfoResponsavel($id){
+
+        $responsavel = DB::table('responsavels as t1')
+        ->join('users as t2','t2.id','=','t1.users_id')
+        ->select(
+            't1.id',
+            't2.name as Nome',
+            't1.DataNascimento',
+            't2.email',
+            't1.endereco',
+            't1.telefone',
+            't1.foto'
+        )
+        ->where('t1.id',$id)->first();
+
+        if(!$responsavel){
+            return redirect()->back()->with('error', 'Responsável não encontrado.');
+        }
+
+        return view('Responsavel.InfoResponsavel', compact('responsavel'));
     }
      
 }

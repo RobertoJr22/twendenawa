@@ -19,6 +19,7 @@
                 <div>
                     <h5 class="card-title">Informações do Motorista</h5>
                     <p><strong>Nome:</strong>{{$user->name}}</p>
+                    <p><strong>Username:</strong>{{ $user->username}}</p>
                     <p><strong>DataNascimento:</strong>{{$motorista->DataNascimento}}</p>
                     <p><strong>Telefone:</strong>{{$motorista->telefone}}</p>
                     <p><strong>Numero da carta:</strong>{{$carteira->NumeroCarta}}</p>

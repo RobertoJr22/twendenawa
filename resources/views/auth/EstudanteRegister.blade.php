@@ -110,7 +110,7 @@
 
                         <!-- Botão de Registrar -->
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn ">Registrar</button>
+                            <button type="submit" class="btn w-100">Registrar</button>
                         </div>
 
                     </div>

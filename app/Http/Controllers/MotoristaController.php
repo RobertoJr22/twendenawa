@@ -68,6 +68,10 @@ class MotoristaController extends Controller
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->tipo_usuario_id = $request->tipo_usuario_id;
+
+            // Gera o username automaticamente baseado no nome do usuário
+            $user->username = User::generateUniqueUsername($user->name);
+            
             $user->save();
 
             $motorista = new motorista();

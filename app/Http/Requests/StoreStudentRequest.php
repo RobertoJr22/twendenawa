@@ -26,7 +26,7 @@ class StoreStudentRequest extends FormRequest
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'DataNascimento' => 'required|date',
+            'DataNascimento' => 'required|date|before_or_equal:' . now()->subYears(5)->format('Y-m-d'),
             'endereco' => 'required|string|max:255',
             'telefone' => 'required|string|max:15',
             'turnos_id' => 'required|exists:turnos,id',
