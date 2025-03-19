@@ -36,14 +36,14 @@
             @foreach($motoristas as $motorista)
             <tr>
             <td>{{ $motorista->id }}</td>
-            <td>{{ $motorista->nome ?? 'N/A' }}</td>
-            <td>{{ $motorista->telefone ?? 'N/A' }}</td>
-            <td>{{ $motorista->licenca ?? 'N/A' }}</td>
+            <td>{{ $motorista->nome}}</td>
+            <td>{{ $motorista->telefone}}</td>
+            <td>{{ $motorista->licenca }}</td>
 
             @if($motorista->estado == 2)
-                <td>{{ $motorista->marcas ?? 'N/A' }}</td>
-                <td>{{ $motorista->modelos ?? 'N/A' }}</td>
-                <td>{{ $motorista->rotas ?? 'N/A' }}</td>
+                <td>{{ $motorista->marcas}}</td>
+                <td>{{ $motorista->modelos}}</td>
+                <td>{{ $motorista->rotas}}</td>
             @else
                 <td>N/A</td>
                 <td>N/A</td>
@@ -52,8 +52,10 @@
 
             <td>{{ $motorista->Turnos ?? 'N/A' }}</td>
             <td>
-                <button class="btn btn-sm btn-custom">Editar</button>
-                <button class="btn btn-sm btn-custom">Desvincular</button>
+                @if($motorista->estado == 2)                
+                    <a href="{{route('DesassociarMotorista',$motorista->id)}}" class="btn btn-sm btn-custom">Desassociar</a>
+                @endif
+                <a href="{{route('DesvincularMotorista',$motorista->id)}}" class="btn btn-sm btn-custom">Desvincular</a>
             </td>
         </tr>
             @endforeach

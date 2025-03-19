@@ -10,7 +10,8 @@ class escolas_motoristas extends Model
 
     protected $fillable = [
         'motoristas_id',
-        'escolas_id'
+        'escolas_id',
+        'estado'
     ];
 
     public function escola(){

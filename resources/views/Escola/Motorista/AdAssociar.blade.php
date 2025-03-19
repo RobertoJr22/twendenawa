@@ -44,7 +44,7 @@
                         <label for="veiculos_id" class="form-label">Veiculo:</label>
                         <select name="veiculos_id" class="form-control form-select">
                             @foreach($veiculos as $veiculo)
-                            <option value="{{$veiculo->id}}">{{$veiculo->marca}}-{{$veiculo->modelo}}-{{$veiculo->Matricula}}</option>
+                            <option value="{{$veiculo->id}}">{{$veiculo->marca}}-{{$veiculo->modelo}}-{{$veiculo->matricula}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -53,7 +53,7 @@
                         <label for="motoristas_id" class="form-label">Motorista:</label>
                         <select name="motoristas_id" class="form-control form-select">
                             @foreach($motoristas as $motorista)
-                            <option value="{{$motorista->motorista->id}}">{{$motorista->motorista->user->name}}-{{$motorista->motorista->carteira->NumeroCarta}}-{{$motorista->motorista->turno->nome}}</option>
+                            <option value="{{$motorista->id}}">{{$motorista->nome}}-{{$motorista->carteira}}-{{$motorista->turno}}</option>
                             @endforeach
                         </select>
                     </div>

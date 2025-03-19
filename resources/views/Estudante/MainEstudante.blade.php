@@ -47,6 +47,9 @@
                             <p><strong>Bairro:</strong>{{$escola->bairro}}</p>
                             <p><strong>Email:</strong>{{ $escola->email}}</p>
                             <p><strong>Telefone:</strong>{{$escola->telefone}}</p>
+                            <div>
+                                <a href="{{route('DesvincularEscola',$escola->id)}}" class="btn">Desvincular se</a>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -137,6 +140,26 @@
                         <div class="card-body">
                             <div class="map-container">
                                 Mapa interativo aqui (em desenvolvimento) <ion-icon name="map-outline"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- conexoes com escolas -->
+                    <div class="card" id="dados-responsavel">
+                        <div class="card-header">
+                        Escolas e Conexões
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group overflow">
+                            @if ($escolas->isEmpty())
+                                <span>Nenhum pedido de conexão</span>
+                            @else
+                                @foreach($escolas as $escola)
+                                    <a href="{{route('EscolasConexoes',$escola->id)}}" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
+                                        <span>{{ $escola->nome }}</span>
+                                        <span>Ver Mais</span>
+                                    </a>
+                                @endforeach
+                            @endif
                             </div>
                         </div>
                     </div>

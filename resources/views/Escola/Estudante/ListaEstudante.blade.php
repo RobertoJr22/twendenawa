@@ -30,9 +30,9 @@
                     <th>Ações</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
+            <tbody>               
                 @foreach($busca as $b)
+                <tr>
                     <td>{{$b->id}}</td>
                     <td>{{$b->nome}}</td>
                     <td>{{$b->email}}</td>
@@ -43,8 +43,8 @@
                         <button class="btn btn-sm btn-custom mb-1">Editar</button>
                         <button class="btn btn-sm btn-custom mb-1">Deletar</button>
                     </td>
-                @endforeach
                 </tr>
+                @endforeach   
             </tbody>
         </table>
     </div>

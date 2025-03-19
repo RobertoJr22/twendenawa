@@ -42,29 +42,32 @@
                 </li>
                 @endguest
                 @auth
-                @if(auth()->user() && (auth()->user()->tipo_usuario_id == 2 || auth()->user()->tipo_usuario_id == 4))
-                    <li class="nav-item">
-                        <a id="Pagamentos" class="nav-link" href="/Estudante/PagamentosEstudante">Pagamentos</a>
-                    </li>
+                @if(auth()->user() && (auth()->user()->tipo_usuario_id == 2 || auth()->user()->tipo_usuario_id == 4) || auth()->user()->tipo_usuario_id == 3)
+
                     <li class="nav-item">
                         <a id="Conexões" class="nav-link" href="/Responsavel/conexao">Conexões</a>
                     </li>
-                    @php
-                        $currentPage = url()->current(); // Obtém a URL atual
-                        if(auth()->user() && (auth()->user()->tipo_usuario_id == 2 )){
-                            $targetPage = route('TelaEstudante');
-                        }
-                        else{
-                            $targetPage = route('TelaResponsavel');
-                        }
-                    @endphp
-                    <li class="nav-item">
-                        @if($currentPage == $targetPage)
-                            <a id="notificações" class="nav-link" href="#MsgNotificacoes">Notificações</a>
-                        @else
-                        <a id="notificações" class="nav-link" href="{{$targetPage}}#MsgNotificacoes">Notificações</a>
-                        @endif
-                    </li>
+                    @if(!(auth()->user()->tipo_usuario_id == 3))                    
+                        <li class="nav-item">
+                            <a id="Pagamentos" class="nav-link" href="/Estudante/PagamentosEstudante">Pagamentos</a>
+                        </li>
+                        @php
+                            $currentPage = url()->current(); // Obtém a URL atual
+                            if(auth()->user() && (auth()->user()->tipo_usuario_id == 2 )){
+                                $targetPage = route('TelaEstudante');
+                            }
+                            else{
+                                $targetPage = route('TelaResponsavel');
+                            }
+                        @endphp
+                        <li class="nav-item">
+                            @if($currentPage == $targetPage)
+                                <a id="notificações" class="nav-link" href="#MsgNotificacoes">Notificações</a>
+                            @else
+                            <a id="notificações" class="nav-link" href="{{$targetPage}}#MsgNotificacoes">Notificações</a>
+                            @endif
+                        </li>
+                    @endif
                 @endif
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">

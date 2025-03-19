@@ -78,6 +78,11 @@ class TwendenawaController extends Controller
     public function CadastrarEscola(StoreEscolaRequest $request){
         DB::beginTransaction();
         try{
+            $imagePath = null;
+            if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+                $imagePath = $request->file('foto')->store('avatares', 'public');
+            }
+
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
@@ -88,6 +93,7 @@ class TwendenawaController extends Controller
 
             $escola = new escola();
             $escola->users_id = $user->id;
+            $escola->foto = $imagePath;
             $escola->bairros_id = $request->bairros_id;
             $escola->telefone = $request->telefone;
             $escola->save();

@@ -21,11 +21,16 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
     Route::get('/Estudante/{id}/adicionar', [EstudanteController::class, 'adicionarAbordo'])->name('AdicionarAbordo');
     Route::get('/Estudante/{id}/remover', [EstudanteController::class, 'removerEstudanteAbordo'])->name('RemoverAbordo');
     Route::post('/EnviarRelatorio/Viagem', [EstudanteController::class, 'EnviarRelatorio'])->name('EnviarRelatorio');
+    
     /* Estudante*/
     Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );
     Route::get('/Estudante/MainEstudante',[EstudanteController::class, 'MainEstudante'] )->name('TelaEstudante');
     Route::get('/Estudante/PagamentosEstudante',[EstudanteController::class,'PagamentosEstudante']);
     Route::get('/Responsavel/InfoResponsavel/{id}',[EstudanteController::class,'InfoResponsavel'])->name('InfoResponsavel');
+    Route::get('/Estudante/EscolaConexoes/{id}',[EstudanteController::class,'EscolasConexoes'])->name('EscolasConexoes');
+    Route::get('/Estudante/EscolaConexoes/{id}/{acao}', [EstudanteController::class, 'AcaoEscolaConexao'])->name('AcaoEscolaConexao');
+    Route::get('/DesvincularEscola/{id}', [EstudanteController::class, 'DesvincularEscola'])->name('DesvincularEscola');
+
     /* Escola */
     Route::get('/Escola/MainEscola',[EscolaController::class,'index'])->name('TelaEscola');
     Route::get('/Escola/Estudante',[EscolaController::class,'ListaEstudante'])->name('ListaEstudante');
@@ -47,12 +52,14 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
     Route::get('/Escola/Motorista/ListaMotorista',[EscolaController::class, 'ListaMotorista'])->name('ListaMotorista');
     Route::get('/Escola/Motorista/AdAssociar',[EscolaController::class, 'ExibirAdAssociar'])->name('AdAssociar');
     Route::post('/Escola/Motorista/AdAssociar',[EscolaController::class, 'Associar'])->name('Associar');
+    Route::get('/DesassociarMotorista/{id}',[EscolaController::class, 'DesassociarMotorista'])->name('DesassociarMotorista');
+    Route::get('/DesvincularMotorista/{id}',[EscolaController::class, 'DesvincularMotorista'])->name('DesvincularMotorista');
 
     /* Responsavel */
     Route::get('/Responsavel/MainResponsavel',[ResponsavelController::class, 'MainResponsavel'])->name('TelaResponsavel');
     Route::get('/Estudante/DetalhesViagem/{id}',[ResponsavelController::class,'DetalhesViagem'])->name('DetalhesViagem');
     Route::get('/Estudante/InfoEstudante/{id}',[ResponsavelController::class,'InfoEstudante'])->name('InfoEstudante');
-    Route::get('/Responsavel/conexao',[ResponsavelController::class,'ExibirConexao'])->name('ExibirConexao');
+    Route::get('/Responsavel/conexao/{id?}',[ResponsavelController::class,'ExibirConexao'])->name('ExibirConexao');
     Route::get('/Responsavel/MainResponsavel/{id}',[ResponsavelController::class,'DesfazerConexao'])->name('DesfazerConexao');
     Route::get('/AcaoConexao/{id}/{acao}/{tipousuario}', [ResponsavelController::class, 'AcaoConexao'])->name('AcaoConexao');
 

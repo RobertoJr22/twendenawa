@@ -14,6 +14,8 @@ use App\Models\estudantes_rotas;
 use App\Models\motoristas_rotas_veiculos;
 use Illuminate\Support\Facades\Auth;
 
+use function Laravel\Prompts\select;
+
 class EstudanteController extends Controller
 {
     public function index(){
@@ -39,17 +41,36 @@ class EstudanteController extends Controller
                     ->where('t3.estado', '=', 1)
                     ->select('t2.name as nome','t1.id')
                     ->get();
-        $escola = DB::table('escolas as t1')
-                    ->join('rotas as t2','t2.escolas_id','=','t1.id')
-                    ->join('estudantes_rotas as t3','t3.rotas_id','=','t2.id')
-                    ->join('users as t4','t4.id','=','t1.users_id')
-                    ->join('bairros as t5','t5.id','=','t1.bairros_id')
-                    ->join('distritos as t6','t6.id','=','t5.distritos_id')
-                    ->join('municipios as t7','t7.id','=','t6.municipios_id')
-                    ->where('t3.estados','=',1)
-                    ->where('t3.estudantes_id','=',$estudante->id)
-                    ->select('t4.name as nome', 't1.telefone as telefone', 't4.email as email', 't7.nome as municipio', 't5.nome as bairro')
+        $escola = DB::table('escolas_estudantes as t0')
+                    ->join('escolas as t1','t1.id','=','t0.escolas_id')
+                    ->join('users as t2', 't2.id', '=', 't1.users_id')
+                    ->join('bairros as t3','t3.id','=','t1.bairros_id')
+                    ->join('distritos as t4','t4.id','=','t3.distritos_id')
+                    ->join('municipios as t5','t5.id','=','t4.municipios_id')
+                    ->select(
+                            't1.id',
+                            't1.telefone',
+                            't2.name as nome',
+                            't1.foto',
+                            't2.email',
+                            't5.nome as municipio',
+                            't4.nome as distrito',
+                            't3.nome as bairro'
+                            )
+                    ->where('t0.estado',1)
+                    ->where('t0.estudantes_id',$estudante->id)
                     ->first();
+        $escolas = DB::table('escolas_estudantes as t1')
+                    ->join('escolas as t2','t2.id','=','t1.escolas_id')
+                    ->join('users as t3','t3.id','=','t2.users_id')
+                    ->select(
+                                't2.id',
+                                't3.name as nome'
+                            )
+                    ->where('t1.estudantes_id',$estudante->id)
+                    ->where('t1.estado',2)
+                    ->get();
+
         $viagem = DB::table('viagems as t1')
                     ->join('dados_viagems as t2', 't1.id', '=', 't2.viagems_id')
                     ->join('motoristas as t3', 't1.motoristas_id', '=', 't3.id')
@@ -79,7 +100,7 @@ class EstudanteController extends Controller
         // Recupera as notificações do responsável, ordenando as mais recentes primeiro
         $notificacoes = $estudante->notifications()->orderBy('created_at', 'desc')->get();
 
-        return view('Estudante.MainEstudante', compact('estudante','turno','rota', 'user', 'escola','responsaveis', 'notificacoes','viagem'));
+        return view('Estudante.MainEstudante', compact('escolas','estudante','turno','rota', 'user', 'escola','responsaveis', 'notificacoes','viagem'));
     }
 
     public function DetalhesViagem(){
@@ -386,6 +407,112 @@ class EstudanteController extends Controller
         }
 
         return view('Responsavel.InfoResponsavel', compact('responsavel'));
+    }
+
+    public function EscolasConexoes($id){
+
+        $estudanteId = Auth::user()->estudante->id;
+
+        $SearchEscola = DB::table('escolas as t1')
+        ->join('users as t2', 't2.id', '=', 't1.users_id')
+        ->join('bairros as t3','t3.id','=','t1.bairros_id')
+        ->join('distritos as t4','t4.id','=','t3.distritos_id')
+        ->join('municipios as t5','t5.id','=','t4.municipios_id')
+        ->select('t1.id',
+                 't1.telefone',
+                 't2.name as nome',
+                 't1.foto',
+                 't5.nome as municipio',
+                 't4.nome as distrito',
+                 't3.nome as bairro'
+                 )
+        ->where('t1.id', $id)
+        ->first();
+        if($SearchEscola){
+            $estado = DB::table('escolas_estudantes')
+                    ->where('escolas_id', $SearchEscola->id)
+                    ->where('estudantes_id',$estudanteId)
+                    ->select('estado')
+                    ->first();
+        }
+
+        return view('Estudante.EscolasConexoes', compact('SearchEscola','estado'));
+    }
+
+    public function AcaoEscolaConexao($id, $acao){
+
+        $estudanteId = Auth::user()->estudante->id;
+
+
+        $escola = DB::table('escolas_estudantes')
+                ->where('escolas_id', $id)
+                ->where('estudantes_id', $estudanteId)
+                ->where('estado', 2)
+                ->select('id')
+                ->first();
+        if(!$escola){
+            return redirect()->back()->with('error', 'Erro ao localizar a escola.');
+        }
+
+        $rota = DB::table('estudantes_rotas as t1')
+                ->join('rotas as t2','t2.id','=','t1.rotas_id')
+                ->where('t1.estudantes_id', $estudanteId)
+                ->where('t2.escolas_id', $id)   
+                ->where('t1.estados', 2)
+                ->select('t1.id')
+                ->first();
+        if(!$rota){
+            return redirect()->back()->with('error', 'Erro ao passar a rota.');
+        }
+
+        if($acao == 'aceitar'){
+            DB::table('escolas_estudantes')
+                ->where('id', $escola->id)
+                ->update(['estado' => 1]);
+
+            DB::table('estudantes_rotas')
+                ->where('id', $rota->id)
+                ->update(['estados' => 1]);
+
+            $pedidosPendentes = DB::table('escolas_estudantes')
+                ->where('estudantes_id', $estudanteId)
+                ->where('estado', 2)
+                ->get();
+            $rotasPendentes = DB::table('estudantes_rotas')
+                ->where('estudantes_id', $estudanteId)
+                ->where('estados', 2)
+                ->get();
+
+            if($pedidosPendentes){
+                foreach($pedidosPendentes as $pedido){
+                    DB::table('escolas_estudantes')
+                        ->where('id', $pedido->id)
+                        ->delete();
+                }
+            }
+
+            if($rotasPendentes){
+                foreach($rotasPendentes as $rota){
+                    DB::table('estudantes_rotas')
+                        ->where('id', $rota->id)
+                        ->delete();
+                }
+            }
+
+            return redirect()->back()->with('success', 'Conexão aceita com sucesso.');
+        } else if($acao == 'negar'){
+            DB::table('escolas_estudantes')
+                ->where('id', $escola->id)
+                ->delete();
+
+            DB::table('estudantes_rotas')
+                ->where('id', $rota->id)
+                ->delete();
+
+            return redirect()->back()->with('success', 'Conexão recusada com sucesso.');
+        }
+
+        return redirect()->back()->with('error', 'Ação inválida.');
     }
      
 }

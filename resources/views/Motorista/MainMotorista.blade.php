@@ -53,6 +53,23 @@
                 </div>
             </div>
             @endif
+            <!-- Instituicao de ensino -->
+            <div class="card" id="dados-responsavel">
+                <div class="card-header">
+                    Informação da instituição
+                </div>
+                <div class="card-body">
+                    @if($escola === null)
+                        <span>O usuário não está vinculado à uma instituição</span>
+                    @else
+                        <p><strong>Nome:</strong>{{$escola->nome}}</p>
+                        <p><strong>Municipio:</strong>{{$escola->municipio}}</p>
+                        <p><strong>Bairro:</strong>{{$escola->bairro}}</p>
+                        <p><strong>Email:</strong>{{ $escola->email}}</p>
+                        <p><strong>Telefone:</strong>{{$escola->telefone}}</p>
+                    @endif
+                </div>
+            </div>
         </div>
 
         <!-- Coluna direita (outro card) -->

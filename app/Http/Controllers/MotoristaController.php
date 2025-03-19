@@ -28,6 +28,24 @@ class MotoristaController extends Controller
         $turno = $motorista->turno;
         $rota = $motorista->rota; 
 
+        $escola = DB::table('escolas as t1')
+        ->join('escolas_motoristas as t2','t2.escolas_id','=','t1.id')
+        ->join('users as t3','t3.id','=','t1.users_id')
+        ->join('bairros as t4','t4.id','=','t1.bairros_id')
+        ->join('distritos as t5','t5.id','=','t4.distritos_id')
+        ->join('municipios as t6','t6.id','=','t5.municipios_id')
+        ->whereIn('t2.estado',[1,2])
+        ->where('t2.motoristas_id','=',$motorista->id)
+        ->select(
+                't1.id',
+                't3.name as nome',
+                't1.telefone',
+                't3.email as email',
+                't6.nome as municipio',
+                't5.nome as distrito',
+                't4.nome as bairro')
+        ->first();
+
         $dados = motoristas_rotas_veiculos::where('motoristas_id', $motorista->id)
         ->where('estado', 1)
         ->with([
@@ -51,7 +69,7 @@ class MotoristaController extends Controller
                     
     
         
-        return view('Motorista.MainMotorista', compact('user', 'motorista','dados', 'carteira','turno','rota','aBordo'));
+        return view('Motorista.MainMotorista', compact('user', 'motorista','dados', 'carteira','turno','rota','aBordo','escola'));
     }
 
     public function RegistrarMotorista(StoreMotoristaRequest $request){

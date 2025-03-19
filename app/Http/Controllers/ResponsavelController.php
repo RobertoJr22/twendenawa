@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreResponsavelRequest;
 use app\Models;
+use App\Models\escolas_motoristas;
 use App\Models\estudante;
 use App\Models\estudantes_responsavels;
 use App\Models\responsavel;
@@ -222,16 +223,20 @@ class ResponsavelController extends Controller
         }
     }
 
-    public function ExibirConexao(Request $request){
+    public function ExibirConexao(Request $request,$id = null){
 
         $responsaveis = collect();
         $estudantes = collect();
+        $Escolas = collect();
         $SearchResponsavel = null;
         $SearchEstudante = null;
+        $SearchEscola = null; 
         $estado = null;
+
         
         
         if($request->filled('search')){
+            $id = null;
             if($request->input('TipoUsuario') == 2){
                 $EstudanteId = Auth::user()->estudante->id;
                 $SearchResponsavel = DB::table('responsavels as t1')->join('users as t2','t2.id','=','t1.users_id')
@@ -265,10 +270,68 @@ class ResponsavelController extends Controller
                     $estado = DB::table('estudantes_responsavels as t1')
                             ->where('estudantes_id', $SearchEstudante->id)
                             ->where('t1.responsavels_id',$ResponsavelId)
-                            ->select('t1.estado as estado')
+                            ->select('t1.estado')
                             ->first();
                 }
             }
+        }
+
+            // Se for um clique em um pedido de conexão, buscar os dados do usuário correspondente
+        if ($id) {
+            if (Auth::user()->tipo_usuario_id == 4) {
+                $ResponsavelId = Auth::user()->responsavel->id;
+                $SearchEstudante = DB::table('estudantes as t1')
+                    ->join('users as t2', 't2.id', '=', 't1.users_id')
+                    ->select('t1.id', 't1.telefone', 't2.name as nome', 't1.foto')
+                    ->where('t1.id', $id)
+                    ->first();
+                if($SearchEstudante){
+                    $estado = DB::table('estudantes_responsavels as t1')
+                            ->where('estudantes_id', $SearchEstudante->id)
+                            ->where('t1.responsavels_id',$ResponsavelId)
+                            ->select('t1.estado as estado')
+                            ->first();
+                }
+            } elseif (Auth::user()->tipo_usuario_id == 2) {
+                $EstudanteId = Auth::user()->estudante->id;
+                $SearchResponsavel = DB::table('responsavels as t1')
+                    ->join('users as t2', 't2.id', '=', 't1.users_id')
+                    ->select('t1.id', 't1.telefone', 't2.name as nome', 't1.foto')
+                    ->where('t1.id', $id)
+                    ->first();
+                if($SearchResponsavel){
+                    $estado = DB::table('estudantes_responsavels as t1')
+                                ->where('responsavels_id', $SearchResponsavel->id)
+                                ->where('estudantes_id', $EstudanteId)
+                                ->select('t1.estado')
+                                ->first();
+                }
+            }elseif (Auth::user()->tipo_usuario_id == 3) {
+                $MotoristaId = Auth::user()->motorista->id;
+                $SearchEscola = DB::table('escolas as t1')
+                    ->join('users as t2', 't2.id', '=', 't1.users_id')
+                    ->join('bairros as t3','t3.id','=','t1.bairros_id')
+                    ->join('distritos as t4','t4.id','=','t3.distritos_id')
+                    ->join('municipios as t5','t5.id','=','t4.municipios_id')
+                    ->select('t1.id',
+                             't1.telefone',
+                             't2.name as nome',
+                             't1.foto',
+                             't5.nome as municipio',
+                             't4.nome as distrito',
+                             't3.nome as bairro'
+                             )
+                    ->where('t1.id', $id)
+                    ->first();
+                if($SearchEscola){
+                    $estado = DB::table('escolas_motoristas as t1')
+                            ->where('escolas_id', $SearchEscola->id)
+                            ->where('t1.Motoristas_id',$MotoristaId)
+                            ->select('t1.estado')
+                            ->first();
+                }
+            }
+            
         }
         if(Auth::user()->tipo_usuario_id == 4){
             $estudantes = DB::table('estudantes_responsavels as t1')
@@ -292,12 +355,25 @@ class ResponsavelController extends Controller
                             't3.name as nome',
                             )
                         ->get();
+        }elseif(Auth::user()->tipo_usuario_id == 3 ){
+            $MotoristaId = Auth::user()->motorista->id;
+
+            $Escolas = DB::table('escolas_motoristas as t0')
+                ->join('escolas as t1', 't1.id','=','t0.escolas_id')
+                ->join('users as t2', 't2.id', '=', 't1.users_id')
+                ->select(
+                            't1.id',
+                            't2.name as nome',
+                         )
+                ->where('t0.motoristas_id', $MotoristaId)
+                ->where('t0.estado',3)
+                ->get();
         }
 
-        return view('Responsavel.conexao', compact('estudantes','responsaveis','SearchEstudante','SearchResponsavel','estado'));
+        return view('Responsavel.conexao', compact('estudantes','responsaveis','SearchEstudante','SearchResponsavel','Escolas','SearchEscola','estado'));
    }
    
-   public function AcaoConexao($id,$acao,$tipousuario){
+    public function AcaoConexao($id,$acao,$tipousuario){
         switch($acao){
             /* 
                 0 = enviar pedido
@@ -425,6 +501,27 @@ class ResponsavelController extends Controller
                     }else{
                         return redirect()->back()->with('error','Erro ao aceitar o pedido de conexão');
                     }
+                }elseif($tipousuario == 3){
+                    DB::beginTransaction();
+                    try{
+                        $escola = DB::table('escolas_motoristas')
+                                ->where('escolas_id','=',$id)
+                                ->where('estado','=',3)
+                                ->where('motoristas_id','=',Auth::user()->motorista->id)
+                                ->update(['estado'=>1]);
+                        if($escola > 0){
+                            escolas_motoristas::where('motoristas_id',Auth::user()->motorista->id)
+                            ->where('estado',3)->delete();
+                            DB::commit();
+                            return redirect()->back()->with('sucess','Pedido de conexão aceite');
+                        }else{
+                            DB::rollBack();
+                            return redirect()->back()->with('error','Erro ao aceitar o pedido de conexão');
+                        }
+                    }catch(Exception $e){
+                        DB::rollBack();
+                        return redirect()->back()->with('error','Erro ao aceitar o pedido de conexão'.$e->getMessage());
+                    }
                 }
                 break;
             case 3:
@@ -451,6 +548,17 @@ class ResponsavelController extends Controller
                         return redirect()->back()->with('sucess','Pedido de conexão negado');
                     }else{
                         return redirect()->back()->with('error','Erro ao negar pedido de conexão');
+                    }
+                }elseif($tipousuario == 3){
+                    $afetado = DB::table('escolas_motoristas')
+                                ->where('escolas_id','=',$id)
+                                ->where('estado','=',3)
+                                ->where('motoristas_id','=',Auth::user()->motorista->id)
+                                ->update(['estado'=>0]);
+                    if($afetado > 0){
+                        return redirect()->back()->with('sucess','Pedido de conexão aceite');
+                    }else{
+                        return redirect()->back()->with('error','Erro ao aceitar o pedido de conexão');
                     }
                 }
                 break;

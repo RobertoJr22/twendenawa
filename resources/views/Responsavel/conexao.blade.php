@@ -2,6 +2,7 @@
 @section('title','Conexões')
 @section('content')
 <div class="container mt-5">
+    @if(auth()->user()->tipo_usuario_id == 4 || auth()->user()->tipo_usuario_id == 2)
     <!-- Seção 1: Barra de Pesquisa -->
     <form action="" method="get">
         @csrf
@@ -15,6 +16,7 @@
         </div>
         <input type="hidden" value="{{auth()->user()->tipo_usuario_id}}" name="TipoUsuario">
     </form>
+    @endif
 
     <!-- Seção 2 e 3: Lista de Nomes e Resultados (Invertidos) -->
     <div class="row g-4">
@@ -76,6 +78,34 @@
                                 <a href="{{route('AcaoConexao',[$SearchResponsavel->id,4,auth()->user()->tipo_usuario_id])}}" class="btn btn-custom">Cancelar pedido</a>
                             @endif
                         @endif
+                    @elseif(auth()->user()->tipo_usuario_id == 3)
+                        @if(!$SearchEscola)
+                            <p>Clica nos pedido de conexão(se tiver), para aparecer os dados do mesmo.</p>
+                        @else
+                            <!-- Foto de Perfil (Mantendo tamanho 150x150px e centralizada) -->
+                            <div  class="profile-photo-container d-flex justify-content-center align-items-center mx-auto" style="width:150px; height:150px;">
+                                @if ($SearchEscola && $SearchEscola->foto)
+                                    <img src="{{ asset('storage/'.$SearchEscola->foto) }}" alt="">
+                                @else
+                                    <ion-icon name="camera-outline"></ion-icon>
+                                @endif
+                            </div>
+                            <!-- Dados Pessoais -->
+                            <h5 class="card-title">Informações da Instituição</h5>
+                            <p><strong>Nome:</strong>{{$SearchEscola->nome}}</p>
+                            <p><strong>Telefone:</strong>{{$SearchEscola->telefone}}</p>
+                            <p><strong>Municipio:</strong>{{$SearchEscola->municipio}}</p>
+                            <p><strong>Distrito:</strong>{{$SearchEscola->distrito}}</p>
+                            <p><strong>Bairro:</strong>{{$SearchEscola->bairro}}</p>
+                            @if(!$estado || $estado->estado == 0)
+                                <p class="btn btn-custom">Sem conexão</p>
+                            @elseif($estado->estado == 1)
+                                <p class="btn btn-custom">Conectado</p>
+                            @elseif($estado->estado == 3)
+                                <a href="{{route('AcaoConexao',[$SearchEscola->id,2,auth()->user()->tipo_usuario_id])}}" class="btn btn-custom">Aceitar conexão</a>
+                                <a href="{{route('AcaoConexao',[$SearchEscola->id,3,auth()->user()->tipo_usuario_id])}}" class="btn btn-custom">Negar conexão</a>
+                            @endif
+                        @endif
                     @endif
                 </div>
             </div>
@@ -94,7 +124,7 @@
                                 <p>Sem pedidos de conexão</p>
                             @else
                                 @foreach($estudantes as $estudante)
-                                    <a href="" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
+                                    <a href="{{ route('ExibirConexao', $estudante->id) }}" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
                                         <span>{{$estudante->nome}}</span>
                                         <span>Ver Mais</span>
                                     </a>
@@ -107,8 +137,21 @@
                                 <p>Sem pedidos de conexão</p>
                             @else
                                 @foreach($responsaveis as $responsavel)
-                                    <a href="" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
+                                    <a href="{{ route('ExibirConexao', $responsavel->id) }}" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
                                         <span>{{$responsavel->nome}}</span>
+                                        <span>Ver Mais</span>
+                                    </a>
+                                @endforeach
+                            @endif
+                        </div>
+                    @elseif(auth()->user()->tipo_usuario_id == 3)
+                        <div class="list-group">
+                            @if($Escolas->isEmpty())
+                                <p>Sem pedidos de conexão</p>
+                            @else
+                                @foreach($Escolas as $escola)
+                                    <a href="{{ route('ExibirConexao', $escola->id) }}" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
+                                        <span>{{$escola->nome}}</span>
                                         <span>Ver Mais</span>
                                     </a>
                                 @endforeach
