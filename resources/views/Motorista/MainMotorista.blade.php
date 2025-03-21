@@ -87,8 +87,7 @@
                         <!-- Botão para iniciar/pausar a viagem -->
                         <div class="text-center mt-3">
                             <button class="btn viagem">Iniciar Viagem <ion-icon name="play-outline"></ion-icon></button>
-                            <button class="btn viagem">Pausar Viagem <ion-icon name="pause-outline"></ion-icon></button>
-                            <button class="btn viagem">Pausar Viagem <ion-icon name="stop-outline"></ion-icon></button>
+                            <button class="btn viagem">Parar Viagem <ion-icon name="stop-outline"></ion-icon></button>
                         </div>
                     </div>                   
                 </div>
@@ -104,7 +103,7 @@
                             @else
                                 @foreach($aBordo as $estudante)
                                     <a href="#" id="btn-lista" class="btn d-flex justify-content-between align-items-center mb-3">
-                                        <span>$estudante->nome</span>
+                                        <span>{{$estudante->nome}}</span>
                                         <span>Ver Mais</span>
                                     </a>
                                 @endforeach

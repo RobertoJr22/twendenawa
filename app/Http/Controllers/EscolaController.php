@@ -587,6 +587,14 @@ class EscolaController extends Controller
             return redirect()->back()->with('error','Motorista não encontrado');
         }
 
+        $ViagemAtiva = DB::table('viagems as t1')
+        ->where('t1.motoristas_id',$motorista->id)
+        ->whereIn('t1.estado',[1,2])->exists();
+
+        if($ViagemAtiva){
+            return redirect()->back()->with('error','Motorista está em viagem');
+        }
+
         DB::beginTransaction();
         try{
             $conexao = escolas_motoristas::where('motoristas_id',$motorista->id)

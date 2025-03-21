@@ -118,5 +118,57 @@ class MotoristaController extends Controller
         Auth::login($user);
         return redirect()->route('TelaMotorista')->with('sucess','Bem vindo ao Twendenawa');
     }
+
+    public function ComecarViagem($id){
+
+        $motorista = Auth::user()->motorista;
+        $hora = now()->format('H');
+
+        $Horaturno = DB::table('turnos as t1')
+        ->where('t1.id','=',$motorista->turnos_id)
+        ->select('t1.HoraInicio','t1.HoraRegresso')
+        ->first();
+
+        $HoraIda = \Carbon\Carbon::parse($Horaturno->HoraInicio)->format('H');
+        $HoraRegresso = \Carbon\Carbon::parse($Horaturno->HoraRegresso)->format('H');
+
+        if($hora >= $HoraIda && $hora <= $HoraRegresso){
+            if($hora == $HoraIda || $hora == $HoraRegresso){
+                $ViagemId = DB::table('viagems as t1')
+                ->where('t1.motoristas_id','=',$motorista->id)
+                ->where('t1.estado','=',1)
+                ->value('t1.id');
+
+                if($ViagemId == null){
+                    return redirect()->route('TelaMotorista')->with('error','Não existe nenhuma viagem para iniciar, precisa adicionar estudantes a bordo');
+                }
+
+                $estudantes = DB::table('dados_viagems as t1')
+                ->join('viagems as t2','t1.viagems_id','=','t2.id')
+                ->where('t2.id',$ViagemId)
+                ->whereNotNull('estudantes_id')
+                ->count();
+
+                if($estudantes == 0){
+                    return redirect()->route('TelaMotorista')->with('error','Não existe nenhum estudante a bordo');
+                }
+
+                $comecar = DB::table('viagems as t1')
+                ->where('t1.id','=',$ViagemId)
+                ->update(['estado'=>2]);
+
+                if ($comecar > 0) { 
+                    return redirect()->route('TelaMotorista')->with('success', 'Viagem iniciada com sucesso');
+                } else {
+                    return redirect()->route('TelaMotorista')->with('error', 'Erro ao iniciar a viagem ou já está em andamento');
+                }
+
+            }else{
+                return redirect()->route('TelaMotorista')->with('error','A viagem não pode ser iniciada fora do horário de trabalho');
+            }
+        }else{
+            return redirect()->route('TelaMotorista')->with('error','A viagem não pode ser iniciada fora do horário de trabalho');
+        }
+    }
     
 }

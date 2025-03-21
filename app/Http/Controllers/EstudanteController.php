@@ -13,6 +13,8 @@ use App\Models\DadosViagem;
 use App\Models\estudantes_rotas;
 use App\Models\motoristas_rotas_veiculos;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
 
 use function Laravel\Prompts\select;
 
@@ -199,123 +201,283 @@ class EstudanteController extends Controller
 
     public function adicionarAbordo($id)
     {
+        
         $motorista = Auth::user()->motorista;
-    
-        // Obter dados do motorista
-        $DadosMotorista = DB::table('users as t1')
-            ->join('escolas as t2', 't1.id', '=', 't2.users_id')
-            ->join('veiculos as t3', 't2.id', '=', 't3.escolas_id')
-            ->join('motoristas_rotas_veiculos as t4', 't3.id', '=', 't4.veiculos_id')
-            ->join('motoristas as t5', 't5.id', '=', 't4.motoristas_id')
-            ->join('turnos as t6', 't6.id', '=', 't5.turnos_id')
-            ->join('rotas as t7', 't7.id', '=', 't4.rotas_id')
-            ->where('t4.motoristas_id', $motorista->id)
-            ->select('t1.name as escola', 't7.nome as rota', 't6.nome as turno', 't3.capacidade')
+        $hora = now()->format('H');
+        $horaViagem = DB::table('turnos as t1')
+            ->join('motoristas as t2', 't2.turnos_id', '=', 't1.id')
+            ->where('t2.id', $motorista->id)
+            ->select('t1.HoraIda','t1.HoraRegresso')
             ->first();
-    
-        if (!$DadosMotorista) {
-            return redirect()->back()->with('error', 'Não estás associado a uma instituição.');
+
+        $HoraIda = Carbon::parse($horaViagem->HoraIda)->format('H');
+        $HoraRegresso = Carbon::parse($horaViagem->HoraRegresso)->format('H');
+
+        $estudanteId = $id;
+
+        if($hora >= $HoraIda && $hora <= $HoraRegresso){
+
+            if($hora == $HoraIda){
+
+                // Obter dados do motorista
+                $DadosMotorista = DB::table('users as t1')
+                ->join('escolas as t2', 't1.id', '=', 't2.users_id')
+                ->join('veiculos as t3', 't2.id', '=', 't3.escolas_id')
+                ->join('motoristas_rotas_veiculos as t4', 't3.id', '=', 't4.veiculos_id')
+                ->join('motoristas as t5', 't5.id', '=', 't4.motoristas_id')
+                ->join('turnos as t6', 't6.id', '=', 't5.turnos_id')
+                ->join('rotas as t7', 't7.id', '=', 't4.rotas_id')
+                ->where('t4.motoristas_id', $motorista->id)
+                ->select('t1.name as escola', 't7.nome as rota', 't6.nome as turno', 't3.capacidade')
+                ->first();
+
+                if (!$DadosMotorista) {
+                    return redirect()->back()->with('error', 'Não estás associado a uma instituição.');
+                }
+
+                // Verificar estudante
+                $estudante = DB::table('estudantes as t1')
+                    ->join('users as t2', 't2.id', '=', 't1.users_id')
+                    ->where('t1.id', $estudanteId)
+                    ->where('t2.estado', 1)
+                    ->first();
+                if (!$estudante) {
+                    return redirect()->back()->with('error', 'Erro de sistema, não foi possível localizar o estudante.');
+                }
+
+                // Verificar se o estudante tem uma instituição ativa
+                $VerifEscola = estudantes_rotas::where('estudantes_id', $estudanteId)
+                ->where('estados', 1)
+                ->exists();
+                if (!$VerifEscola) {
+                    return redirect()->back()->with('error', 'Estudante sem rota ou sem instituição.');
+                }
+
+                // Obter dados do estudante
+                $DadosEstudante = DB::table('users as t1')
+                ->join('escolas as t2', 't1.id', '=', 't2.users_id')
+                ->join('rotas as t3', 't2.id', '=', 't3.escolas_id')
+                ->join('estudantes_rotas as t4', 't3.id', '=', 't4.rotas_id')
+                ->join('estudantes as t5', 't5.id', '=', 't4.estudantes_id')
+                ->join('turnos as t6', 't6.id', '=', 't5.turnos_id')
+                ->where('t4.estudantes_id', $estudanteId)
+                ->select('t1.name as escola', 't3.nome as rota', 't6.nome as turno')
+                ->first();
+
+                // Verificar correspondência entre motorista e estudante
+                if ($DadosEstudante->escola !== $DadosMotorista->escola) {
+                    return redirect()->back()->with('error', 'Estudante pertence a outra Instituição.');
+                }
+            
+                if ($DadosEstudante->turno !== $DadosMotorista->turno) {
+                    return redirect()->back()->with('error', 'Estudante pertence a outro turno.');
+                }
+            
+                if ($DadosEstudante->rota !== $DadosMotorista->rota) {
+                    return redirect()->back()->with('error', 'Estudante pertence a outra rota.');
+                }
+
+                // Verificar se já existe uma viagem em andamento
+                $ViagemAndamento = DB::table('viagems')
+                ->where('motoristas_id', $motorista->id)
+                ->where('estado', 2)
+                ->exists();
+
+                if ($ViagemAndamento) {
+                    return redirect()->back()->with('error', 'O motorista tem uma viagem em andamento.');
+                }
+
+                // Buscar ou criar a viagem ativa
+                $ViagemAtiva = DB::table('viagems')
+                ->where('motoristas_id', $motorista->id)
+                ->where('estado', 1)
+                ->select('id')
+                ->first();
+
+                if (!$ViagemAtiva) {
+                    $ViagemAtiva = DB::table('viagems')->insertGetId([
+                        'motoristas_id' => $motorista->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                } else {
+                    $ViagemAtiva = $ViagemAtiva->id;
+                }
+
+                // Verificar se o estudante já está a bordo
+                $Abordo = DB::table('dados_viagems')
+                    ->where('estudantes_id', $id)
+                    ->where('viagems_id', $ViagemAtiva)
+                    ->exists();
+
+                if ($Abordo) {
+                    return redirect()->back()->with('error', 'Estudante já foi adicionado.');
+                }
+
+                // Verificar capacidade do veículo
+                $capacidadeAtual = DB::table('dados_viagems')
+                    ->where('viagems_id', $ViagemAtiva)
+                    ->whereNotNull('estudantes_id')
+                    ->count();
+
+                if ($capacidadeAtual >= $DadosMotorista->capacidade) {
+                    return redirect()->back()->with('error', 'Veículo lotado.');
+                }
+
+                // Adicionar estudante à viagem
+                $resultado = DB::table('dados_viagems')->insert([
+                    'estudantes_id' => $id,
+                    'viagems_id' => $ViagemAtiva,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                if ($resultado) {
+                    return redirect()->route('TelaMotorista')->with('sucess', 'Estudante adicionado a bordo.');
+                }
+
+                return redirect()->back()->with('error', 'Erro ao adicionar estudante.');
+
+            }elseif($hora == $HoraRegresso){
+
+                $ViagemIda = DB::table('viagems')
+                    ->where('motoristas_id', $motorista->id)
+                    ->where('estado', 3)
+                    ->exists();
+                if(!$ViagemIda){
+                    return redirect()->back()->with('error', 'Viagem de ida não iniciada, considerado uma falta');
+                }else{
+                    $ViagemIda = DB::table('viagems')
+                    ->where('motoristas_id', $motorista->id)
+                    ->where('estado', 3)
+                    ->update(['estado' => 0]);
+
+                    // Obter dados do motorista
+                    $DadosMotorista = DB::table('users as t1')
+                    ->join('escolas as t2', 't1.id', '=', 't2.users_id')
+                    ->join('veiculos as t3', 't2.id', '=', 't3.escolas_id')
+                    ->join('motoristas_rotas_veiculos as t4', 't3.id', '=', 't4.veiculos_id')
+                    ->join('motoristas as t5', 't5.id', '=', 't4.motoristas_id')
+                    ->join('turnos as t6', 't6.id', '=', 't5.turnos_id')
+                    ->join('rotas as t7', 't7.id', '=', 't4.rotas_id')
+                    ->where('t4.motoristas_id', $motorista->id)
+                    ->select('t1.name as escola', 't7.nome as rota', 't6.nome as turno', 't3.capacidade')
+                    ->first();
+
+                    if (!$DadosMotorista) {
+                        return redirect()->back()->with('error', 'Não estás associado a uma instituição.');
+                    }
+
+                    // Verificar estudante
+                    $estudante = DB::table('estudantes as t1')
+                        ->join('users as t2', 't2.id', '=', 't1.users_id')
+                        ->where('t1.id', $estudanteId)
+                        ->where('t2.estado', 1)
+                        ->first();
+                    if (!$estudante) {
+                        return redirect()->back()->with('error', 'Erro de sistema, não foi possível localizar o estudante.');
+                    }
+
+                    // Verificar se o estudante tem uma instituição ativa
+                    $VerifEscola = estudantes_rotas::where('estudantes_id', $estudanteId)
+                    ->where('estados', 1)
+                    ->exists();
+                    if (!$VerifEscola) {
+                        return redirect()->back()->with('error', 'Estudante sem rota ou sem instituição.');
+                    }
+
+                    // Obter dados do estudante
+                    $DadosEstudante = DB::table('users as t1')
+                    ->join('escolas as t2', 't1.id', '=', 't2.users_id')
+                    ->join('rotas as t3', 't2.id', '=', 't3.escolas_id')
+                    ->join('estudantes_rotas as t4', 't3.id', '=', 't4.rotas_id')
+                    ->join('estudantes as t5', 't5.id', '=', 't4.estudantes_id')
+                    ->join('turnos as t6', 't6.id', '=', 't5.turnos_id')
+                    ->where('t4.estudantes_id', $estudanteId)
+                    ->select('t1.name as escola', 't3.nome as rota', 't6.nome as turno')
+                    ->first();
+
+                    // Verificar correspondência entre motorista e estudante
+                    if ($DadosEstudante->escola !== $DadosMotorista->escola) {
+                        return redirect()->back()->with('error', 'Estudante pertence a outra Instituição.');
+                    }
+                
+                    if ($DadosEstudante->turno !== $DadosMotorista->turno) {
+                        return redirect()->back()->with('error', 'Estudante pertence a outro turno.');
+                    }
+                
+                    if ($DadosEstudante->rota !== $DadosMotorista->rota) {
+                        return redirect()->back()->with('error', 'Estudante pertence a outra rota.');
+                    }
+
+                    // Verificar se já existe uma viagem em andamento
+                    $ViagemAndamento = DB::table('viagems')
+                    ->where('motoristas_id', $motorista->id)
+                    ->where('estado', 2)
+                    ->exists();
+
+                    if ($ViagemAndamento) {
+                        return redirect()->back()->with('error', 'O motorista tem uma viagem em andamento.');
+                    }
+
+                    // Buscar ou criar a viagem ativa
+                    $ViagemAtiva = DB::table('viagems')
+                    ->where('motoristas_id', $motorista->id)
+                    ->where('estado', 1)
+                    ->select('id')
+                    ->first();
+
+                    if (!$ViagemAtiva) {
+                        $ViagemAtiva = DB::table('viagems')->insertGetId([
+                            'motoristas_id' => $motorista->id,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    } else {
+                        $ViagemAtiva = $ViagemAtiva->id;
+                    }
+
+                    // Verificar se o estudante já está a bordo
+                    $Abordo = DB::table('dados_viagems')
+                        ->where('estudantes_id', $id)
+                        ->where('viagems_id', $ViagemAtiva)
+                        ->exists();
+
+                    if ($Abordo) {
+                        return redirect()->back()->with('error', 'Estudante já foi adicionado.');
+                    }
+
+                    // Verificar capacidade do veículo
+                    $capacidadeAtual = DB::table('dados_viagems')
+                        ->where('viagems_id', $ViagemAtiva)
+                        ->whereNotNull('estudantes_id')
+                        ->count();
+
+                    if ($capacidadeAtual >= $DadosMotorista->capacidade) {
+                        return redirect()->back()->with('error', 'Veículo lotado.');
+                    }
+
+                    // Adicionar estudante à viagem
+                    $resultado = DB::table('dados_viagems')->insert([
+                        'estudantes_id' => $id,
+                        'viagems_id' => $ViagemAtiva,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+
+                    if ($resultado) {
+                        return redirect()->route('TelaMotorista')->with('sucess', 'Estudante adicionado a bordo.');
+                    }
+
+                    return redirect()->back()->with('error', 'Erro ao adicionar estudante.');
+
+                }
+
+            }
+        }else{
+            return redirect()->back()->with('error', 'A viagem não pode ser iniciada fora do horário de trabalho');
         }
-    
-        // Verificar estudante
-        $estudante = Estudante::find($id);
-        if (!$estudante) {
-            return redirect()->back()->with('error', 'Erro de sistema, não foi possível localizar o estudante.');
-        }
-    
-        // Verificar se o estudante tem uma instituição ativa
-        $VerifEscola = estudantes_rotas::where('estudantes_id', $estudante->id)
-            ->where('estados', 1)
-            ->exists();
-    
-        if (!$VerifEscola) {
-            return redirect()->back()->with('error', 'Estudante sem instituição.');
-        }
-    
-        // Obter dados do estudante
-        $DadosEstudante = DB::table('users as t1')
-            ->join('escolas as t2', 't1.id', '=', 't2.users_id')
-            ->join('rotas as t3', 't2.id', '=', 't3.escolas_id')
-            ->join('estudantes_rotas as t4', 't3.id', '=', 't4.rotas_id')
-            ->join('estudantes as t5', 't5.id', '=', 't4.estudantes_id')
-            ->join('turnos as t6', 't6.id', '=', 't5.turnos_id')
-            ->where('t4.estudantes_id', $estudante->id)
-            ->select('t1.name as escola', 't3.nome as rota', 't6.nome as turno')
-            ->first();
-    
-        // Verificar correspondência entre motorista e estudante
-        if ($DadosEstudante->escola !== $DadosMotorista->escola) {
-            return redirect()->back()->with('error', 'Estudante pertence a outra Instituição.');
-        }
-    
-        if ($DadosEstudante->turno !== $DadosMotorista->turno) {
-            return redirect()->back()->with('error', 'Estudante pertence a outro turno.');
-        }
-    
-        if ($DadosEstudante->rota !== $DadosMotorista->rota) {
-            return redirect()->back()->with('error', 'Estudante pertence a outra rota.');
-        }
-    
-        // Verificar se já existe uma viagem em andamento
-        $ViagemAndamento = DB::table('viagems')
-            ->where('motoristas_id', $motorista->id)
-            ->where('estado', 2)
-            ->exists();
-    
-        if ($ViagemAndamento) {
-            return redirect()->back()->with('error', 'Tem uma viagem em andamento.');
-        }
-    
-        // Buscar ou criar a viagem ativa
-        $ViagemAtiva = DB::table('viagems')
-            ->where('motoristas_id', $motorista->id)
-            ->where('estado', 1)
-            ->select('id')
-            ->first();
-    
-        if (!$ViagemAtiva) {
-            $ViagemAtiva = DB::table('viagems')->insertGetId([
-                'motoristas_id' => $motorista->id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        } else {
-            $ViagemAtiva = $ViagemAtiva->id;
-        }
-    
-        // Verificar se o estudante já está a bordo
-        $Abordo = DB::table('dados_viagems')
-            ->where('estudantes_id', $id)
-            ->where('viagems_id', $ViagemAtiva)
-            ->exists();
-    
-        if ($Abordo) {
-            return redirect()->back()->with('error', 'Estudante já foi adicionado.');
-        }
-    
-        // Verificar capacidade do veículo
-        $capacidadeAtual = DB::table('dados_viagems')
-            ->where('viagems_id', $ViagemAtiva)
-            ->whereNotNull('estudantes_id')
-            ->count();
-    
-        if ($capacidadeAtual >= $DadosMotorista->capacidade) {
-            return redirect()->back()->with('error', 'Veículo lotado.');
-        }
-    
-        // Adicionar estudante à viagem
-        $resultado = DB::table('dados_viagems')->insert([
-            'estudantes_id' => $id,
-            'viagems_id' => $ViagemAtiva,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-    
-        if ($resultado) {
-            return redirect()->route('TelaMotorista')->with('sucess', 'Estudante adicionado a bordo.');
-        }
-    
-        return redirect()->back()->with('error', 'Erro ao adicionar estudante.');
+
     } 
 
     public function removerEstudanteAbordo($id) {
@@ -345,7 +507,7 @@ class EstudanteController extends Controller
         DB::table('dados_viagems')
             ->where('estudantes_id', $id)
             ->where('viagems_id', $viagemAtiva->id)
-            ->update(['estudantes_id' => null]);
+            ->delete();
     
         return redirect()->back()->with('success', 'Estudante removido com sucesso.');
     }
