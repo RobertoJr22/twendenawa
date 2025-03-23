@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\StoreResponsavelRequest;
 use app\Models;
 use App\Models\escolas_motoristas;

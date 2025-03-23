@@ -1,6 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
+
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use App\Models\escola;
 use App\Models\rota;
 use App\Models\marca;
