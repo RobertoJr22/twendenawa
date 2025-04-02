@@ -23,10 +23,11 @@
                 <p><strong>Data de Nascimento:</strong> {{ $responsavel->DataNascimento ?: 'Sem dados' }}</p>
                 <p><strong>endereço:</strong> {{ $responsavel->endereco ?: 'Sem dados' }}</p>
                 <p><strong>Telefone:</strong> {{ $responsavel->telefone ?: 'Sem dados' }}</p>
-
-                <div class="text-center">
-                    <a href="{{ route('DesfazerConexao',$responsavel->id)}}" class="btn">Desfazer Conexão</a>
-                </div>
+                @if(auth()->user()->tipo_usuario_id == 2)
+                    <div class="text-center">
+                        <a href="{{ route('DesfazerConexao',$responsavel->id)}}" class="btn">Desfazer Conexão</a>
+                    </div>
+                @endif
             </div>
         </div>
 

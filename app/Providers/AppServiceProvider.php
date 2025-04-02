@@ -6,6 +6,7 @@ use App\Helpers\dados;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Helpers\Helper;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $view->with('helper', new Helper);
         });
+
+        URL::forceScheme('https');
 
     }
 }

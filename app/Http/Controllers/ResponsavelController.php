@@ -193,9 +193,21 @@ class ResponsavelController extends Controller
             't1.id as id'
         )
         ->first();
+
+        $responsaveis = DB::table('estudantes_responsavels as t1')
+        ->join('responsavels as t2','t2.id','=','t1.responsavels_id')
+        ->join('users as t3','t3.id','=','t2.users_id')
+        ->select(
+            't2.id',
+            't3.name as nome'
+        )
+        ->where('t1.estado','=',1)
+        ->where('t1.estudantes_id',$id)
+        ->whereNot('t1.responsavels_id',$responsavel->id)
+        ->get();
     
     
-        return view('Estudante.InfoEstudante', compact('estudantes'));
+        return view('Estudante.InfoEstudante', compact('estudantes','responsaveis'));
     }
 
     public function DesfazerConexao($id){

@@ -101,7 +101,8 @@ class EstudanteController extends Controller
                         't5.HoraIda',
                         't5.HoraRegresso'
                     )
-                    ->where('t1.estado', 1)
+                    ->where('t1.estado', 2)
+                    ->where('t2.estudantes_id', $estudante->id)
                     ->first();
         
         // Recupera as notificações do responsável, ordenando as mais recentes primeiro
@@ -158,6 +159,7 @@ class EstudanteController extends Controller
 
 
     public function InfoEstudante(){
+
         return view('Estudante.InfoEstudante');
     }
 

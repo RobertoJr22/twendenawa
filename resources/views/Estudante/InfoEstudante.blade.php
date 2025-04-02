@@ -33,6 +33,24 @@
                     {{ $estudantes->PontoA ?: 'Sem dados' }} -
                     {{ $estudantes->PontoB ?: 'Sem dados' }}
                 </p>
+                 <!-- Responsaveis do estudante -->
+                 <div id="Outros-Responsaveis" class="card mt-3">
+                    <h5>Outros responsáveis do estudante</h5>
+                    <div class="card-body">
+                        <div class="list-group overflow">
+                        @if ($responsaveis->isEmpty())
+                            <span>Nenhum outro responsável</span>
+                        @else
+                            @foreach($responsaveis as $responsavel)
+                                <a href="{{route('InfoResponsavel',$responsavel->id)}}" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
+                                    <span>{{ $responsavel->nome }}</span>
+                                    <span>Ver Mais</span>
+                                </a>
+                            @endforeach
+                        @endif
+                        </div>
+                    </div>
+                </div>
                 <div class="text-center">
                     <a href="{{ route('DesfazerConexao',$estudantes->id)}}" class="btn">Desfazer Conexão</a>
                 </div>

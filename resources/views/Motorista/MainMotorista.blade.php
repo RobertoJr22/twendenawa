@@ -81,9 +81,7 @@
                         Localização em Tempo Real <ion-icon name="navigate-circle-outline"></ion-icon>
                     </div>
                     <div class="card-body">
-                        <div class="map-container">
-                            Mapa interativo (em desenvolvimento)
-                        </div>
+                        <div id="map" class="map-container" style="height: 400px;"></div>
                         <!-- Botão para iniciar/pausar a viagem -->
                         <div class="text-center mt-3">
                             <button class="btn viagem">Iniciar Viagem <ion-icon name="play-outline"></ion-icon></button>
@@ -91,47 +89,55 @@
                         </div>
                     </div>                   
                 </div>
-                <!-- Estudantes a bordo -->
-                <div class="card">
-                    <div class="card-header">
-                        Estudantes a bordo <ion-icon name="bus-outline"></ion-icon>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group notificacoes">
-                            @if($aBordo->isEmpty())
-                                <p>Sem estudantes a bordo</p>
-                            @else
-                                @foreach($aBordo as $estudante)
-                                    <a href="#" id="btn-lista" class="btn d-flex justify-content-between align-items-center mb-3">
-                                        <span>{{$estudante->nome}}</span>
-                                        <span>Ver Mais</span>
-                                    </a>
-                                @endforeach
-                            @endif
-                        </div>
-                        <!-- Botão de Voltar -->
-                        <div class="text-center">
-                            <a href="/Estudante/SelecaoEstudante" class="btn">Adicionar</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Relatório de Eventualidades -->
-                <div class="card mt-3">
-                    <div class="card-header">
-                        Relatório de Eventualidades <ion-icon name="alert-circle-outline"></ion-icon>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{route('EnviarRelatorio')}}" method="post">
-                            @csrf
-                            <textarea class="form-control" name="relatorio" rows="4" placeholder="Informe qualquer eventualidade na viagem..."></textarea>
-                            <button type="submit" class="btn .btn-custom mt-3">Enviar Relatório</button>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 </div>
+
+@section('scripts')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    iniciarMapa(latitude, longitude);
+                }, function() {
+                    iniciarMapa(-8.839988, 13.289437);
+                }, { enableHighAccuracy: true });
+
+                navigator.geolocation.watchPosition(function(position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    atualizarPosicao(latitude, longitude);
+                }, function() {
+                    console.log("Erro ao obter atualização de posição");
+                }, { enableHighAccuracy: true });
+            } else {
+                iniciarMapa(-8.839988, 13.289437);
+            }
+        });
+
+        var map, marker;
+        function iniciarMapa(latitude, longitude) {
+            map = L.map('map').setView([latitude, longitude], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            marker = L.marker([latitude, longitude]).addTo(map)
+                .bindPopup("<b>Posição Atual</b>")
+                .openPopup();
+        }
+
+        function atualizarPosicao(latitude, longitude) {
+            if (marker) {
+                marker.setLatLng([latitude, longitude]);
+                map.setView([latitude, longitude]);
+            }
+        }
+    </script>
+@endsection
 
 @endsection
