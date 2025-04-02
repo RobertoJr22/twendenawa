@@ -138,6 +138,21 @@
             }
         }
     </script>
+
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script>
+    const socket = io('http://localhost:6001'); // porta do websocket
+
+    socket.on('connect', () => {
+        console.log("Conectado ao servidor WebSocket!");
+        alert("Conectado ao servidor WebSocket!");
+    });
+
+    socket.on('disconnect', () => {
+        console.log("Desconectado do servidor WebSocket.");
+    });
+</script>
+
 @endsection
 
 @endsection

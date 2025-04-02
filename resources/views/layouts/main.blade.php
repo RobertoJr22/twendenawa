@@ -11,9 +11,12 @@
     <!-- Link do CSS -->
     <link rel="stylesheet" href="/css/estilo.css">
 
+ 
+
     <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
 
     <script src="script.js"></script>
+    @vite('resources/js/app.js')
     
 </head>
 <body>
