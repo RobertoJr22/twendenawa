@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
-class StudentEventNotification extends Notification
+class StudentEventNotification extends Notification implements ShouldQueue  
 {
     use Queueable;
 
