@@ -133,75 +133,68 @@
 </div>
 
 @endsection
-
 @section('scripts')
-    <!-- Leaflet CSS e JS -->  
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />  
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>  
-    
-    <!-- Socket.IO -->
-    <script src="https://cdn.socket.io/4.4.0/socket.io.min.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/css/ionicons.min.css" />
 
-    <script>
-        let map;
-        let marker;
+<script>
 
-        document.addEventListener("DOMContentLoaded", function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var latitude = position.coords.latitude;
-                    var longitude = position.coords.longitude;
-                    iniciarMapa(latitude, longitude);
-                }, function() {
-                    iniciarMapa(-8.839988, 13.289437); // Posição padrão
-                }, { enableHighAccuracy: true });
-            } else {
-                iniciarMapa(-8.839988, 13.289437);
-            }
+    const motoristaId = "{{ $motoristaId }}"; // Corrigido para passar o ID do motorista
+    const viagemId = "{{ $viagem->id ?? '' }}";
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                iniciarMapa(position.coords.latitude, position.coords.longitude);
+            }, function() {
+                iniciarMapa(-8.839988, 13.289437); // fallback
+            }, { enableHighAccuracy: true });
+        } else {
+            iniciarMapa(-8.839988, 13.289437);
+        }
+    });
+
+    function iniciarMapa(latitude, longitude) {
+        let map = L.map('map').setView([latitude, longitude], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        let marker = L.marker([latitude, longitude]).addTo(map)
+            .bindPopup("<b>Você está aqui</b>")
+            .openPopup();
+
+        const socket = io("https://3b27-102-214-36-123.ngrok-free.app", { transports: ["websocket"] }); // ou seu domínio público
+
+        socket.on("connect", () => {
+            console.log("✅ Conectado ao Socket.IO:", socket.id);
         });
 
-        function iniciarMapa(latitude, longitude) {
-            map = L.map('map').setView([latitude, longitude], 15);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(map);
+        navigator.geolocation.watchPosition((position) => {
+            const localizacao = {
+                motorista_id: motoristaId,
+                viagem_id: viagemId,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            };
 
-            // Criar marcador inicial
-            marker = L.marker([latitude, longitude]).addTo(map)
-                .bindPopup("<b>Posição Atual</b>")
-                .openPopup();
+            socket.emit("localizacao", localizacao);
 
-            //const socket = io('http://localhost:6001');
-
-            const socket = io("https://7b30-102-214-36-184.ngrok-free.app", {
-                transports: ["websocket"]
-            });
-
-
-            socket.on("connect", () => {
-                console.log("✅ Conectado ao servidor Socket.IO com ID:", socket.id);
-            });
-
-            navigator.geolocation.watchPosition((position) => {
-                const localizacao = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                };
-
-                console.log("📍 Enviando localização:", localizacao);
-                socket.emit("localizacao", localizacao);
-
-                // Atualizar marcador no mapa
-                if (marker) {
-                    marker.setLatLng([localizacao.latitude, localizacao.longitude]);
-                    map.setView([localizacao.latitude, localizacao.longitude]);
-                }
-            });
-
-            socket.on("atualizacao-localizacao", (data) => {
-                console.log("📡 Atualização recebida:", data);
-            });
-        }
-    </script>
+            marker.setLatLng([localizacao.latitude, localizacao.longitude]);
+            map.setView([localizacao.latitude, localizacao.longitude]);
+        }, (err) => {
+            console.error("Erro ao rastrear:", err);
+        }, {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 10000
+        });
+    }
+</script>
 @endsection
+
 

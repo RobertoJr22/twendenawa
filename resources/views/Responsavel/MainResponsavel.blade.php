@@ -45,7 +45,7 @@
                                     <span>Sem estudantes em viagens ativas</span>
                                 @else
                                     @foreach($viagens as $viagem)
-                                    <a href="{{route('DetalhesViagem',$viagens->IdEstudante)}}" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
+                                    <a href="{{route('DetalhesViagem',$viagem->IdEstudante)}}" class="student-link btn btn-lista d-flex justify-content-between align-items-center mb-3">
                                         <span>{{$viagem->NomeEstudante}}</span>
                                         <span>Ver Mais</span>
                                     </a>

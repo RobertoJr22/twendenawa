@@ -29,87 +29,97 @@ class EstudanteController extends Controller
         return view('Estudante.CadastrarEstudante');
     }
 
-    public function MainEstudante(){
+    public function MainEstudante() {
         $user = Auth::user();
-
         $estudante = $user->estudante;
-
         $turno = $estudante->turno;
-
+    
         $rota = DB::table('rotas as t1')
-                    ->join('estudantes_rotas as t2','t2.rotas_id','=','t1.id')
-                    ->where('t2.estudantes_id','=',$estudante->id)
-                    ->where('t2.estados','=',1)
-                    ->select('t1.nome as nome','t1.PontoA as PontoA', 't1.PontoB as PontoB')->first();
+            ->join('estudantes_rotas as t2','t2.rotas_id','=','t1.id')
+            ->where('t2.estudantes_id','=',$estudante->id)
+            ->where('t2.estados','=',1)
+            ->select('t1.nome as nome','t1.PontoA as PontoA', 't1.PontoB as PontoB')
+            ->first();
+    
         $responsaveis = DB::table('Responsavels as t1')
-                    ->join('users as t2', 't2.id', '=', 't1.users_id')
-                    ->join('estudantes_responsavels as t3', 't3.responsavels_id', '=', 't1.id')
-                    ->where('t3.estudantes_id', '=', $estudante->id)
-                    ->where('t3.estado', '=', 1)
-                    ->select('t2.name as nome','t1.id')
-                    ->get();
+            ->join('users as t2', 't2.id', '=', 't1.users_id')
+            ->join('estudantes_responsavels as t3', 't3.responsavels_id', '=', 't1.id')
+            ->where('t3.estudantes_id', '=', $estudante->id)
+            ->where('t3.estado', '=', 1)
+            ->select('t2.name as nome','t1.id')
+            ->get();
+    
         $escola = DB::table('escolas_estudantes as t0')
-                    ->join('escolas as t1','t1.id','=','t0.escolas_id')
-                    ->join('users as t2', 't2.id', '=', 't1.users_id')
-                    ->join('bairros as t3','t3.id','=','t1.bairros_id')
-                    ->join('distritos as t4','t4.id','=','t3.distritos_id')
-                    ->join('municipios as t5','t5.id','=','t4.municipios_id')
-                    ->select(
-                            't1.id',
-                            't1.telefone',
-                            't2.name as nome',
-                            't1.foto',
-                            't2.email',
-                            't5.nome as municipio',
-                            't4.nome as distrito',
-                            't3.nome as bairro'
-                            )
-                    ->where('t0.estado',1)
-                    ->where('t0.estudantes_id',$estudante->id)
-                    ->first();
+            ->join('escolas as t1','t1.id','=','t0.escolas_id')
+            ->join('users as t2', 't2.id', '=', 't1.users_id')
+            ->join('bairros as t3','t3.id','=','t1.bairros_id')
+            ->join('distritos as t4','t4.id','=','t3.distritos_id')
+            ->join('municipios as t5','t5.id','=','t4.municipios_id')
+            ->select(
+                't1.id',
+                't1.telefone',
+                't2.name as nome',
+                't1.foto',
+                't2.email',
+                't5.nome as municipio',
+                't4.nome as distrito',
+                't3.nome as bairro'
+            )
+            ->where('t0.estado',1)
+            ->where('t0.estudantes_id',$estudante->id)
+            ->first();
+    
         $escolas = DB::table('escolas_estudantes as t1')
-                    ->join('escolas as t2','t2.id','=','t1.escolas_id')
-                    ->join('users as t3','t3.id','=','t2.users_id')
-                    ->select(
-                                't2.id',
-                                't3.name as nome'
-                            )
-                    ->where('t1.estudantes_id',$estudante->id)
-                    ->where('t1.estado',2)
-                    ->get();
-
+            ->join('escolas as t2','t2.id','=','t1.escolas_id')
+            ->join('users as t3','t3.id','=','t2.users_id')
+            ->select(
+                't2.id',
+                't3.name as nome'
+            )
+            ->where('t1.estudantes_id',$estudante->id)
+            ->where('t1.estado',2)
+            ->get();
+    
         $viagem = DB::table('viagems as t1')
-                    ->join('dados_viagems as t2', 't1.id', '=', 't2.viagems_id')
-                    ->join('motoristas as t3', 't1.motoristas_id', '=', 't3.id')
-                    ->join('users as t4', 't4.id', '=', 't3.users_id')
-                    ->join('turnos as t5', 't5.id', '=', 't3.turnos_id')
-                    ->join('motoristas_rotas_veiculos as t6', function($join) {
-                        $join->on('t6.motoristas_id', '=', 't3.id')
-                             ->where('t6.estado', '=', 1);
-                    })
-                    ->join('veiculos as t7', 't7.id', '=', 't6.veiculos_id')
-                    ->join('modelos as t8', 't8.id', '=', 't7.modelos_id')
-                    ->join('marcas as t9', 't9.id', '=', 't8.marcas_id')
-                    ->join('rotas as t10', 't10.id', '=', 't6.rotas_id')
-                    ->select(
-                        't8.nome as modelo',
-                        't9.nome as marca',
-                        't7.Matricula',
-                        't4.name as motorista',
-                        't10.PontoA',
-                        't10.PontoB',
-                        't5.HoraIda',
-                        't5.HoraRegresso'
-                    )
-                    ->where('t1.estado', 2)
-                    ->where('t2.estudantes_id', $estudante->id)
-                    ->first();
-        
-        // Recupera as notificações do responsável, ordenando as mais recentes primeiro
+            ->join('dados_viagems as t2', 't1.id', '=', 't2.viagems_id')
+            ->join('motoristas as t3', 't1.motoristas_id', '=', 't3.id')
+            ->join('users as t4', 't4.id', '=', 't3.users_id')
+            ->join('turnos as t5', 't5.id', '=', 't3.turnos_id')
+            ->join('motoristas_rotas_veiculos as t6', function($join) {
+                $join->on('t6.motoristas_id', '=', 't3.id')
+                     ->where('t6.estado', '=', 1);
+            })
+            ->join('veiculos as t7', 't7.id', '=', 't6.veiculos_id')
+            ->join('modelos as t8', 't8.id', '=', 't7.modelos_id')
+            ->join('marcas as t9', 't9.id', '=', 't8.marcas_id')
+            ->join('rotas as t10', 't10.id', '=', 't6.rotas_id')
+            ->select(
+                't1.motoristas_id', // <--- adicionado aqui
+                't8.nome as modelo',
+                't9.nome as marca',
+                't7.Matricula',
+                't4.name as motorista',
+                't10.PontoA',
+                't10.PontoB',
+                't5.HoraIda',
+                't5.HoraRegresso',
+                't1.estado'
+            )
+            ->whereIn('t1.estado',[1,2])
+            ->where('t2.estudantes_id', $estudante->id)
+            ->first();
+    
         $notificacoes = $estudante->notifications()->orderBy('created_at', 'desc')->get();
 
-        return view('Estudante.MainEstudante', compact('escolas','estudante','turno','rota', 'user', 'escola','responsaveis', 'notificacoes','viagem'));
+
+    
+        return view('Estudante.MainEstudante', compact(
+            'escolas','estudante','turno','rota', 'user', 'escola','responsaveis', 'notificacoes','viagem'
+        ) + [
+            'motoristaId' => $viagem?->motoristas_id
+        ]);
     }
+    
 
     public function DetalhesViagem(){
         return view('Estudante.DetalhesViagem');
@@ -485,6 +495,7 @@ class EstudanteController extends Controller
             return redirect()->back()->with('error', 'A viagem não pode ser iniciada fora do horário de trabalho');
         }
 
+        return redirect()->back()->with('error', 'Horário inválido para adicionar estudante.');
     } 
 
     public function removerEstudanteAbordo($id) {

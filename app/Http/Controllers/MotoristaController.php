@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreMotoristaRequest;
 use App\Models\carteira;
 use App\Models\turno;
+use App\Models\viagem;
 
 class MotoristaController extends Controller
 {
@@ -29,51 +30,58 @@ class MotoristaController extends Controller
         $motorista = $user->motorista;
         $carteira = $motorista->carteira;
         $turno = $motorista->turno;
-        $rota = $motorista->rota; 
-
+        $rota = $motorista->rota;
+        $motoristaId = $motorista->id;
+    
         $escola = DB::table('escolas as t1')
-        ->join('escolas_motoristas as t2','t2.escolas_id','=','t1.id')
-        ->join('users as t3','t3.id','=','t1.users_id')
-        ->join('bairros as t4','t4.id','=','t1.bairros_id')
-        ->join('distritos as t5','t5.id','=','t4.distritos_id')
-        ->join('municipios as t6','t6.id','=','t5.municipios_id')
-        ->whereIn('t2.estado',[1,2])
-        ->where('t2.motoristas_id','=',$motorista->id)
-        ->select(
+            ->join('escolas_motoristas as t2', 't2.escolas_id', '=', 't1.id')
+            ->join('users as t3', 't3.id', '=', 't1.users_id')
+            ->join('bairros as t4', 't4.id', '=', 't1.bairros_id')
+            ->join('distritos as t5', 't5.id', '=', 't4.distritos_id')
+            ->join('municipios as t6', 't6.id', '=', 't5.municipios_id')
+            ->whereIn('t2.estado', [1, 2]) // Verificando se o motorista está ativo ou em andamento
+            ->where('t2.motoristas_id', '=', $motorista->id)
+            ->select(
                 't1.id',
                 't3.name as nome',
                 't1.telefone',
                 't3.email as email',
                 't6.nome as municipio',
                 't5.nome as distrito',
-                't4.nome as bairro')
-        ->first();
-
-        $dados = motoristas_rotas_veiculos::where('motoristas_id', $motorista->id)
-        ->where('estado', 1)
-        ->with([
-            'rota.escola',         // Escola associada à rota
-            'veiculo.escola',      // Escola associada ao veículo
-            'veiculo.modelo.marcas', // Marca do veículo via modelo
-            'motorista.carteira'   // Carteira do motorista
-        ])
-        ->first(); // Pegando apenas um resultado
-
-        $aBordo = DB::table('dados_viagems as t1')
-                    ->where('t1.estado','=',1)
-                    ->join('estudantes as t2','t2.id','=','t1.estudantes_id')
-                    ->join('users as t3','t3.id','=','t2.users_id')
-                    ->join('viagems as t4','t4.id','=','t1.viagems_id')
-                    ->where('t4.estado','=',1)
-                    ->select(
-                        't2.id',
-                        't3.name as nome'
-                    )->get();
-                    
+                't4.nome as bairro'
+            )
+            ->first();
     
-        
-        return view('Motorista.MainMotorista', compact('user', 'motorista','dados', 'carteira','turno','rota','aBordo','escola'));
+        $dados = motoristas_rotas_veiculos::where('motoristas_id', $motorista->id)
+            ->where('estado', 1)
+            ->with([
+                'rota.escola',         // Escola associada à rota
+                'veiculo.escola',      // Escola associada ao veículo
+                'veiculo.modelo.marcas', // Marca do veículo via modelo
+                'motorista.carteira'   // Carteira do motorista
+            ])
+            ->first(); // Pegando apenas um resultado
+    
+        $aBordo = DB::table('dados_viagems as t1')
+            ->where('t1.estado', '=', 1)
+            ->join('estudantes as t2', 't2.id', '=', 't1.estudantes_id')
+            ->join('users as t3', 't3.id', '=', 't2.users_id')
+            ->join('viagems as t4', 't4.id', '=', 't1.viagems_id')
+            ->where('t4.estado', '=', 1)
+            ->select(
+                't2.id',
+                't3.name as nome'
+            )
+            ->get();
+    
+        // Recupera a viagem associada ao motorista
+        $viagem = viagem::where('motoristas_id', $motorista->id)
+            ->whereIn('estado', [1, 2]) // Verificando se a viagem está ativa ou em andamento
+            ->first();
+    
+        return view('Motorista.MainMotorista', compact('user','motoristaId', 'motorista', 'dados', 'carteira', 'turno', 'rota', 'aBordo', 'escola', 'viagem'));
     }
+    
 
     public function RegistrarMotorista(StoreMotoristaRequest $request){
 

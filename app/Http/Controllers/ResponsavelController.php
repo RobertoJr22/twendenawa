@@ -89,8 +89,8 @@ class ResponsavelController extends Controller
         ->join('users as t5','t5.id','=','t2.users_id')
         ->join('responsavels as t6','t6.id','=','t3.responsavels_id')
         ->where('t3.responsavels_id','=',$responsavel->id)
-        ->where('t4.estado','=',1)
-        ->select('t2.id as IdEstudante','t5.name as Nome')->get();
+        ->whereIn('t4.estado',[1,2])
+        ->select('t2.id as IdEstudante','t5.name as NomeEstudante')->get();
     
 
 
@@ -125,6 +125,7 @@ class ResponsavelController extends Controller
         ->join('users as t15','t15.id','=','t7.users_id')  //para  escolas
         ->select(
             't1.id',
+            't1.motoristas_id',
             't4.name as Estudante',
             't3.DataNascimento',
             't15.name as Escola',
@@ -135,7 +136,7 @@ class ResponsavelController extends Controller
             't6.nome as rota',
             't6.PontoA',
             't6.PontoB',
-            't8.HoraInicio',
+            't8.HoraIda',
             't8.HoraRegresso',
             't14.nome as marca',
             't13.nome as modelo',
@@ -143,7 +144,7 @@ class ResponsavelController extends Controller
             't12.capacidade',
             't8.nome as Turno'
         )
-        ->where('t1.estado', 2)
+        ->whereIn('t1.estado',[1,2])
         ->where('t11.estado', 1)
         ->where('t3.id',$id)
         ->first();
