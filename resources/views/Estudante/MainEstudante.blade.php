@@ -190,7 +190,7 @@
 
     let marker = L.marker([-8.8383, 13.2344]).addTo(map);
 
-    const socket = io("https://3b27-102-214-36-123.ngrok-free.app", { transports: ["websocket"] });
+    const socket = io("https://35c0-102-214-36-123.ngrok-free.app", { transports: ["websocket"] });
 
     socket.on("connect", () => {
         console.log("Conectado ao socket com ID:", socket.id);
