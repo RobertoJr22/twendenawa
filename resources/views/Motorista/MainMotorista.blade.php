@@ -83,8 +83,8 @@
                         <div id="map" class="map-container" style="height: 400px;"></div>
                         <!-- Botão para iniciar/pausar a viagem -->
                         <div class="text-center mt-3">
-                            <button class="btn viagem" id="iniciar-viagem">Iniciar Viagem <ion-icon name="play-outline"></ion-icon></button>
-                            <button class="btn viagem" id="parar-viagem">Parar Viagem <ion-icon name="stop-outline"></ion-icon></button>
+                            <a href="{{route('ComecarViagem')}}" class="btn viagem" id="iniciar-viagem">Iniciar Viagem <ion-icon name="play-outline"></ion-icon></a>
+                            <a class="btn viagem" id="parar-viagem">Parar Viagem <ion-icon name="stop-outline"></ion-icon></a>
                         </div>
                     </div>                   
                 </div>
@@ -100,7 +100,7 @@
                                 <p>Sem estudantes a bordo</p>
                             @else
                                 @foreach($aBordo as $estudante)
-                                    <a href="#" id="btn-lista" class="btn d-flex justify-content-between align-items-center mb-3">
+                                    <a href="{{route('InfoEstudanteAbordo', $estudante->id)}}" id="btn-lista" class="btn d-flex justify-content-between align-items-center mb-3">
                                         <span>{{$estudante->nome}}</span>
                                         <span>Ver Mais</span>
                                     </a>
@@ -168,7 +168,7 @@
             .bindPopup("<b>Você está aqui</b>")
             .openPopup();
 
-        const socket = io("https://35c0-102-214-36-123.ngrok-free.app", { transports: ["websocket"] }); // ou seu domínio público
+        const socket = io("https://a527-102-214-36-172.ngrok-free.app", { transports: ["websocket"] }); // ou seu domínio público
 
         socket.on("connect", () => {
             console.log("✅ Conectado ao Socket.IO:", socket.id);

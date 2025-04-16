@@ -13,6 +13,8 @@ use App\Models\User;
 use App\Models\motoristas_rotas_veiculos;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\StudentEventNotification; // Adjust the namespace if necessary
+use App\Notifications\EstudanteEventNotification; // Import the missing class
 use App\Http\Requests\StoreMotoristaRequest;
 use App\Models\carteira;
 use App\Models\turno;
@@ -130,17 +132,17 @@ class MotoristaController extends Controller
         return redirect()->route('TelaMotorista')->with('sucess','Bem vindo ao Twendenawa');
     }
 
-    public function ComecarViagem($id){
+    public function ComecarViagem(){
 
         $motorista = Auth::user()->motorista;
         $hora = now()->format('H');
 
         $Horaturno = DB::table('turnos as t1')
         ->where('t1.id','=',$motorista->turnos_id)
-        ->select('t1.HoraInicio','t1.HoraRegresso')
+        ->select('t1.HoraIda','t1.HoraRegresso')
         ->first();
 
-        $HoraIda = \Carbon\Carbon::parse($Horaturno->HoraInicio)->format('H');
+        $HoraIda = \Carbon\Carbon::parse($Horaturno->HoraIda)->format('H');
         $HoraRegresso = \Carbon\Carbon::parse($Horaturno->HoraRegresso)->format('H');
 
         if($hora >= $HoraIda && $hora <= $HoraRegresso){
@@ -168,8 +170,28 @@ class MotoristaController extends Controller
                 ->where('t1.id','=',$ViagemId)
                 ->update(['estado'=>2]);
 
-                if ($comecar > 0) { 
-                    return redirect()->route('TelaMotorista')->with('success', 'Viagem iniciada com sucesso');
+                if ($comecar > 0) {
+                    try {
+                        $idsEstudantes = DB::table('dados_viagems')
+                            ->where('viagems_id', $ViagemId)
+                            ->whereNotNull('estudantes_id')
+                            ->pluck('estudantes_id');
+                    
+                        $estudantes = \App\Models\Estudante::whereIn('id', $idsEstudantes)->get();
+                    
+                        foreach ($estudantes as $estudante) {
+                            // Enviar a notificação para os responsáveis
+                            StudentEventNotification::notifyResponsaveis('trip_start', $estudante);
+                            //enviar para os estudantes
+                            EstudanteEventNotification::NotifyEstudante('trip_start', $estudante->id);
+                        }
+                    
+                        return redirect()->route('TelaMotorista')->with('success', 'Viagem iniciada com sucesso');
+                    } catch (\Exception $e) {
+                        // Caso ocorra um erro no envio da notificação ou em outra parte do código
+                        return redirect()->route('TelaMotorista')->with('error', 'Erro ao iniciar a viagem. Tente novamente.');
+                    }
+                    
                 } else {
                     return redirect()->route('TelaMotorista')->with('error', 'Erro ao iniciar a viagem ou já está em andamento');
                 }
@@ -181,5 +203,47 @@ class MotoristaController extends Controller
             return redirect()->route('TelaMotorista')->with('error','A viagem não pode ser iniciada fora do horário de trabalho');
         }
     }
-    
+    public function TerminarViagem(){
+
+    }
+
+    public function InfoEstudanteAbordo($estudanteId){
+        $motorista = Auth::user()->motorista;
+        $estudantes = DB::table('estudantes as t1')
+        ->join('users as t2', 't2.id', '=', 't1.users_id')
+        ->join('turnos as t4', 't4.id', '=', 't1.turnos_id')
+        ->leftJoin('estudantes_rotas as t5', 't5.estudantes_id', '=', 't1.id')
+        ->leftJoin('rotas as t6', 't6.id', '=', 't5.rotas_id')
+        ->leftJoin('escolas as t7', 't7.id', '=', 't6.escolas_id')
+        ->leftJoin('users as t8', 't8.id', '=', 't7.users_id')
+        ->where('t1.id', $estudanteId)
+        ->select(
+            't4.HoraRegresso as HoraRegresso',
+            't4.HoraIda as HoraIda',
+            't4.nome as Turno',
+            't6.PontoB as PontoB',
+            't6.PontoA as PontoA',
+            't6.nome as NomeRota',
+            't8.name as escola',
+            't2.name as NomeEstudante',
+            't1.DataNascimento as datanascimento',
+            't1.telefone',
+            't1.foto as foto',
+            't1.id as id'
+        )
+        ->first();
+
+        $responsaveis = DB::table('estudantes_responsavels as t1')
+        ->join('responsavels as t2','t2.id','=','t1.responsavels_id')
+        ->join('users as t3','t3.id','=','t2.users_id')
+        ->select(
+            't2.id',
+            't3.name as nome'
+        )
+        ->where('t1.estado','=',1)
+        ->where('t1.estudantes_id',$estudanteId)
+        ->get();
+
+        return view('Estudante.InfoEstudante',compact('estudantes', 'responsaveis'));	
+    }
 }

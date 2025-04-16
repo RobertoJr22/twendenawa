@@ -35,7 +35,11 @@
                 </p>
                  <!-- Responsaveis do estudante -->
                  <div id="Outros-Responsaveis" class="card mt-3">
-                    <h5>Outros responsáveis do estudante</h5>
+                    @if(auth()->user()->tipo_usuario_id == 3)
+                        <h5>Responsáveis do estudante</h5>
+                    @else
+                        <h5>Outros responsáveis do estudante</h5>
+                    @endif
                     <div class="card-body">
                         <div class="list-group overflow">
                         @if ($responsaveis->isEmpty())
@@ -51,9 +55,11 @@
                         </div>
                     </div>
                 </div>
+                @if(auth()->user()->tipo_usuario_id == 4)
                 <div class="text-center">
                     <a href="{{ route('DesfazerConexao',$estudantes->id)}}" class="btn">Desfazer Conexão</a>
                 </div>
+                @endif
             </div>
         </div>
 
