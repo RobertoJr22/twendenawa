@@ -19,6 +19,8 @@ use App\Models\estudantes_rotas;
 use App\Models\motoristas_rotas_veiculos;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Notifications\StudentEventNotification;
+use App\Notifications\EstudanteEventNotification;
 
 
 use function Laravel\Prompts\select;
@@ -483,6 +485,9 @@ class EstudanteController extends Controller
                     ]);
 
                     if ($resultado) {
+                        $estudante = estudante::find($estudanteId);
+                        StudentEventNotification::notifyResponsaveis('enter', $estudante);
+                        EstudanteEventNotification::NotifyEstudante('enter', $estudanteId);
                         return redirect()->route('TelaMotorista')->with('sucess', 'Estudante adicionado a bordo.');
                     }
 
@@ -526,7 +531,11 @@ class EstudanteController extends Controller
             ->where('estudantes_id', $id)
             ->where('viagems_id', $viagemAtiva->id)
             ->delete();
-    
+
+            $estudante = estudante::find($id);
+        
+        StudentEventNotification::notifyResponsaveis('exit', $estudante);
+        EstudanteEventNotification::NotifyEstudante('exit', $id);            
         return redirect()->back()->with('success', 'Estudante removido com sucesso.');
     }
 
