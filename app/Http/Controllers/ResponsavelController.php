@@ -157,6 +157,7 @@ class ResponsavelController extends Controller
                                 't1.created_at'
                             )
                             ->where('t2.id',$viagem->id)
+                            ->whereNotNull('t1.relatorio')
                             ->get();
         }
 

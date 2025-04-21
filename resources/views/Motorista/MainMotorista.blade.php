@@ -168,7 +168,7 @@
             .bindPopup("<b>Você está aqui</b>")
             .openPopup();
 
-        const socket = io("https://a527-102-214-36-172.ngrok-free.app", { transports: ["websocket"] }); // ou seu domínio público
+        const socket = io("https://2e15-102-218-85-229.ngrok-free.app", { transports: ["websocket"] }); // ou seu domínio público
 
         socket.on("connect", () => {
             console.log("✅ Conectado ao Socket.IO:", socket.id);
