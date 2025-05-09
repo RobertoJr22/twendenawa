@@ -160,7 +160,9 @@ class ResponsavelController extends Controller
                             ->whereNotNull('t1.relatorio')
                             ->get();
         }
-
+        if(!$viagem){
+            return redirect()->back()->with('error','Viagem não encontrada ou ja terminada');
+        }
         return view('Estudante.DetalhesViagem',compact('viagem', 'user', 'responsavel', 'relatorios'));
     }
 

@@ -48,11 +48,6 @@
                 @endforeach
             @endif
         </div>
-
-        <!-- Botão de Voltar -->
-        <div class="text-center">
-            <a href="url()->previous()" class="btn">Voltar</a>
-        </div>
         <div id="space"></div>
     </div>
     @endif

@@ -23,6 +23,7 @@ Route::middleware(['auth', VerificarEstadoUsuario::class])->group(function () {
     Route::post('/EnviarRelatorio/Viagem', [EstudanteController::class, 'EnviarRelatorio'])->name('EnviarRelatorio');
     Route::get('InfoEstudanteAbordo/{id}',[MotoristaController::class,'InfoEstudanteAbordo'])->name('InfoEstudanteAbordo');
     Route::get('IniciarViagem', [MotoristaController::class, 'ComecarViagem'])->name('ComecarViagem');
+    Route::get('FinalizarViagem', [MotoristaController::class, 'TerminarViagem'])->name('TerminarViagem');
 
     /* Estudante*/
     Route::get('/Estudante/CadastrarEstudante',[EstudanteController::class, 'index'] );

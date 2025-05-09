@@ -84,7 +84,7 @@
                         <!-- Botão para iniciar/pausar a viagem -->
                         <div class="text-center mt-3">
                             <a href="{{route('ComecarViagem')}}" class="btn viagem" id="iniciar-viagem">Iniciar Viagem <ion-icon name="play-outline"></ion-icon></a>
-                            <a class="btn viagem" id="parar-viagem">Parar Viagem <ion-icon name="stop-outline"></ion-icon></a>
+                            <a href="{{route('TerminarViagem')}}" class="btn viagem" id="parar-viagem">Parar Viagem <ion-icon name="stop-outline"></ion-icon></a>
                         </div>
                     </div>                   
                 </div>
