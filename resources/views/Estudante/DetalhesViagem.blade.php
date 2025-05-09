@@ -79,7 +79,7 @@
 
         const marker = L.marker([-8.8383, 13.2344]).addTo(map);
 
-        const socket = io("https://2e15-102-218-85-229.ngrok-free.app", { transports: ["websocket"] });
+        const socket = io("https://01c6-102-214-36-148.ngrok-free.app", { transports: ["websocket"] });
 
         socket.on("connect", () => {
             console.log("Conectado ao Socket.IO como responsável.");

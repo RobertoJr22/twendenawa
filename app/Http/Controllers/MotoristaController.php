@@ -19,6 +19,7 @@ use App\Http\Requests\StoreMotoristaRequest;
 use App\Models\carteira;
 use App\Models\turno;
 use App\Models\viagem;
+use Carbon\Carbon;
 
 class MotoristaController extends Controller
 {
@@ -203,9 +204,97 @@ class MotoristaController extends Controller
             return redirect()->route('TelaMotorista')->with('error','A viagem não pode ser iniciada fora do horário de trabalho');
         }
     }
+    
     public function TerminarViagem(){
-
+        $motorista = Auth::user()->motorista;
+        $Horaturno = DB::table('turnos as t1')
+            ->where('t1.id', '=', $motorista->turnos_id)
+            ->select('t1.HoraIda','t1.HoraRegresso')
+            ->first();
+    
+        $HoraIda = \Carbon\Carbon::parse($Horaturno->HoraIda)->format('H');
+        $HoraRegresso = \Carbon\Carbon::parse($Horaturno->HoraRegresso)->format('H');
+        $HoraAgora = \Carbon\Carbon::now()->format('H');
+    
+        if($HoraAgora == $HoraIda){
+            $ViagemAtiva = DB::table('viagems')
+                ->select('id')
+                ->where('motoristas_id', $motorista->id)
+                ->where('estado', 2)
+                ->first();
+    
+            if($ViagemAtiva){
+                $Estudantes = DB::table('dados_viagems as t1')
+                    ->join('viagems as t2','t1.viagems_id','=','t2.id')
+                    ->where('t2.id', '=', $ViagemAtiva->id)
+                    ->where('t2.estado', '=', 2)
+                    ->whereNotNull('estudantes_id')
+                    ->pluck('estudantes_id');
+    
+                if($Estudantes->count()){
+                    foreach($Estudantes as $id){
+                        $estudante = \App\Models\Estudante::find($id);
+                        if ($estudante) {
+                            StudentEventNotification::notifyResponsaveis('trip_end', $estudante);
+                            EstudanteEventNotification::NotifyEstudante('trip_end', $estudante->id);
+                        }
+                    }
+                }
+    
+                DB::table('dados_viagems')
+                    ->where('viagems_id', $ViagemAtiva->id)
+                    ->update(['estado' => 0]);
+    
+                DB::table('viagems')
+                    ->where('id', $ViagemAtiva->id)
+                    ->update(['estado' => 3]);
+    
+                return redirect()->route('TelaMotorista')->with('success','Viagem terminada com sucesso');
+            } else {
+                return redirect()->route('TelaMotorista')->with('alert','Não existe nenhuma viagem ativa para terminar');
+            }
+        }elseif($HoraAgora == $HoraRegresso){
+            $ViagemAtiva = DB::table('viagems')
+                ->select('id')
+                ->where('motoristas_id', $motorista->id)
+                ->where('estado', 2)
+                ->first();
+    
+            if($ViagemAtiva){
+                $Estudantes = DB::table('dados_viagems as t1')
+                    ->join('viagems as t2','t1.viagems_id','=','t2.id')
+                    ->where('t2.id', '=', $ViagemAtiva->id)
+                    ->where('t2.estado', '=', 2)
+                    ->whereNotNull('estudantes_id')
+                    ->pluck('estudantes_id');
+    
+                if($Estudantes->count()){
+                    foreach($Estudantes as $id){
+                        $estudante = \App\Models\Estudante::find($id);
+                        if ($estudante) {
+                            StudentEventNotification::notifyResponsaveis('trip_end', $estudante);
+                            EstudanteEventNotification::NotifyEstudante('trip_end', $estudante->id);
+                        }
+                    }
+                }
+    
+                DB::table('dados_viagems')
+                    ->where('viagems_id', $ViagemAtiva->id)
+                    ->update(['estado' => 0]);
+    
+                DB::table('viagems')
+                    ->where('id', $ViagemAtiva->id)
+                    ->update(['estado' => 0]);
+    
+                return redirect()->route('TelaMotorista')->with('success','Viagem terminada com sucesso');
+            } else {
+                return redirect()->route('TelaMotorista')->with('alert','Não existe nenhuma viagem ativa para terminar');
+            }
+        }else{
+            return redirect()->route('TelaMotorista')->with('alert','Fora do horário de trabalho');
+        }
     }
+    
 
     public function InfoEstudanteAbordo($estudanteId){
         $motorista = Auth::user()->motorista;

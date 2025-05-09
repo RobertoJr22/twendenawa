@@ -481,7 +481,7 @@ class EstudanteController extends Controller
                         'estudantes_id' => $id,
                         'viagems_id' => $ViagemAtiva,
                         'created_at' => now(),
-                        'updated_at' => now(),
+                        'updated_at' => now(),  
                     ]);
 
                     if ($resultado) {
