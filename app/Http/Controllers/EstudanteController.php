@@ -296,20 +296,11 @@ class EstudanteController extends Controller
                     return redirect()->back()->with('error', 'Estudante pertence a outra rota.');
                 }
 
-                // Verificar se já existe uma viagem em andamento
-                $ViagemAndamento = DB::table('viagems')
-                ->where('motoristas_id', $motorista->id)
-                ->where('estado', 2)
-                ->exists();
-
-                if ($ViagemAndamento) {
-                    return redirect()->back()->with('error', 'O motorista tem uma viagem em andamento.');
-                }
 
                 // Buscar ou criar a viagem ativa
                 $ViagemAtiva = DB::table('viagems')
                 ->where('motoristas_id', $motorista->id)
-                ->where('estado', 1)
+                ->whereIn('estado', [1,2])
                 ->select('id')
                 ->first();
 
@@ -429,20 +420,11 @@ class EstudanteController extends Controller
                         return redirect()->back()->with('error', 'Estudante pertence a outra rota.');
                     }
 
-                    // Verificar se já existe uma viagem em andamento
-                    $ViagemAndamento = DB::table('viagems')
-                    ->where('motoristas_id', $motorista->id)
-                    ->where('estado', 2)
-                    ->exists();
-
-                    if ($ViagemAndamento) {
-                        return redirect()->back()->with('error', 'O motorista tem uma viagem em andamento.');
-                    }
 
                     // Buscar ou criar a viagem ativa
                     $ViagemAtiva = DB::table('viagems')
                     ->where('motoristas_id', $motorista->id)
-                    ->where('estado', 1)
+                    ->whereIn('estado', [1, 2])
                     ->select('id')
                     ->first();
 
